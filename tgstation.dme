@@ -4403,6 +4403,8 @@
 #include "modular_bluemoon\code\modules\awaymissions\blackmesa\mobs\mesa_human_mobs.dm"
 #include "modular_bluemoon\code\modules\awaymissions\blackmesa\weapons\mesa_guns.dm"
 #include "modular_bluemoon\code\modules\awaymissions\blackmesa\weapons\mesa_melee.dm"
+#include "modular_bluemoon\code\modules\awaymissions\skihell\mobs.dm"
+#include "modular_bluemoon\code\modules\awaymissions\skihell\skihell_areas.dm"
 #include "modular_bluemoon\code\modules\cargo\bounties\roboticist.dm"
 #include "modular_bluemoon\code\modules\cargo\packs\armory.dm"
 #include "modular_bluemoon\code\modules\cargo\packs\emergency.dm"

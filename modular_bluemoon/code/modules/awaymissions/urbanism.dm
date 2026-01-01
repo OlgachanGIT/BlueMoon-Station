@@ -275,3 +275,50 @@
 	name = "Призрак лидера отряда HECU"
 	desc = "Он точно потерялся... И он точно перепутал гейт Blackmesa с ihategordon. Появится ли blackmesa и тут? Что значит призрак этого парня? Зачем вы читаете его описание?"
 	icon_state = "Hecughost"
+
+
+/obj/structure/urbanismeffect
+	icon = 'modular_bluemoon/icons/obj/urbanism/urbanismmisc.dmi'
+	icon_state = "red_big"
+	anchored = TRUE
+	density = FALSE
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
+	move_resist = INFINITY
+	obj_flags = 0
+
+	vis_flags = VIS_INHERIT_PLANE
+
+/obj/structure/urbanismeffect/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
+	return
+
+/obj/structure/urbanismeffect/fire_act(exposed_temperature, exposed_volume)
+	return
+
+/obj/structure/urbanismeffect/acid_act()
+	return
+
+/obj/structure/urbanismeffect/blob_act(obj/structure/blob/B)
+	return
+
+/obj/structure/urbanismeffect/attack_hulk(mob/living/carbon/human/user, does_attack_animation = 0)
+	return FALSE
+
+/obj/structure/urbanismeffect/experience_pressure_difference()
+	return
+
+/obj/structure/urbanismeffect/singularity_act()
+	qdel(src)
+	return FALSE
+
+/obj/structure/urbanismeffect/ConveyorMove()
+	return
+
+/obj/structure/urbanismeffect/abstract/ex_act(severity, target, origin)
+	return
+
+//заебала эта хуета с сломанными стейтами блять.
+/obj/structure/flora/grass/snowgrass
+	name = "snowy grass"
+	desc = "A patch of overgrown grass."
+	icon = 'icons/obj/flora/snowflora.dmi'
+	icon_state = "snowgrass"

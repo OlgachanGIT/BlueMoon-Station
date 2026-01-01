@@ -597,3 +597,148 @@
 /obj/item/storage/box/basedmedic/medbeam/PopulateContents()
 	new /obj/item/gun/medbeam(src)
 	new /obj/item/storage/firstaid/tactical(src)
+
+
+//skihell
+
+/obj/item/shield/police
+	name = "special police shield"
+	desc = "A gigantic shield made of robust materials"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile.dmi'
+	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/weapons_lefthand.dmi'
+	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/weapons_righthand.dmi'
+	icon_state = "policeshield"
+	item_state = "policeshield"
+	w_class = WEIGHT_CLASS_HUGE
+	armor = list(MELEE = 60, BULLET = 70, LASER = 50, ENERGY = 0, BOMB = 40, BIO = 0, RAD = 0, FIRE = 80, ACID = 70)
+	slot_flags = ITEM_SLOT_BACK
+	block_chance = 80
+	shieldbash_knockback = 5
+	force = 15
+	throw_range = 1
+	throw_speed = 2
+	attack_verb = list("bashed","pounded","slammed")
+	item_flags = SLOWS_WHILE_IN_HAND
+	w_class = WEIGHT_CLASS_GIGANTIC
+
+
+/obj/item/gun/ballistic/automatic/pistol/ski9mm
+	name = "SKI-SPIRIT 9mm pistol"
+	desc = "Модифицированная версия beretta 92 FS получившая своё название после утери около сотни экземпляров прямо в комплексе Skistation"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile.dmi'
+	icon_state = "ski9mm"
+	w_class = WEIGHT_CLASS_NORMAL
+	mag_type = /obj/item/ammo_box/magazine/pistolm9mm
+	can_suppress = FALSE
+	burst_size = 3
+	spread = 5
+	fire_delay = 0.5
+	fire_select_modes = list(SELECT_SEMI_AUTOMATIC)
+	fire_sound = 'modular_bluemoon/sound/weapons/ski9mm.ogg'
+
+
+/obj/item/gun/ballistic/automatic/pistol/ski9mm/update_icon_state()
+	icon_state = "[initial(icon_state)][chambered ? "" : "-e"]"
+
+/obj/item/gun/ballistic/automatic/ak47/skiak
+	name = "\improper AK-54-BOREAS rifle"
+	desc = "Одного магазина АК-54-БОРЕЙ хватит на убийство РОВНО трёх сибирских медведей. Думайте - Плакат `во все оружии`"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_lefthand.dmi'
+	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_righthand.dmi'
+	icon_state = "skiak"
+	item_state = "saiga"
+	fire_sound = 'modular_bluemoon/sound/weapons/skiak.ogg'
+
+/obj/item/gun/ballistic/automatic/ak47/skiak/update_icon_state()
+	if(magazine)
+		icon_state = "skiak"
+	else
+		icon_state = "skiak_mag"
+
+/obj/item/gun/ballistic/automatic/ak47/skiak/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
+/obj/item/gun/ballistic/automatic/shotgun/aa12/saiga
+	name = "\improper Saiga-SNOWGRAVE"
+	desc = "Продвинутая версия оригинальной Сайги со сломанным исскуственным интелектом на борту... Вы слышали этот крик?"
+	icon_state = "saiga"
+	item_state = "saiga"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_lefthand.dmi'
+	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_righthand.dmi'
+	recoil = 3
+	spread = 10
+	fire_delay = 4
+	mag_type = /obj/item/ammo_box/magazine/aa12/saiga
+	fire_sound = 'modular_bluemoon/sound/weapons/saiga.ogg'
+
+/obj/item/gun/ballistic/automatic/shotgun/aa12/saiga/update_icon_state()
+	if(magazine)
+		icon_state = "saiga"
+	else
+		icon_state = "saiga_mag"
+
+
+/obj/item/ammo_box/magazine/aa12/saiga
+	name = "saiga drum magazine (12g buckshot)"
+	icon_state = "saiga"
+	icon = 'modular_bluemoon/icons/obj/ammo.dmi'
+	w_class = WEIGHT_CLASS_NORMAL
+	ammo_type = /obj/item/ammo_casing/shotgun/buckshot
+	caliber = "shotgun"
+	max_ammo = 20
+	max_ammo = 8
+
+/obj/item/ammo_box/magazine/aa12/saiga/update_icon()
+	. = ..()
+	if(ammo_count())
+		icon_state = "[initial(icon_state)]-ammo"
+	else
+		icon_state = "[initial(icon_state)]"
+
+
+/obj/item/gun/ballistic/automatic/shotgun/aa12/saiga/empty_alarm()
+	if(!chambered && !get_ammo() && !alarmed)
+		var/list/sounds = list(
+			'modular_bluemoon/sound/creatures/skihell/cover.ogg',
+			'modular_bluemoon/sound/creatures/skihell/fuck.ogg',
+			'modular_bluemoon/sound/creatures/skihell/shit.ogg'
+		)
+		playsound(src, pick(sounds), 70, 0)
+		update_icon()
+		alarmed = 1
+	return
+
+//одежда
+
+/obj/item/clothing/suit/armor/saggitarius
+	name = "order stealth suit"
+	desc = "Modified version of average amrmor suit. uses special sensors to make owner invisible"
+	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
+	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/skihellclothes.dmi'
+	icon_state = "saggitariussuit"
+	item_state = "saggitariussuit"
+	body_parts_covered = CHEST|GROIN|ARMS|LEGS
+	cold_protection = CHEST|GROIN|ARMS|LEGS
+
+/obj/item/clothing/head/helmet/saggitarius
+	name = "NVG Helmet"
+	desc = "Standard saggitarius helmet. Protects the head from impacts. Equipped with a night vision."
+	icon_state = "saggitariushelmett"
+	item_state = "saggitariushelmet"
+	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
+	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/skihellclothes.dmi'
+	darkness_view = 8
+	flash_protect = -1
+	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
+
+
+/obj/item/storage/backpack/relicuum
+	name = "relicuum backpack"
+	desc = "Strange backpack with antenna on it"
+	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
+	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/skihellclothes.dmi'
+	icon_state = "relicuumbag"
+	item_state = "relicuumbag"
