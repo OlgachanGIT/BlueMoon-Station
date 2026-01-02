@@ -9472,17 +9472,6 @@
 	slowdown = 0
 	},
 /area/awaymission/skihell)
-"hsa" = (
-/obj/structure/urbanismeffect{
-	icon_state = "space_wind";
-	dir = 1
-	},
-/obj/structure/urbanismeffect{
-	icon_state = "water_vapor"
-	},
-/obj/structure/mecha_wreckage/reticence,
-/turf/open/floor/plasteel/checker,
-/area/awaymission/skihell)
 "hsq" = (
 /obj/machinery/light/cold{
 	dir = 1
@@ -20334,7 +20323,6 @@
 /area/awaymission/skihell)
 "qIS" = (
 /obj/structure/rack/shelf,
-/obj/item/clothing/mask/gas/glass/alt,
 /obj/structure/urbanismeffect{
 	icon_state = "water_vapor"
 	},
@@ -25744,17 +25732,6 @@
 	name = "void"
 	},
 /area/awaymission/skihell/center)
-"uRY" = (
-/obj/structure/decorative{
-	icon = 'icons/effects/atmospherics.dmi';
-	icon_state = 'water_vapor';
-	dir = 1
-	},
-/turf/closed/mineral/mesarock{
-	icon_state = "rock2";
-	color = "#78aeff"
-	},
-/area/awaymission/skihell/rock)
 "uSO" = (
 /obj/machinery/door/poddoor/shutters/old/preopen,
 /obj/effect/turf_decal/weather/snow/corner{
@@ -35909,7 +35886,7 @@ pWQ
 tWs
 oSF
 lyA
-uRY
+lyA
 lyA
 lyA
 lyA
@@ -46476,7 +46453,7 @@ lyA
 qRf
 fAo
 ksW
-hsa
+ksW
 ksW
 fQe
 nIF
