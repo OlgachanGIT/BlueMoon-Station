@@ -322,3 +322,81 @@
 	desc = "A patch of overgrown grass."
 	icon = 'icons/obj/flora/snowflora.dmi'
 	icon_state = "snowgrass"
+
+/obj/structure/urbanismhuge
+	name = "huge construction"
+	desc = "Oh my god, what a huge construction is this?"
+	icon = 'modular_bluemoon/icons/obj/urbanism/hugeshit.dmi'
+	icon_state = "huge1"
+	anchored = TRUE
+	density = TRUE
+	armor = list(MELEE = 100, BULLET =100, LASER = 100, ENERGY = 60, BOMB = 80, BIO = 10, RAD = 0, FIRE = 50, ACID = 50)
+	light_range = FALSE
+	light_color = FALSE
+	max_integrity = FALSE
+	layer = SPACEVINE_LAYER
+
+
+/obj/structure/urbanismmachinery
+	name = "heavy machinery"
+	desc = "Huge piece of machinery, probably used in construction works."
+	icon = 'modular_bluemoon/icons/obj/urbanism/communication.dmi'
+	icon_state = "communication"
+	anchored = TRUE
+	density = TRUE
+	armor = list(MELEE = 100, BULLET =100, LASER = 100, ENERGY = 60, BOMB = 80, BIO = 10, RAD = 0, FIRE = 50, ACID = 50)
+	light_range = FALSE
+	light_color = FALSE
+	max_integrity = FALSE
+	layer = SPACEVINE_LAYER
+
+/obj/structure/urbanismfabricator
+	name = "heavy machinery"
+	desc = "Huge piece of machinery, probably used in construction works."
+	icon = 'modular_bluemoon/icons/obj/urbanism/urbanismmachinery.dmi'
+	icon_state = "hugem1"
+	anchored = TRUE
+	density = TRUE
+	armor = list(MELEE = 100, BULLET =100, LASER = 100, ENERGY = 60, BOMB = 80, BIO = 10, RAD = 0, FIRE = 50, ACID = 50)
+	light_range = FALSE
+	light_color = FALSE
+	max_integrity = FALSE
+	layer = SPACEVINE_LAYER
+
+/obj/machinery/negotiations_radio
+	name = "negotiations radio"
+	desc = "An old radio."
+	icon = 'modular_bluemoon/icons/obj/urbanism/urbanism.dmi'
+	icon_state = "radiohecu"
+	anchored = TRUE
+	density = TRUE
+	var/list/negotiation_sounds = list(
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter1.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter2.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter3.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter4.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter6.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter7.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter8.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter9.ogg'
+	)
+	var/next_play_time = 0
+
+/obj/machinery/negotiations_radio/Initialize()
+	. = ..()
+	START_PROCESSING(SSobj, src)
+
+/obj/machinery/negotiations_radio/process()
+	if(world.time >= next_play_time)
+		icon_state = "radiohecu_talking"
+		var/sound_to_play = pick(negotiation_sounds)
+		playsound(src, sound_to_play, 70)
+		addtimer(CALLBACK(src, .proc/reset_icon), 2 SECONDS)
+		next_play_time = world.time + rand(10 SECONDS, 25 SECONDS)
+
+/obj/machinery/negotiations_radio/proc/reset_icon()
+	icon_state = initial(icon_state)
+
+/obj/machinery/negotiations_radio/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	return ..()

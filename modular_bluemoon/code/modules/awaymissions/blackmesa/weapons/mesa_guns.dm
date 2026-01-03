@@ -85,7 +85,7 @@
 	spread = 9
 	burst_size = 3
 	burst_shot_delay = 2
-	fire_delay = 2.5 ///Это пиздец!
+	fire_delay = 1.5 ///Это пиздец!
 	can_bayonet = FALSE
 	automatic_burst_overlay = FALSE
 
@@ -220,7 +220,7 @@
 	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
 	icon_state = "m16hl"
 	burst_size = 1
-	fire_delay = 3
+	fire_delay = 2
 	spread = 11
 	fire_sound = 'modular_bluemoon/sound/weapons/mesa/m16.ogg'
 

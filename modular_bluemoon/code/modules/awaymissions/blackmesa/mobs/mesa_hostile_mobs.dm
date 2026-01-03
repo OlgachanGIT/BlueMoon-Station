@@ -146,7 +146,7 @@
 /mob/living/simple_animal/hostile/blackmesa/xen/gonome
 	name = "Gonome"
 	desc = "Довольно опасная мутация обычного зомби! Вам точно стоило тратить время на его рассмотрение?"
-	icon = 'modular_bluemoon/icons/mob/mesa_mobs.dmi'
+	icon = 'modular_bluemoon/icons/mob/gonome.dmi'
 	icon_state = "gonome"
 	icon_living = "gonome"
 	icon_dead = "gonome_dead"
@@ -154,6 +154,12 @@
 	mob_biotypes = MOB_ORGANIC|MOB_HUMANOID
 	environment_smash = ENVIRONMENT_SMASH_STRUCTURES
 	faction = list(FACTION_XEN)
+	ranged = TRUE
+	retreat_distance = 1
+	minimum_distance = 1
+	projectilesound = 'modular_bluemoon/sound/creatures/mesa/bullsquid/goo_attack3.ogg'
+	gold_core_spawnable = HOSTILE_SPAWN
+	projectiletype = /obj/item/projectile/neurotox/bullsquid
 	speak_chance = 50
 	speak_emote = list("Рычит")
 	speed = 1
@@ -173,6 +179,7 @@
 	maxbodytemp = 1500
 	alert_sounds = list ('modular_bluemoon/sound/creatures/mesa/gonome/gonomealert1.ogg','modular_bluemoon/sound/creatures/mesa/gonome/gonomealert3.ogg','modular_bluemoon/sound/creatures/mesa/gonome/gonomealert2.ogg','modular_bluemoon/sound/creatures/mesa/gonome/gonomealert4.ogg')
 	loot = list(/obj/effect/gibspawner/human, /obj/item/wrench/shepard)
+
 
 // Mesa Headcrab
 
