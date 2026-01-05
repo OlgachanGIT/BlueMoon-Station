@@ -390,7 +390,7 @@
 	if(world.time >= next_play_time)
 		icon_state = "radiohecu_talking"
 		var/sound_to_play = pick(negotiation_sounds)
-		playsound(src, sound_to_play, 70)
+		playsound(src, sound_to_play, 70, FALSE, 7, 3)
 		addtimer(CALLBACK(src, .proc/reset_icon), 2 SECONDS)
 		next_play_time = world.time + rand(10 SECONDS, 25 SECONDS)
 
@@ -400,3 +400,46 @@
 /obj/machinery/negotiations_radio/Destroy()
 	STOP_PROCESSING(SSobj, src)
 	return ..()
+
+/obj/structure/microwaveexplosive
+	name = "suspicious microwave"
+	desc = "This microwave looks... off. Better not touch it."
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "mw"
+	density = TRUE
+	anchored = TRUE
+
+/obj/structure/microwaveexplosive/attack_hand(mob/user)
+	. = ..()
+
+	playsound(src, 'modular_bluemoon/sound/creatures/mesa/madsci/microwaveboom.ogg', 100, FALSE)
+
+
+	for(var/obj/structure/mad_scientist/scientist in range(5, src))
+		playsound(scientist, 'modular_bluemoon/sound/creatures/mesa/madsci/microwavefuck.ogg', 150, FALSE)
+
+	explosion(src, 0, 0, 1, 1, flame_range =1)
+
+	new /obj/effect/hotspot(get_turf(src))
+
+	icon_state = "mwbloodyo"
+	new /obj/structure/urbanismeffect(get_turf(src))
+
+/obj/structure/mad_scientist
+	name = "mad scientist"
+	desc = "A deranged scientist who seems to be working on something dangerous."
+	icon = 'modular_bluemoon/icons/mob/mesa_mobs.dmi'
+	icon_state = "madscientist"
+	density = TRUE
+	anchored = TRUE
+
+/obj/structure/mad_scientist/attack_hand(mob/user)
+	. = ..()
+
+	// Play mad scientist sound
+	playsound(src, 'modular_bluemoon/sound/creatures/mesa/madsci/scimad.ogg', 100, FALSE)
+
+//Super idol 的笑容 都沒你的甜
+//八月正午的陽光 都沒你耀眼
+//熱愛105度的你
+//滴滴清純的蒸餾水

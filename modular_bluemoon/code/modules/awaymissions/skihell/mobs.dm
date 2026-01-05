@@ -1,3 +1,7 @@
+/obj/item/ammo_casing/c22lr/fortificator
+	name = ".22 Long rifle bullet casing (fortificator)"
+
+
 /mob/living/simple_animal/hostile/syndicate/ranged/orderfortificator
 	name = "Order Fortificator"
 	desc = "This guy in heavy armour looks at you..."
@@ -10,7 +14,7 @@
 	projectilesound = 'modular_bluemoon/sound/weapons/mesa/scar.ogg'
 	rapid = 18
 	aggro_vision_range = 9
-	casingtype = /obj/item/ammo_casing/c22lr
+	casingtype = /obj/item/ammo_casing/c22lr/fortificator
 	death_sound = 'modular_bluemoon/sound/creatures/skihell/death.ogg'
 	deathmessage = "gets discombobulated and fucking dies."
 	icon_dead = "fortificator_dead"
@@ -24,7 +28,7 @@
 		new /obj/item/ammo_box/magazine/ak47(get_turf(src))
 	. = ..()
 
-/obj/item/ammo_casing/c10mm/autodelete
+/obj/item/ammo_casing/c22lr/fortificator/autodelete
 	Initialize()
 		. = ..()
 		QDEL_IN(src, 50)
@@ -140,20 +144,39 @@
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
 	var/has_thrown_grenade = FALSE
+	var/grenade_cooldown = 30 SECONDS
+	var/last_grenade_throw = 0
 
 	New()
 		..()
 		spawn(0)
 			ai_loop()
 
+	Life()
+		. = ..()
+		if(stat != CONSCIOUS)
+			return
+		// Check for incoming grenades and dodge
+		for(var/obj/item/grenade/G in oview(3, src))
+			if(G.throwing && get_dist(src, G) <= 2)
+				dodge_grenade(G)
+				break
+
+	proc/dodge_grenade(obj/item/grenade/G)
+		var/list/dirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
+		var/turf/T = get_step(src, pick(dirs))
+		if(T && !T.density)
+			visible_message("<span class='warning'>[src] dodges the incoming grenade!</span>")
+			playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1)
+			forceMove(T)
 
 	proc/ai_loop()
 		while(src && src.stat != DEAD)
 			var/mob/living/target = find_target()
 
-			if(target && !has_thrown_grenade)
+			if(target && world.time > last_grenade_throw + grenade_cooldown && get_dist(src, target) >= 4 && get_dist(src, target) <= 7)
 				throw_grenade(target)
-				has_thrown_grenade = TRUE
+				last_grenade_throw = world.time
 
 			sleep(5)
 		return
@@ -188,15 +211,48 @@
 		if(!target || QDELETED(target))
 			return
 
-		visible_message("<span class='danger'>[src] throws a frag grenade!</span>")
+		// Stop moving and prepare
+		var/old_speed = speed
+		speed = 0
+
+		// Enhanced visual and audio warning
+		var/obj/effect/temp_visual/TV = new /obj/effect/temp_visual/decoy/fading(loc, 2 SECONDS)
+		TV.color = "#ff0000"
+		visible_message("<span class='danger'>[src] begins charging a grenade throw!</span>")
+		playsound(src, 'sound/magic/lightning_chargeup.ogg', 70, 1)
+		// Add a light effect
+		set_light(3, 1, "#ff0000")
+		addtimer(CALLBACK(src, .proc/reset_light), 2 SECONDS)
+
+		addtimer(CALLBACK(src, .proc/do_throw, target, old_speed), 2 SECONDS)
+
+	proc/reset_light()
+		set_light(0)
+
+	proc/do_throw(mob/living/target, old_speed)
+		if(!target || QDELETED(target))
+			speed = old_speed
+			return
+
+		visible_message("<span class='danger'>[src] hurls a frag grenade with deadly precision!</span>")
 		playsound(get_turf(src), 'modular_bluemoon/sound/creatures/skihell/shielddodge.ogg', 70, 1)
 
-		var/turf/T = get_turf(target)
+		// Create and throw grenade
 		var/obj/item/grenade/syndieminibomb/concussion/combatant/G = new(src.loc)
+		G.throw_at(target, 6, 2, src)
+		addtimer(CALLBACK(G, /obj/item/grenade/proc/prime), 25)
 
-		if(G)
-			G.throw_at(T, 6, 2, src)
-			addtimer(CALLBACK(G, /obj/item/grenade/proc/prime), 25)
+		// Add smoke effect at throw location
+		var/turf/throw_turf = get_turf(src)
+		addtimer(CALLBACK(src, .proc/create_smoke, throw_turf), 10)
+
+		speed = old_speed
+
+	proc/create_smoke(turf/T)
+		if(T)
+			var/datum/effect_system/smoke_spread/bad/smoke = new
+			smoke.set_up(3, T)
+			smoke.start()
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/adjustHealth(amount, updating_health = TRUE, ...)
 	. = ..()
@@ -573,3 +629,82 @@
 				'sound/rig/loudbeep.ogg'
 			)
 			playsound(src, pick(sounds), 100, 0)
+
+//sniper
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper
+	name = "Order Sniper"
+	desc = "A stationary sniper with precise ranged attacks."
+	icon = 'modular_bluemoon/icons/mob/skihellbosses.dmi'
+	icon_state = "phantasma"
+	icon_dead = "phantasma_dead"
+	del_on_death = 0
+	health = 120
+	maxHealth = 120
+	projectilesound = 'modular_bluemoon/sound/weapons/acr_fire.ogg'
+	rapid = 1
+	aggro_vision_range = 20
+	projectiletype = /obj/item/projectile/bullet/a308
+	casingtype = /obj/item/ammo_casing/a308
+	death_sound = 'modular_bluemoon/sound/creatures/skihell/death.ogg'
+	deathmessage = "gets discombobulated and fucking dies."
+	icon_dead = "sniper_dead"
+	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
+	minbodytemp = 0
+	var/aiming = FALSE
+	var/aim_time = 2 SECONDS
+	var/last_aim = 0
+	var/datum/beam/current_beam = null
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/Move(atom/newloc)
+	return FALSE
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/OpenFire(atom/A)
+	if(aiming || world.time < last_aim + aim_time)
+		return
+	start_aiming(A)
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/proc/start_aiming(atom/target)
+	if(!target || aiming)
+		return
+	if(!can_see(src, target, aggro_vision_range))
+		return
+	aiming = TRUE
+	current_beam = Beam(target, icon_state="blood", time=aim_time, maxdistance=aggro_vision_range, beam_type=/obj/effect/ebeam/laser)
+	visible_message("<span class='danger'>[src] takes aim at [target]!</span>")
+	addtimer(CALLBACK(src, PROC_REF(fire_shot), target), aim_time)
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/proc/fire_shot(atom/target)
+	if(!target || !aiming)
+		stop_aiming()
+		return
+	if(!can_see(src, target, aggro_vision_range))
+		stop_aiming()
+		return
+	QDEL_NULL(current_beam)
+	aiming = FALSE
+	last_aim = world.time
+	Shoot(target)
+	visible_message("<span class='danger'>[src] fires a precise shot!</span>")
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/proc/stop_aiming()
+	aiming = FALSE
+	QDEL_NULL(current_beam)
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/Destroy()
+	stop_aiming()
+	return ..()
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/death(gibbed)
+	if(!gibbed)
+		var/datum/effect_system/spark_spread/sparks = new
+		sparks.set_up(3, 1, src)
+		sparks.start()
+		playsound(get_turf(src), 'sound/magic/Repulse.ogg', 100, 1)
+		animate(src, alpha = 0, time = 5)
+		QDEL_IN(src, 5)
+	return ..()
+
+/obj/effect/ebeam/laser
+	name = "laser beam"
+

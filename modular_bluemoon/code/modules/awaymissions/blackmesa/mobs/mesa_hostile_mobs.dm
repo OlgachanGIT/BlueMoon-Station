@@ -224,6 +224,40 @@
 	minbodytemp = 0
 	maxbodytemp = 1500
 	alert_sounds = list ('modular_bluemoon/sound/creatures/mesa/houndeye/he_alert1.ogg','modular_bluemoon/sound/creatures/mesa/houndeye/he_alert2.ogg','modular_bluemoon/sound/creatures/mesa/houndeye/he_alert3.ogg','modular_bluemoon/sound/creatures/mesa/houndeye/he_alert4.ogg','modular_bluemoon/sound/creatures/mesa/houndeye/he_alert5.ogg')
+	var/repulse_cooldown = 10 SECONDS
+	var/last_repulse = 0
+
+/mob/living/simple_animal/hostile/blackmesa/xen/houndeye/Life()
+	. = ..()
+	if(world.time > last_repulse + repulse_cooldown)
+		for(var/mob/living/L in oview(4, src))
+			if(!faction_check_mob(L, TRUE))
+				repulse_attack()
+				break
+
+/mob/living/simple_animal/hostile/blackmesa/xen/houndeye/proc/repulse_attack()
+	if(stat == DEAD)
+		return
+	last_repulse = world.time
+	playsound(get_turf(src), 'modular_bluemoon/sound/creatures/mesa/houndeye/houndeyeattack.ogg', 30, 1)
+	visible_message("<span class='danger'>[src] unleashes a repulsing shockwave!</span>")
+	for(var/turf/T in view(3, src))
+		new /obj/effect/temp_visual/emp/pulse(T)
+	for(var/mob/living/L in oview(4, src))
+		if(faction_check_mob(L, TRUE))
+			continue
+		var/turf/throwtarget = get_edge_target_turf(src, get_dir(src, get_step_away(L, src)))
+		var/dist = get_dist(src, L)
+		if(dist == 0)
+			L.DefaultCombatKnockdown(100, override_hardstun = 20)
+			L.adjustBruteLoss(10)
+			to_chat(L, "<span class='userdanger'>You're slammed into the floor by [src]!</span>")
+		else
+			new /obj/effect/temp_visual/gravpush(get_turf(L), get_dir(src, L))
+			L.DefaultCombatKnockdown(50, override_hardstun = 10)
+			L.adjustBruteLoss(5)
+			to_chat(L, "<span class='userdanger'>You're thrown back by [src]!</span>")
+			L.throw_at(throwtarget, 5, 1, src)
 
 // Xen Shark
 

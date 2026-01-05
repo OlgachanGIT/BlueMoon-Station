@@ -23,6 +23,10 @@
 /obj/item/gun/ballistic/automatic/pistol/hl9mm/update_icon_state()
 	icon_state = "[initial(icon_state)][chambered ? "" : "-e"]"
 
+/obj/item/gun/ballistic/automatic/pistol/hl9mm/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
 /obj/item/gun/ballistic/automatic/sniper_rifle/m4oa1
 	name = "m40a1 sniper rifle"
 	desc = "Довольно старая, но верная и мощная снайперская винтовка прямиком из далёкого прошлого"
@@ -53,6 +57,10 @@
 		icon_state = "m4oa1"
 	else
 		icon_state = "m4oa1_mag"
+
+/obj/item/gun/ballistic/automatic/sniper_rifle/m4oa1/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
 
 /obj/item/ammo_box/magazine/sniper_rounds/m4oa1
 	name = "m4oa1 magazine"
@@ -95,6 +103,10 @@
 	else
 		icon_state = "mp5nomag"
 
+/obj/item/gun/ballistic/automatic/mp5/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 100, 0, 0)
+
 /obj/item/ammo_box/magazine/mp5
 	name = "MP5 magazine (10mm Auto)"
 	desc = "Magazines taking 10mm ammunition; it fits in the MP5."
@@ -126,6 +138,10 @@
 	mag_type = /obj/item/ammo_box/magazine/internal/shot/m870
 	weapon_weight = WEAPON_HEAVY
 
+/obj/item/gun/ballistic/shotgun/m870/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
 /obj/item/ammo_box/magazine/internal/shot/m870
 	name = "shotgun internal magazine"
 	ammo_type = /obj/item/ammo_casing/shotgun/buckshot
@@ -152,6 +168,7 @@
 /obj/item/gun/ballistic/shotgun/spas/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
 	..()
 	src.pump(user)
+	playsound(user, fire_sound, 80, 0, 0)
 
 /obj/item/ammo_box/magazine/internal/shot/spas
 	name = "shotgun internal magazine"
@@ -205,7 +222,7 @@
 			select = 0
 			burst_size = 1
 			to_chat(user, "<span class='notice'>You switch to semi-auto.</span>")
-	playsound(user, 'sound/weapons/empty.ogg', 100, 1)
+	playsound(user, 'sound/weapons/empty.ogg', 100, 0)
 	update_icon()
 	return
 
@@ -230,6 +247,10 @@
 	else
 		icon_state = "m16hl-e"
 
+/obj/item/gun/ballistic/automatic/m16a4/mesa/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
 /obj/item/gun/ballistic/automatic/mp7
 	name = "\improper mp7"
 	desc = "Heckler & Koch MP7 A1 PDW — пистолет-пулемёт, разработанный в начале 2000-х годов немецкой фирмой Heckler & Koch. Отлично подойдёт, если вместо лечения союзников медик вашего отряда HECU хочет устроить бойню"
@@ -250,6 +271,10 @@
 		icon_state = "mp7"
 	else
 		icon_state = "mp7nomag"
+
+/obj/item/gun/ballistic/automatic/mp7/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
 
 /obj/item/ammo_box/magazine/mp7
 	name = "MP7 magazine"
@@ -304,6 +329,10 @@
 	else
 		icon_state = "scar_mag"
 
+/obj/item/gun/ballistic/automatic/scar/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
 /obj/item/ammo_box/magazine/scar
 	name = " HC SCAR magazine"
 	desc = "A standart magazine for HC SCAR"
@@ -356,6 +385,10 @@
 		icon_state = "p90"
 	else
 		icon_state = "p90_mag"
+
+/obj/item/gun/ballistic/automatic/p90/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
 
 /obj/item/ammo_box/magazine/p90
 	name = "p90 magazine"
@@ -640,6 +673,10 @@
 /obj/item/gun/ballistic/automatic/pistol/ski9mm/update_icon_state()
 	icon_state = "[initial(icon_state)][chambered ? "" : "-e"]"
 
+/obj/item/gun/ballistic/automatic/pistol/ski9mm/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
 /obj/item/gun/ballistic/automatic/ak47/skiak
 	name = "\improper AK-54-BOREAS rifle"
 	desc = "Одного магазина АК-54-БОРЕЙ хватит на убийство РОВНО трёх сибирских медведей. Думайте - Плакат `во все оружии`"
@@ -680,6 +717,10 @@
 	else
 		icon_state = "saiga_mag"
 
+/obj/item/gun/ballistic/automatic/shotgun/aa12/saiga/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
 
 /obj/item/ammo_box/magazine/aa12/saiga
 	name = "saiga drum magazine (12g buckshot)"
@@ -689,7 +730,6 @@
 	ammo_type = /obj/item/ammo_casing/shotgun/buckshot
 	caliber = "shotgun"
 	max_ammo = 20
-	max_ammo = 8
 
 /obj/item/ammo_box/magazine/aa12/saiga/update_icon()
 	. = ..()
