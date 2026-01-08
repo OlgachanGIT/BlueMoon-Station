@@ -5163,6 +5163,16 @@
 	slowdown = 0
 	},
 /area/awaymission/skihell/trainway)
+"dQb" = (
+/obj/structure/urbanismbigcrate/alt{
+	icon_state = "boxalt1";
+	pixel_x = 1;
+	pixel_y = 8
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/center)
 "dRk" = (
 /obj/machinery/power/floodlight/urbanismlight/mesaoutside{
 	light_color = "#3686ff";
@@ -7452,6 +7462,16 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/center)
+"fKH" = (
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper{
+	dir = 1;
+	pixel_x = 0;
+	pixel_y = 9
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "fKT" = (
 /obj/effect/turf_decal/siding/red{
 	dir = 8
@@ -10220,6 +10240,18 @@
 /obj/structure/window/reinforced/fulltile/ice,
 /turf/open/floor/plating,
 /area/awaymission/skihell)
+"hSC" = (
+/obj/structure/railing{
+	dir = 1
+	},
+/obj/structure/urbanismbigcrate/alt{
+	icon_state = "boxalt2";
+	dir = 8
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/center)
 "hSH" = (
 /obj/structure/rack/shelf,
 /obj/item/storage/toolbox/mechanical/old{
@@ -13668,6 +13700,14 @@
 	},
 /turf/open/floor/carpet/green,
 /area/awaymission/skihell/center)
+"kJT" = (
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper{
+	dir = 1;
+	pixel_x = 0;
+	pixel_y = 9
+	},
+/turf/open/floor/plating/snowed/smoothed,
+/area/awaymission/skihell/rock)
 "kKm" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark,
 /obj/effect/turf_decal/weather/snow/corner{
@@ -14205,6 +14245,13 @@
 	slowdown = 1
 	},
 /area/awaymission/skihell/trainway)
+"lms" = (
+/obj/structure/curtain{
+	color = "#560319"
+	},
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "lmP" = (
 /obj/structure/plasticflaps/opaque,
 /turf/open/floor/plating,
@@ -14712,7 +14759,7 @@
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
 "lJs" = (
-/obj/structure/fence,
+/obj/structure/girder/reinforced,
 /turf/open/floor/plating/snowed/smoothed,
 /area/awaymission/skihell/rock)
 "lKZ" = (
@@ -17371,6 +17418,10 @@
 	},
 /turf/open/floor/carpet/green,
 /area/awaymission/skihell/center)
+"obG" = (
+/obj/structure/barricade/sandbags,
+/turf/open/floor/plating/snowed/smoothed,
+/area/awaymission/skihell/rock)
 "ocx" = (
 /obj/effect/turf_decal/weather/snow/corner{
 	dir = 1
@@ -19180,6 +19231,12 @@
 	},
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/train)
+"pEY" = (
+/obj/structure/girder/reinforced,
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "pFs" = (
 /obj/structure/fluff/broken_flooring{
 	icon_state = "singular"
@@ -20609,6 +20666,15 @@
 	},
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"qSt" = (
+/obj/machinery/power/floodlight/urbanismlight/mesaoutside{
+	light_color = "#3686ff";
+	light_range = 50
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "qTR" = (
 /obj/structure/urbanismeffect{
 	icon_state = "red_medium"
@@ -27231,6 +27297,16 @@
 	},
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
+"whv" = (
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper{
+	dir = 1;
+	pixel_x = 0;
+	pixel_y = 9
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/center)
 "wic" = (
 /obj/effect/turf_decal/weather/snow/corner{
 	dir = 1
@@ -32954,6 +33030,38 @@ lkg
 lkg
 lkg
 lkg
+ppY
+log
+log
+log
+log
+lkg
+lkg
+lkg
+ppY
+log
+log
+log
+log
+log
+log
+log
+log
+log
+log
+log
+lkg
+lkg
+lkg
+log
+log
+log
+log
+log
+lkg
+lkg
+lkg
+lkg
 lkg
 log
 log
@@ -32962,6 +33070,9 @@ log
 log
 log
 log
+lkg
+lkg
+pEY
 log
 log
 log
@@ -32972,58 +33083,23 @@ log
 log
 log
 log
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
 log
 log
 log
 log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
+lkg
+lkg
+lkg
 log
 log
 log
@@ -33206,30 +33282,15 @@ pUj
 pUj
 pUj
 pUj
+obG
+log
+log
+obG
 pUj
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
+pUj
+pUj
+pUj
+obG
 log
 log
 log
@@ -33244,27 +33305,6 @@ log
 pUj
 pUj
 pUj
-pUj
-log
-log
-log
-log
-log
-log
-pUj
-pUj
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
-log
 log
 log
 log
@@ -33273,12 +33313,48 @@ pUj
 pUj
 pUj
 pUj
+pUj
+obG
+log
+log
+pUj
+pUj
+pUj
+pUj
+pUj
+pUj
+pUj
+pUj
+lJs
+log
+pUj
+pUj
 log
 log
 log
 log
 log
 log
+pUj
+pUj
+pUj
+pUj
+pUj
+pUj
+pUj
+pUj
+pUj
+lJs
+pUj
+pUj
+pUj
+pUj
+pUj
+pUj
+obG
+obG
+pUj
+pUj
 pUj
 pUj
 pUj
@@ -33453,21 +33529,14 @@ lkg
 lkg
 lkg
 oXj
-oXj
 lkg
 lkg
 lkg
 lkg
 lkg
-log
-log
-log
-log
-log
-log
-log
-log
-log
+lkg
+ppY
+ppY
 lkg
 lkg
 lkg
@@ -33478,34 +33547,26 @@ lkg
 lkg
 lkg
 lkg
-log
-log
-log
-log
+lkg
+lkg
+ppY
+fKH
 lkg
 lkg
 lkg
 lkg
 lkg
-log
-log
-log
-log
+pEY
 lkg
 lkg
 lkg
 lkg
 lkg
 lkg
-log
-log
-log
-log
-log
-log
-log
-log
-log
+lkg
+lkg
+lkg
+ppY
 lkg
 lkg
 lkg
@@ -33516,10 +33577,6 @@ lkg
 lkg
 lkg
 lkg
-log
-log
-log
-log
 lkg
 lkg
 lkg
@@ -33529,6 +33586,25 @@ lkg
 lkg
 lkg
 lkg
+lkg
+lkg
+pEY
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+ppY
+fKH
 lkg
 lkg
 lkg
@@ -33704,8 +33780,6 @@ lkg
 lkg
 lkg
 lkg
-oXj
-oXj
 lkg
 lkg
 lkg
@@ -33727,6 +33801,8 @@ lkg
 lkg
 lkg
 lkg
+ppY
+ppY
 lkg
 lkg
 lkg
@@ -33740,8 +33816,6 @@ lkg
 lkg
 lkg
 lkg
-log
-log
 lkg
 lkg
 lkg
@@ -33749,15 +33823,6 @@ lkg
 lkg
 lkg
 lkg
-log
-log
-log
-log
-log
-log
-log
-log
-log
 lkg
 lkg
 lkg
@@ -33765,6 +33830,7 @@ lkg
 lkg
 lkg
 lkg
+ppY
 lkg
 lkg
 lkg
@@ -33774,8 +33840,10 @@ lkg
 lkg
 lkg
 lkg
+pEY
 lkg
 lkg
+qSt
 lkg
 lkg
 lkg
@@ -33786,6 +33854,14 @@ lkg
 lkg
 lkg
 lkg
+lkg
+ppY
+ppY
+lkg
+lkg
+lkg
+lkg
+qSt
 lkg
 lkg
 lkg
@@ -33945,6 +34021,7 @@ lkg
 lkg
 lkg
 lkg
+qSt
 lkg
 lkg
 lkg
@@ -33956,8 +34033,6 @@ lkg
 lkg
 lkg
 lkg
-oXj
-oXj
 lkg
 lkg
 lkg
@@ -33968,6 +34043,7 @@ lkg
 lkg
 lkg
 lkg
+qSt
 lkg
 lkg
 lkg
@@ -33989,12 +34065,10 @@ lkg
 lkg
 lkg
 lkg
+qSt
 lkg
 lkg
 lkg
-log
-log
-log
 lkg
 lkg
 lkg
@@ -34003,18 +34077,13 @@ lkg
 lkg
 lkg
 lkg
-log
-log
-log
-log
-log
-log
-log
 lkg
 lkg
 lkg
 lkg
 lkg
+ppY
+kJT
 lkg
 lkg
 lkg
@@ -34029,9 +34098,16 @@ lkg
 lkg
 lkg
 lkg
+pEY
 lkg
 lkg
 lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+ppY
 lkg
 lkg
 lkg
@@ -34208,8 +34284,22 @@ lkg
 lkg
 lkg
 lkg
-oXj
-oXj
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+fGN
 lkg
 lkg
 lkg
@@ -34244,24 +34334,10 @@ lkg
 lkg
 lkg
 lkg
-log
-log
-log
+ppY
+pUj
 lkg
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-log
-log
-log
-log
-log
-log
-log
 lkg
 lkg
 lkg
@@ -34461,7 +34537,21 @@ lkg
 lkg
 lkg
 oXj
-oXj
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+fGN
 lkg
 lkg
 lkg
@@ -34482,21 +34572,7 @@ lkg
 lkg
 lkg
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+pEY
 log
 log
 lkg
@@ -34510,10 +34586,7 @@ lkg
 lkg
 lkg
 lkg
-lkg
-log
-log
-log
+ppY
 lkg
 lkg
 lkg
@@ -34537,6 +34610,9 @@ lkg
 lkg
 lkg
 lkg
+lkg
+ppY
+ppY
 lkg
 lkg
 lkg
@@ -34718,6 +34794,8 @@ pUj
 pUj
 pUj
 pUj
+obG
+obG
 pUj
 pUj
 pUj
@@ -34746,9 +34824,7 @@ pUj
 pUj
 pUj
 pUj
-pUj
-pUj
-pUj
+lJs
 log
 log
 pUj
@@ -34762,33 +34838,33 @@ pUj
 pUj
 pUj
 pUj
-pUj
+lJs
 log
 log
 log
 log
 pUj
 pUj
+lJs
 pUj
 pUj
 pUj
 pUj
 pUj
 pUj
+lJs
+pUj
+pUj
+pUj
+pUj
+lJs
 pUj
 pUj
 pUj
 pUj
 pUj
-pUj
-pUj
-pUj
-pUj
-pUj
-pUj
-pUj
-pUj
-pUj
+obG
+kJT
 pUj
 pUj
 pUj
@@ -34970,6 +35046,7 @@ lkg
 lkg
 lkg
 lkg
+ppY
 lkg
 lkg
 lkg
@@ -34993,6 +35070,15 @@ lkg
 lkg
 lkg
 lkg
+fGN
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+lkg
+log
 lkg
 lkg
 lkg
@@ -35002,6 +35088,12 @@ lkg
 lkg
 lkg
 lkg
+lkg
+lkg
+pEY
+log
+log
+log
 log
 lkg
 lkg
@@ -35015,10 +35107,6 @@ lkg
 lkg
 lkg
 lkg
-log
-log
-log
-log
 lkg
 lkg
 lkg
@@ -35027,20 +35115,8 @@ lkg
 lkg
 lkg
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+ppY
+ppY
 lkg
 lkg
 lkg
@@ -40065,7 +40141,7 @@ lyA
 lyA
 lyA
 fGN
-oft
+omQ
 oft
 ftN
 oft
@@ -40310,12 +40386,12 @@ lXP
 lXP
 lXP
 fGN
-lJs
-lJs
-lJs
-lJs
-lJs
-lJs
+xkr
+xkr
+xkr
+xkr
+xkr
+xkr
 fGN
 fsv
 oft
@@ -40816,7 +40892,7 @@ sEv
 ftN
 oft
 oft
-oft
+fsv
 vSS
 oft
 oft
@@ -41068,7 +41144,7 @@ lXP
 ftN
 oft
 oft
-oft
+dQb
 oft
 oft
 oft
@@ -41076,7 +41152,7 @@ cgV
 oft
 oft
 fKe
-oft
+fsv
 oft
 oft
 oft
@@ -41328,7 +41404,7 @@ oft
 oft
 oft
 fKe
-oft
+fsv
 oft
 ulx
 oft
@@ -42082,7 +42158,7 @@ hrW
 hrW
 hrW
 hrW
-hPL
+hSC
 ftN
 oft
 oft
@@ -42337,7 +42413,7 @@ hrW
 hPL
 ftN
 oft
-oft
+fsv
 vSS
 oft
 oft
@@ -42589,7 +42665,7 @@ hrW
 hPL
 ftN
 oft
-oft
+fsv
 oft
 oft
 oft
@@ -43082,7 +43158,7 @@ tRC
 bdy
 aRH
 wOx
-lzr
+lms
 ciO
 hrW
 hrW
@@ -56945,7 +57021,7 @@ oft
 oft
 oft
 kJp
-oft
+whv
 oft
 oft
 oft
@@ -57695,7 +57771,7 @@ oft
 oft
 oft
 oft
-ujn
+oft
 oft
 oft
 oft
@@ -58196,7 +58272,7 @@ oft
 oft
 hzZ
 oft
-uXT
+oft
 oft
 oft
 oft

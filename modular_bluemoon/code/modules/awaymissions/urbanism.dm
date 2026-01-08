@@ -5,6 +5,9 @@
 	icon_state = "rockyash"
 	smooth = SMOOTH_MORE|SMOOTH_BORDER
 	canSmoothWith = list (/turf/closed)
+	var/resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
+	explosion_block = 50
+	wave_explosion_block = INFINITY
 
 /turf/closed/mineral/mesarock/rust_heretic_act()
 	return
@@ -14,6 +17,9 @@
 
 /turf/closed/mineral/mesarock/acid_act(acidpwr, acid_volume, acid_id)
 	return FALSE
+
+/turf/closed/mineral/mesarock/acid_melt()
+	return
 
 /turf/closed/mineral/mesarock/Melt()
 	to_be_destroyed = FALSE
@@ -26,6 +32,21 @@
 	return
 
 /turf/closed/mineral/mesarock/attack_hand(mob/user)
+	return
+
+/turf/closed/mineral/mesarock/gets_drilled()
+	return
+
+/turf/closed/mineral/mesarock/attack_animal(mob/living/simple_animal/user, list/modifiers)
+	return
+
+/turf/closed/mineral/mesarock/attack_alien(mob/living/carbon/alien/user, list/modifiers)
+	return
+
+/turf/closed/mineral/mesarock/attack_hulk(mob/living/carbon/human/H)
+	return FALSE
+
+/turf/closed/mineral/mesarock/ex_act(severity, target, origin)
 	return
 
 /obj/machinery/power/floodlight/urbanismlight
@@ -193,7 +214,6 @@
 	max_integrity = FALSE
 
 /obj/structure/urbanismmachines
-
 	name = "old machine"
 	desc = "some kind of old (and sometimes broken) machine"
 	icon = 'modular_bluemoon/icons/obj/urbanism/urbanism.dmi'
@@ -203,13 +223,11 @@
 	armor = list(MELEE = 30, BULLET =50, LASER = 30, ENERGY = 20, BOMB = 70, BIO = 15, RAD = 10, FIRE = 40, ACID = 30)
 
 /obj/structure/urbanismmachines/server
-
 	name = "old server"
 	icon = 'modular_bluemoon/icons/obj/urbanism/urbanism_structure32x64.dmi'
 	icon_state = "server"
 
 /obj/structure/urbanismmounted
-
 	name = "Mounted kind of machine"
 	desc = "here's many terminals and generators... Be careful"
 	icon = 'modular_bluemoon/icons/obj/urbanism/urbanism.dmi'
@@ -217,7 +235,6 @@
 	anchored = TRUE
 	density = FALSE
 	armor = list(MELEE = 30, BULLET =50, LASER = 30, ENERGY = 20, BOMB = 70, BIO = 15, RAD = 10, FIRE = 40, ACID = 30)
-
 
 /obj/structure/urbanismbillboard
 	name = "Big billboard"
@@ -307,14 +324,15 @@
 	return
 
 /obj/structure/urbanismeffect/singularity_act()
-	qdel(src)
 	return FALSE
+
+/obj/structure/urbanismeffect/ex_act(severity, target, origin)
+	return
 
 /obj/structure/urbanismeffect/ConveyorMove()
 	return
 
-/obj/structure/urbanismeffect/abstract/ex_act(severity, target, origin)
-	return
+/obj/structure/urbanismeffect/abstract
 
 //заебала эта хуета с сломанными стейтами блять.
 /obj/structure/flora/grass/snowgrass

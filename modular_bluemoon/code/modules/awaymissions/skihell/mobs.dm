@@ -11,10 +11,12 @@
 	del_on_death = 0
 	health = 200
 	maxHealth = 200
+	obj_damage = 0
+	environment_smash = ENVIRONMENT_SMASH_NONE
 	projectilesound = 'modular_bluemoon/sound/weapons/mesa/scar.ogg'
 	rapid = 18
 	aggro_vision_range = 9
-	casingtype = /obj/item/ammo_casing/c22lr/fortificator
+	casingtype = /obj/item/ammo_casing/c22lr/fortificator/autodelete
 	death_sound = 'modular_bluemoon/sound/creatures/skihell/death.ogg'
 	deathmessage = "gets discombobulated and fucking dies."
 	icon_dead = "fortificator_dead"
@@ -55,6 +57,9 @@
 			playsound(src, pick(sounds), 50, 0)
 
 /mob/living/simple_animal/hostile/syndicate/ranged/orderfortificator/Move(atom/newloc)
+	return FALSE
+
+/mob/living/simple_animal/hostile/syndicate/ranged/orderfortificator/AttackingTarget()
 	return FALSE
 
 
@@ -119,7 +124,13 @@
 /mob/living/simple_animal/hostile/syndicate/melee/orderreinforcer/bullet_act(obj/item/projectile/Proj)
 	if(prob(40))
 		visible_message("<span class='danger'>[src] blocks [Proj] with its shield!</span>")
-		playsound(src, 'modular_bluemoon/sound/creatures/skihell/shielddodge.ogg', 80, 0)
+		var/static/list/shield_sounds = list(
+			'modular_bluemoon/sound/weapons/shield/ric1.ogg',
+			'modular_bluemoon/sound/weapons/shield/ric2.ogg',
+			'modular_bluemoon/sound/weapons/shield/ric3.ogg',
+			'modular_bluemoon/sound/weapons/shield/ric5.ogg'
+		)
+		playsound(src, pick(shield_sounds), 80, 0)
 		return BULLET_ACT_BLOCK
 	return ..()
 
@@ -143,116 +154,79 @@
 	icon_dead = "combatant_dead"
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
-	var/has_thrown_grenade = FALSE
-	var/grenade_cooldown = 30 SECONDS
+	var/grenade_cooldown = 10 SECONDS
 	var/last_grenade_throw = 0
 
-	New()
-		..()
-		spawn(0)
-			ai_loop()
+/mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/Initialize(mapload)
+	. = ..()
+	last_grenade_throw = world.time
 
-	Life()
-		. = ..()
-		if(stat != CONSCIOUS)
-			return
-		// Check for incoming grenades and dodge
-		for(var/obj/item/grenade/G in oview(3, src))
-			if(G.throwing && get_dist(src, G) <= 2)
-				dodge_grenade(G)
-				break
-
-	proc/dodge_grenade(obj/item/grenade/G)
-		var/list/dirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
-		var/turf/T = get_step(src, pick(dirs))
-		if(T && !T.density)
-			visible_message("<span class='warning'>[src] dodges the incoming grenade!</span>")
-			playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1)
-			forceMove(T)
-
-	proc/ai_loop()
-		while(src && src.stat != DEAD)
-			var/mob/living/target = find_target()
-
-			if(target && world.time > last_grenade_throw + grenade_cooldown && get_dist(src, target) >= 4 && get_dist(src, target) <= 7)
-				throw_grenade(target)
-				last_grenade_throw = world.time
-
-			sleep(5)
+/mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/Life()
+	. = ..()
+	if(stat != CONSCIOUS || stop_automated_movement)
 		return
 
-	proc/find_target()
-		var/mob/living/best = null
-		var/dist = 999
+	// Check for incoming grenades and dodge
+	for(var/obj/item/grenade/G in oview(3, src))
+		if(G.throwing && get_dist(src, G) <= 2)
+			dodge_grenade(G)
+			break
 
-		for(var/mob/living/M in oview(aggro_vision_range, src))
-			if(!is_valid_throw_target(M))
-				continue
+	if(target && world.time > last_grenade_throw + grenade_cooldown)
+		var/dist = get_dist(src, target)
+		if(dist >= 3 && dist <= 9 && can_see(src, target, aggro_vision_range))
+			throw_grenade(target)
 
-			var/d = get_dist(src, M)
-			if(d < dist)
-				dist = d
-				best = M
+/mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/proc/dodge_grenade(obj/item/grenade/G)
+	var/list/dirs = list(NORTH, SOUTH, EAST, WEST, NORTHEAST, NORTHWEST, SOUTHEAST, SOUTHWEST)
+	var/turf/T = get_step(src, pick(dirs))
+	if(T && !T.density)
+		visible_message("<span class='warning'>[src] dodges the incoming grenade!</span>")
+		playsound(src, 'sound/weapons/thudswoosh.ogg', 50, 1)
+		forceMove(T)
 
-		return best
+/mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/proc/throw_grenade(mob/living/L)
+	if(!L || QDELETED(L))
+		return
 
-	proc/is_valid_throw_target(mob/living/T)
-		if(!T || QDELETED(T))
-			return FALSE
-		if(T.stat != CONSCIOUS)
-			return FALSE
-		if(T == src)
-			return FALSE
-		if(T.faction && src.faction && (T.faction & src.faction))
-			return FALSE
-		return TRUE
+	last_grenade_throw = world.time
+	stop_automated_movement = TRUE
 
-	proc/throw_grenade(mob/living/target)
-		if(!target || QDELETED(target))
-			return
+	// Enhanced visual and audio warning
+	var/obj/effect/temp_visual/TV = new /obj/effect/temp_visual/decoy/fading(loc, 2 SECONDS)
+	TV.color = "#ff0000"
+	visible_message("<span class='danger'>[src] begins charging a grenade throw!</span>")
+	playsound(src, 'sound/magic/lightning_chargeup.ogg', 70, 1)
 
-		// Stop moving and prepare
-		var/old_speed = speed
-		speed = 0
+	set_light(3, 1, "#ff0000")
+	addtimer(CALLBACK(src, PROC_REF(reset_light)), 2 SECONDS)
+	addtimer(CALLBACK(src, PROC_REF(do_throw), L), 2 SECONDS)
 
-		// Enhanced visual and audio warning
-		var/obj/effect/temp_visual/TV = new /obj/effect/temp_visual/decoy/fading(loc, 2 SECONDS)
-		TV.color = "#ff0000"
-		visible_message("<span class='danger'>[src] begins charging a grenade throw!</span>")
-		playsound(src, 'sound/magic/lightning_chargeup.ogg', 70, 1)
-		// Add a light effect
-		set_light(3, 1, "#ff0000")
-		addtimer(CALLBACK(src, .proc/reset_light), 2 SECONDS)
+/mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/proc/reset_light()
+	set_light(0)
 
-		addtimer(CALLBACK(src, .proc/do_throw, target, old_speed), 2 SECONDS)
+/mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/proc/do_throw(mob/living/L)
+	stop_automated_movement = FALSE
+	if(!L || QDELETED(L) || stat != CONSCIOUS || !can_see(src, L, aggro_vision_range))
+		return
 
-	proc/reset_light()
-		set_light(0)
+	visible_message("<span class='danger'>[src] hurls a frag grenade with deadly precision!</span>")
+	playsound(get_turf(src), 'modular_bluemoon/sound/creatures/skihell/shielddodge.ogg', 70, 1)
 
-	proc/do_throw(mob/living/target, old_speed)
-		if(!target || QDELETED(target))
-			speed = old_speed
-			return
+	// Create and throw grenade
+	var/obj/item/grenade/syndieminibomb/concussion/combatant/G = new(src.loc)
+	G.throw_at(L, 7, 2, src)
+	addtimer(CALLBACK(G, /obj/item/grenade/proc/prime), 25)
 
-		visible_message("<span class='danger'>[src] hurls a frag grenade with deadly precision!</span>")
-		playsound(get_turf(src), 'modular_bluemoon/sound/creatures/skihell/shielddodge.ogg', 70, 1)
+	// Add smoke effect at throw location
+	var/turf/throw_turf = get_turf(src)
+	addtimer(CALLBACK(src, PROC_REF(create_smoke), throw_turf), 10)
 
-		// Create and throw grenade
-		var/obj/item/grenade/syndieminibomb/concussion/combatant/G = new(src.loc)
-		G.throw_at(target, 6, 2, src)
-		addtimer(CALLBACK(G, /obj/item/grenade/proc/prime), 25)
-
-		// Add smoke effect at throw location
-		var/turf/throw_turf = get_turf(src)
-		addtimer(CALLBACK(src, .proc/create_smoke, throw_turf), 10)
-
-		speed = old_speed
-
-	proc/create_smoke(turf/T)
-		if(T)
-			var/datum/effect_system/smoke_spread/bad/smoke = new
-			smoke.set_up(3, T)
-			smoke.start()
+/mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/proc/create_smoke(turf/T)
+	if(T)
+		var/datum/effect_system/smoke_spread/bad/smoke = new
+		smoke.set_up(3, T)
+		smoke.start()
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/adjustHealth(amount, updating_health = TRUE, ...)
 	. = ..()
@@ -569,38 +543,49 @@
 
 		if(closest_wounded && !current_beam)
 			start_healing(closest_wounded)
-			last_heal = world.time
 
 	proc/start_healing(mob/living/target)
 		if(!target || target.stat == DEAD)
 			return
 
 		healing_target = target
-		// Используем Beam() вместо beam()
-		current_beam = Beam(target, icon_state="medbeam", time=100, maxdistance=healing_range, beam_type=/obj/effect/ebeam/medical)
+		current_beam = Beam(target, icon_state="medbeam", time=5 MINUTES, maxdistance=healing_range, beam_type=/obj/effect/ebeam/medical)
 		if(current_beam)
+			RegisterSignal(current_beam, COMSIG_PARENT_QDELETING, PROC_REF(beam_died))
 			beam_healing()
 
 	proc/beam_healing()
-		if(!healing_target || !isliving(healing_target) || healing_target.stat == DEAD || !current_beam)
+		if(!healing_target || !isliving(healing_target) || healing_target.stat == DEAD || !current_beam || QDELETED(current_beam))
 			stop_healing()
 			return
 
-		if(isliving(healing_target))
-			var/mob/living/L = healing_target
-			L.adjustBruteLoss(-5)
-			L.adjustFireLoss(-5)
-			L.adjustToxLoss(-2)
-			L.adjustOxyLoss(-2)
+		if(healing_target.health >= healing_target.maxHealth || get_dist(src, healing_target) > healing_range || !can_see(src, healing_target, healing_range))
+			stop_healing(healing_target.health >= healing_target.maxHealth)
+			return
 
-			new /obj/effect/temp_visual/heal(get_turf(L), "#80F5FF")
+		var/mob/living/L = healing_target
+		L.adjustBruteLoss(-5)
+		L.adjustFireLoss(-5)
+		L.adjustToxLoss(-2)
+		L.adjustOxyLoss(-2)
+
+		new /obj/effect/temp_visual/heal(get_turf(L), "#80F5FF")
 
 		addtimer(CALLBACK(src, PROC_REF(beam_healing)), 1 SECONDS)
 
-	proc/stop_healing()
+	proc/beam_died()
+		SIGNAL_HANDLER
+		stop_healing()
+
+	proc/stop_healing(finished = FALSE)
+		if(current_beam)
+			UnregisterSignal(current_beam, COMSIG_PARENT_QDELETING)
+			QDEL_NULL(current_beam)
 		healing_target = null
-		QDEL_NULL(current_beam)
-		last_heal = world.time
+		if(finished && finished != COMSIG_PARENT_QDELETING)
+			last_heal = world.time - heal_cooldown
+		else
+			last_heal = world.time
 
 	Destroy()
 		stop_healing()
@@ -643,53 +628,163 @@
 	maxHealth = 120
 	projectilesound = 'modular_bluemoon/sound/weapons/acr_fire.ogg'
 	rapid = 1
-	aggro_vision_range = 20
+	aggro_vision_range = 40
+	vision_range = 40
 	projectiletype = /obj/item/projectile/bullet/a308
 	casingtype = /obj/item/ammo_casing/a308
 	death_sound = 'modular_bluemoon/sound/creatures/skihell/death.ogg'
 	deathmessage = "gets discombobulated and fucking dies."
 	icon_dead = "sniper_dead"
+	obj_damage = 0
+	environment_smash = ENVIRONMENT_SMASH_NONE
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
 	var/aiming = FALSE
 	var/aim_time = 2 SECONDS
 	var/last_aim = 0
 	var/datum/beam/current_beam = null
+	var/atom/aiming_target = null
+	var/grace_time = 0.6 SECONDS
+	var/lose_target_time = 0
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/MoveToTarget(list/possible_targets)
+	stop_automated_movement = TRUE
+	if(!target || !CanAttack(target))
+		LoseTarget()
+		return FALSE
+	if(target in possible_targets)
+		var/turf/T = get_turf(src)
+		if(target.z != T.z)
+			LoseTarget()
+			return FALSE
+		// Snipping the adjacency check to ensure we shoot across 1-tile chasms
+		if(ranged_cooldown <= world.time)
+			OpenFire(target)
+		return TRUE
+	LoseTarget()
+	return FALSE
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/Move(atom/newloc)
+	return FALSE
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/AttackingTarget()
 	return FALSE
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/OpenFire(atom/A)
 	if(aiming || world.time < last_aim + aim_time)
 		return
 	start_aiming(A)
+	ranged_cooldown = world.time + ranged_cooldown_time
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/proc/los_check(atom/target)
+	var/turf/user_turf = get_turf(src)
+	var/turf/target_turf = get_turf(target)
+	if(!user_turf || !target_turf || user_turf.z != target_turf.z)
+		return FALSE
+
+	for(var/turf/T in getline(user_turf, target_turf))
+		if(T == user_turf || T == target_turf)
+			continue
+		if(T.opacity)
+			return FALSE
+		if(T.density && !isgroundlessturf(T) && !istype(T, /turf/open/chasm))
+			return FALSE
+		for(var/atom/movable/AM in T)
+			if(AM == target || AM == src || AM.invisibility > see_invisible)
+				continue
+			if(AM.opacity)
+				return FALSE
+			if(AM.density)
+				if(isgroundlessturf(T) || istype(T, /turf/open/chasm)) // Ignore density of objects on chasms/space
+					continue
+				if(AM.pass_flags_self & (PASSTABLE|PASSGLASS|PASSGRILLE|LETPASSTHROW))
+					continue
+				if(istype(AM, /obj/structure/barricade/sandbags) || istype(AM, /obj/structure/window))
+					continue
+				return FALSE
+	return TRUE
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/proc/start_aiming(atom/target)
 	if(!target || aiming)
 		return
-	if(!can_see(src, target, aggro_vision_range))
+	if(!los_check(target))
 		return
 	aiming = TRUE
-	current_beam = Beam(target, icon_state="blood", time=aim_time, maxdistance=aggro_vision_range, beam_type=/obj/effect/ebeam/laser)
+	aiming_target = target
+	lose_target_time = world.time
+	// Increased time slightly to ensure beam doesn't expire before fire_shot
+	current_beam = Beam(target, icon_state="blood", time=aim_time + 2, maxdistance=aggro_vision_range, beam_type=/obj/effect/ebeam/laser)
+	if(current_beam)
+		RegisterSignal(current_beam, COMSIG_PARENT_QDELETING, PROC_REF(beam_died))
 	visible_message("<span class='danger'>[src] takes aim at [target]!</span>")
-	addtimer(CALLBACK(src, PROC_REF(fire_shot), target), aim_time)
+	aim_process(target, world.time + aim_time)
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/proc/beam_died()
+	SIGNAL_HANDLER
+	if(aiming)
+		last_aim = world.time // Ensure cooldown if beam is lost
+	stop_aiming()
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/proc/aim_process(atom/target, end_time)
+	if(!aiming || target != aiming_target || (src.target && target != src.target))
+		stop_aiming()
+		return
+	if(!target || QDELETED(target) || !los_check(target))
+		if(world.time < lose_target_time + grace_time)
+			addtimer(CALLBACK(src, PROC_REF(aim_process), target, end_time), 2)
+			return
+		if(aiming)
+			last_aim = world.time // Cooldown on LOS loss
+		stop_aiming()
+		return
+	lose_target_time = world.time
+	if(world.time >= end_time)
+		fire_shot(target)
+		return
+	addtimer(CALLBACK(src, PROC_REF(aim_process), target, end_time), 2)
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/proc/fire_shot(atom/target)
 	if(!target || !aiming)
 		stop_aiming()
 		return
-	if(!can_see(src, target, aggro_vision_range))
+	if(!los_check(target) && world.time > lose_target_time + grace_time)
 		stop_aiming()
 		return
-	QDEL_NULL(current_beam)
-	aiming = FALSE
+	stop_aiming()
 	last_aim = world.time
-	Shoot(target)
+
+	var/atom/final_target = target
+	var/turf/T = get_turf(target)
+	if(T && isliving(target))
+		var/mob/living/L = target
+		var/dist = get_dist(src, T)
+		var/time_to_hit = dist / 17.5 // Projectile speed estimation
+		var/speed = 0
+		if(L.m_intent == MOVE_INTENT_RUN)
+			speed = 4.5
+		else if(L.m_intent == MOVE_INTENT_WALK)
+			speed = 2
+
+		if(speed > 0)
+			var/lead_tiles = round(time_to_hit * speed)
+			if(lead_tiles > 0)
+				var/turf/lead_T = T
+				for(var/i in 1 to lead_tiles)
+					var/turf/next = get_step(lead_T, L.dir)
+					if(!next || next.density || next.opacity)
+						break
+					lead_T = next
+				final_target = lead_T
+
+	Shoot(final_target)
 	visible_message("<span class='danger'>[src] fires a precise shot!</span>")
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/proc/stop_aiming()
+	if(current_beam)
+		UnregisterSignal(current_beam, COMSIG_PARENT_QDELETING)
+		QDEL_NULL(current_beam)
 	aiming = FALSE
-	QDEL_NULL(current_beam)
+	aiming_target = null
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/Destroy()
 	stop_aiming()

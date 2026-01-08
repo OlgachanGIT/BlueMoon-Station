@@ -653,6 +653,25 @@
 	attack_verb = list("bashed","pounded","slammed")
 	item_flags = SLOWS_WHILE_IN_HAND
 	w_class = WEIGHT_CLASS_GIGANTIC
+	var/durability = 30
+
+/obj/item/shield/police/on_shield_block(mob/living/owner, atom/object, damage, attack_text, attack_type, armour_penetration, mob/attacker, def_zone, final_block_chance)
+	durability--
+	if(durability <= 0)
+		if(owner)
+			owner.visible_message("<span class='warning'>[src] breaks apart!</span>")
+			playsound(owner, 'sound/effects/bang.ogg', 50, 1)
+		qdel(src)
+		return TRUE
+
+	var/static/list/shield_sounds = list(
+		'modular_bluemoon/sound/weapons/shield/ric1.ogg',
+		'modular_bluemoon/sound/weapons/shield/ric2.ogg',
+		'modular_bluemoon/sound/weapons/shield/ric3.ogg',
+		'modular_bluemoon/sound/weapons/shield/ric5.ogg'
+	)
+	playsound(owner, pick(shield_sounds), 50, 1)
+	return ..()
 
 
 /obj/item/gun/ballistic/automatic/pistol/ski9mm
