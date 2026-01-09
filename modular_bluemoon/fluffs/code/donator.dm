@@ -672,7 +672,7 @@
 	name = "Alta's dogtag"
 	slot = ITEM_SLOT_NECK
 	path = /obj/item/clothing/neck/tie/dogtag
-	ckeywhitelist = list("oni3288", "ghos7ik", "discord980", "mihana964", "romontesque", "enigma418", "smol42", "notlikeluls",  "kladmenuwu", "alexsandoor", "scramblescream", "nai1ten", "devildeadspace", "zetneskov", "hazzi", "definitelynotnesuby", "silverfoxpaws", "pr1zrak", "earthphobia", "wafflemeow", "trora", "kosep", "urfdrf", "mikolaostavkin", "xaeshkavd", "deltarayx", "korinfellori", "troubleneko17th", "dimofon", "lichfail", "gisya", "dimakr", "cupteazee", "nopeingeneer", "silyamg", "lomodno", "valsons", "nyctealust", "abrikos", "spoopyman228", "stasdvrz", "shizalrp", "tblkba", "dragon9090", "avtobuspng", "ninjapikachushka", "ailhate")
+	ckeywhitelist = list("oni3288", "ghos7ik", "discord980", "mihana964", "romontesque", "enigma418", "smol42", "notlikeluls",  "kladmenuwu", "alexsandoor", "scramblescream", "nai1ten", "devildeadspace", "zetneskov", "hazzi", "definitelynotnesuby", "silverfoxpaws", "pr1zrak", "earthphobia", "wafflemeow", "trora", "kosep", "urfdrf", "mikolaostavkin", "xaeshkavd", "deltarayx", "korinfellori", "troubleneko17th", "dimofon", "lichfail", "gisya", "dimakr", "cupteazee", "nopeingeneer", "silyamg", "lomodno", "valsons", "nyctealust", "abrikos", "spoopyman228", "stasdvrz", "shizalrp", "tblkba", "dragon9090", "avtobuspng", "ninjapikachushka", "ailhate", "kingdeaths")
 
 /datum/gear/donator/bm/hateredsoul_dogtag
 	name = "Combat Dogtag"
@@ -1117,6 +1117,27 @@
 	slot = ITEM_SLOT_OCLOTHING
 	path = /obj/item/clothing/underwear/shirt/bra/kladmen_bra
 	ckeywhitelist = list("kladmenuwu", "scramblescream")
+	subcategory = LOADOUT_SUBCATEGORIES_DON03
+
+/datum/gear/donator/bm/troubleneko_bra
+	name = "Laced lingerie bra"
+	slot = ITEM_SLOT_OCLOTHING
+	path = /obj/item/clothing/underwear/shirt/bra/troubleneko_bra
+	ckeywhitelist = list("troubleneko17th")
+	subcategory = LOADOUT_SUBCATEGORIES_DON03
+
+/datum/gear/donator/bm/troubleneko_panties
+	name = "Panties"
+	slot = ITEM_SLOT_OCLOTHING
+	path = /obj/item/clothing/underwear/briefs/troubleneko_panties
+	ckeywhitelist = list("troubleneko17th")
+	subcategory = LOADOUT_SUBCATEGORIES_DON03
+
+/datum/gear/donator/bm/troubleneko_socks
+	name = "Socks"
+	slot = ITEM_SLOT_OCLOTHING
+	path = /obj/item/clothing/underwear/socks/thigh/troubleneko_socks
+	ckeywhitelist = list("troubleneko17th")
 	subcategory = LOADOUT_SUBCATEGORIES_DON03
 
 /datum/gear/donator/bm/f_haori
