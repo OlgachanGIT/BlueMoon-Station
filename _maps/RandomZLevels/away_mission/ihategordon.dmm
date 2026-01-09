@@ -1226,9 +1226,10 @@
 /turf/open/floor/plasteel/rivets,
 /area/awaymission/ihategordon/opposing/comlpex)
 "ave" = (
-/obj/effect/spawner/structure/window/hollow/reinforced/end,
+/obj/structure/grille,
+/obj/structure/window/reinforced/fulltile,
 /turf/open/floor/plating,
-/area/awaymission/ihategordon/big_offices)
+/area/awaymission/ihategordon/hecu_camp_hall)
 "avh" = (
 /obj/structure/reagent_dispensers/water_cooler,
 /obj/machinery/light,
@@ -8198,6 +8199,13 @@
 /obj/effect/mapping_helpers/airlock/locked,
 /turf/open/floor/plasteel/rivets,
 /area/awaymission/ihategordon/dorm_offices)
+"cPb" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark/corner{
+	dir = 4
+	},
+/mob/living/simple_animal/hostile/headcrab/mesa,
+/turf/open/floor/plasteel/rivets,
+/area/awaymission/ihategordon/big_offices)
 "cPd" = (
 /obj/effect/festive/street/streetlinesouth,
 /obj/structure/fence/door,
@@ -12333,12 +12341,6 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/ihategordon/underground_tunnels)
-"ehk" = (
-/obj/effect/spawner/structure/window/hollow/reinforced/middle{
-	dir = 4
-	},
-/turf/open/floor/plating,
-/area/awaymission/ihategordon/big_offices)
 "ehq" = (
 /obj/structure/window/reinforced/fulltile,
 /obj/structure/grille,
@@ -13390,10 +13392,16 @@
 /turf/open/floor/plating/ironsand,
 /area/awaymission/ihategordon/outsideofmesa/hecu_camp)
 "eyJ" = (
-/obj/structure/grille,
-/obj/structure/window/reinforced/fulltile,
-/turf/open/floor/plating,
-/area/awaymission/ihategordon/hecu_camp_hall)
+/obj/effect/turf_decal/siding/wideplating_new{
+	color = "#454545";
+	dir = 1
+	},
+/obj/structure/urbanismpower{
+	icon_state = "trafficlight";
+	name = "traffic light"
+	},
+/turf/open/floor/plating/cobblestone/sidewalk,
+/area/awaymission/ihategordon/outsideofmesa)
 "eyK" = (
 /obj/structure/urbanismbigcrate{
 	pixel_x = 5
@@ -21804,11 +21812,6 @@
 	},
 /turf/open/floor/plating,
 /area/awaymission/ihategordon/science_tunnel)
-"hlF" = (
-/obj/structure/window/reinforced/fulltile,
-/obj/structure/grille,
-/turf/open/floor/plating,
-/area/awaymission/ihategordon/cryo_room)
 "hlK" = (
 /obj/structure/closet/crate/solarpanel_small,
 /obj/item/clothing/suit/radiation,
@@ -37050,11 +37053,10 @@
 /turf/open/floor/plasteel/rivets,
 /area/awaymission/ihategordon/big_offices)
 "mhb" = (
-/obj/effect/spawner/structure/window/hollow/reinforced/end{
-	dir = 1
-	},
+/obj/structure/grille,
+/obj/structure/window/reinforced/fulltile,
 /turf/open/floor/plating,
-/area/awaymission/ihategordon/big_offices)
+/area/awaymission/ihategordon/cryo_room)
 "mhm" = (
 /obj/effect/festive/street/streetlinenorth,
 /obj/structure/bed/roller,
@@ -37716,6 +37718,11 @@
 	},
 /turf/open/floor/plating/cobblestone,
 /area/awaymission/ihategordon/underground_tunnels)
+"mty" = (
+/obj/structure/window/reinforced/fulltile,
+/obj/structure/grille,
+/turf/open/floor/plating,
+/area/awaymission/ihategordon/emitter_chambers)
 "mtz" = (
 /obj/structure/alien/weeds{
 	color = "#ac3b06";
@@ -37931,13 +37938,6 @@
 	},
 /turf/open/floor/plating/cobblestone,
 /area/awaymission/ihategordon/underground_tunnels)
-"mxQ" = (
-/obj/effect/turf_decal/siding/wideplating_new/dark/corner{
-	dir = 4
-	},
-/mob/living/simple_animal/hostile/headcrab/mesa,
-/turf/open/floor/plasteel/rivets,
-/area/awaymission/ihategordon/big_offices)
 "mxT" = (
 /obj/effect/turf_decal/siding/wideplating_new{
 	color = "#454545";
@@ -38359,6 +38359,10 @@
 /obj/item/flashlight/seclite,
 /obj/item/flashlight/seclite,
 /obj/item/flashlight/seclite,
+/obj/item/hecusentry_remote{
+	pixel_x = 0;
+	pixel_y = 9
+	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/ihategordon/outsideofmesa/hecu_camp)
 "mGc" = (
@@ -38827,13 +38831,10 @@
 /obj/item/ammo_box/shotgun/loaded/buckshot,
 /obj/item/ammo_box/shotgun/loaded/buckshot,
 /obj/item/ammo_box/shotgun/loaded/buckshot,
-/obj/item/storage/toolbox/emergency/turret,
-/obj/item/storage/toolbox/emergency/turret,
-/obj/item/storage/toolbox/emergency/turret,
-/obj/item/storage/toolbox/emergency/turret,
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 10
 	},
+/obj/item/hecusentry,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/ihategordon/outsideofmesa/hecu_camp)
 "mML" = (
@@ -41643,8 +41644,8 @@
 /turf/open/floor/plating,
 /area/awaymission/ihategordon/science_tunnel)
 "nJI" = (
-/obj/structure/grille,
 /obj/structure/window/reinforced/fulltile,
+/obj/structure/grille,
 /turf/open/floor/plating,
 /area/awaymission/ihategordon/cryo_room)
 "nJK" = (
@@ -43359,6 +43360,17 @@
 	icon_state = "machine3";
 	pixel_x = 0;
 	pixel_y = 12
+	},
+/turf/open/floor/plating/ironsand,
+/area/awaymission/ihategordon/outsideofmesa/hecu_camp)
+"ome" = (
+/obj/item/hecusentry{
+	pixel_x = 0;
+	pixel_y = -3
+	},
+/obj/item/hecusentry{
+	pixel_x = 0;
+	pixel_y = 14
 	},
 /turf/open/floor/plating/ironsand,
 /area/awaymission/ihategordon/outsideofmesa/hecu_camp)
@@ -48643,6 +48655,10 @@
 	},
 /turf/open/floor/plating/ironsand,
 /area/awaymission/ihategordon/outsideofmesa)
+"pZO" = (
+/obj/item/hecusentry,
+/turf/open/floor/plating/ironsand,
+/area/awaymission/ihategordon/outsideofmesa/hecu_camp)
 "pZU" = (
 /obj/structure/window/reinforced/spawner/north{
 	dir = 4
@@ -55554,11 +55570,6 @@
 	},
 /turf/open/floor/plasteel/rivets,
 /area/awaymission/ihategordon/sectorhsecoffices)
-"spY" = (
-/obj/structure/window/reinforced/fulltile,
-/obj/structure/grille,
-/turf/open/floor/plating,
-/area/awaymission/ihategordon/emitter_chambers)
 "sqa" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 4
@@ -68191,10 +68202,6 @@
 	pixel_x = 3;
 	pixel_y = -4
 	},
-/obj/item/gun/ballistic/automatic/pistol/hl9mm{
-	pixel_x = -2;
-	pixel_y = 5
-	},
 /turf/open/floor/plating,
 /area/awaymission/ihategordon/outsideofmesa)
 "wsp" = (
@@ -75753,7 +75760,7 @@ juO
 cIl
 iUL
 xgj
-jWk
+ome
 lSR
 ioT
 jWk
@@ -76010,7 +76017,7 @@ gvg
 cIl
 iUL
 xgj
-jWk
+pZO
 uQX
 jWk
 ubk
@@ -77319,7 +77326,7 @@ rBd
 iUL
 kyb
 iUL
-faf
+tZw
 faf
 iUL
 iUL
@@ -78776,7 +78783,7 @@ rPb
 rPb
 rPb
 rPb
-rPb
+kVl
 rPb
 rPb
 rPb
@@ -79033,7 +79040,7 @@ nmW
 nmW
 nmW
 nmW
-nmW
+fUD
 nmW
 eml
 nmW
@@ -79289,15 +79296,15 @@ jsX
 jsX
 jsX
 jsX
+xnb
+xnb
 jsX
 jsX
 jsX
 jsX
 jsX
 jsX
-jsX
-jsX
-sJV
+xZn
 jsX
 lUk
 jsX
@@ -79561,7 +79568,7 @@ xZn
 jsX
 fta
 jsX
-jsX
+adJ
 jsX
 jsX
 jsX
@@ -79805,8 +79812,8 @@ jsX
 jsX
 jsX
 jsX
-jsX
-jsX
+xnb
+xnb
 jsX
 jxh
 xnb
@@ -80063,7 +80070,7 @@ jsX
 jsX
 xZn
 jsX
-jsX
+xnb
 jsX
 jsX
 xnb
@@ -80207,7 +80214,7 @@ uUq
 sey
 gYt
 hGf
-spY
+mty
 fxu
 sUz
 cSe
@@ -80320,7 +80327,7 @@ jsX
 jsX
 jsX
 bOa
-jsX
+xnb
 jsX
 xZn
 jsX
@@ -80464,7 +80471,7 @@ kkT
 eee
 kSO
 mUB
-spY
+mty
 sbT
 tic
 loT
@@ -80816,7 +80823,7 @@ sgL
 sgL
 sgL
 sgL
-coJ
+eyJ
 mUB
 mUB
 mUB
@@ -80949,11 +80956,11 @@ cpZ
 cpZ
 gbu
 rxG
-mhb
-ehk
-ehk
-ehk
-ave
+rxG
+jvE
+jvE
+jvE
+rxG
 rxG
 bWZ
 bWZ
@@ -80978,7 +80985,7 @@ rYp
 mUB
 mUB
 mUB
-spY
+mty
 fxu
 qzE
 qzE
@@ -82263,7 +82270,7 @@ rYp
 mUB
 mUB
 mUB
-spY
+mty
 cDV
 qzE
 sGk
@@ -82777,7 +82784,7 @@ gqm
 lMa
 uQx
 mUB
-spY
+mty
 lgM
 qzE
 jcN
@@ -83034,7 +83041,7 @@ ykj
 gbu
 nEV
 teE
-spY
+mty
 wap
 qzE
 qzE
@@ -83469,7 +83476,7 @@ uUz
 xvy
 xvy
 uWZ
-eyJ
+ave
 hOD
 ejt
 ejt
@@ -85096,7 +85103,7 @@ qzE
 dTl
 cSP
 wvC
-spY
+mty
 rNM
 qzE
 qzE
@@ -85353,7 +85360,7 @@ qzE
 uYB
 qzE
 xzF
-spY
+mty
 hhR
 qzE
 cyw
@@ -85867,7 +85874,7 @@ qzE
 aik
 qzE
 wvC
-spY
+mty
 fpp
 jJa
 qzE
@@ -86124,7 +86131,7 @@ fqN
 vAe
 qzE
 qCh
-spY
+mty
 iaZ
 qzE
 qzE
@@ -96878,21 +96885,21 @@ jEG
 rBv
 gDj
 wuY
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
 cpZ
 cpZ
 cpZ
@@ -97135,21 +97142,21 @@ xCk
 eOO
 ecV
 wuY
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
-bWZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
+cpZ
 cpZ
 cpZ
 cpZ
@@ -105027,7 +105034,7 @@ xBI
 iJY
 czX
 tGx
-mxQ
+cPb
 kEh
 uvS
 avh
@@ -109714,7 +109721,7 @@ tnT
 tnT
 xIJ
 xIj
-hlF
+nJI
 aTq
 vEg
 tnT
@@ -109971,7 +109978,7 @@ tnT
 glN
 ghz
 glq
-hlF
+nJI
 gmr
 sGp
 glN
@@ -110228,7 +110235,7 @@ tnT
 xIJ
 wtL
 hkZ
-hlF
+nJI
 pPy
 glN
 glN
@@ -110485,7 +110492,7 @@ xIJ
 kJs
 iho
 hkZ
-hlF
+nJI
 gmr
 vgO
 uNo
@@ -110742,7 +110749,7 @@ mkA
 wuo
 xUv
 hkZ
-hlF
+nJI
 bwS
 kFm
 jBm
@@ -110999,7 +111006,7 @@ wtL
 wtL
 wtL
 mvA
-nJI
+mhb
 wAJ
 htQ
 xQT
@@ -111256,7 +111263,7 @@ wtL
 wtL
 kJs
 lTf
-hlF
+nJI
 aKp
 sGp
 tnT

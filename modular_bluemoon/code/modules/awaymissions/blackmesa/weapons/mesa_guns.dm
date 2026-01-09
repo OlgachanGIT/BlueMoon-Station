@@ -801,3 +801,12 @@
 	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/skihellclothes.dmi'
 	icon_state = "relicuumbag"
 	item_state = "relicuumbag"
+
+
+/obj/item/clothing/neck/tie/hecudogtag
+	name = "HECU Dogtag"
+	desc = "Военные жетоны солдата HECU. На них выбиты имя, фамилия и группа крови."
+	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
+	mob_overlay_icon = 'modular_bluemoon/fluffs/icons/mob/clothing/accessories.dmi'
+	icon_state = "dogtag"
+	item_state = "dogtag"

@@ -5423,6 +5423,13 @@
 	slowdown = 0
 	},
 /area/awaymission/skihell/trainway)
+"efH" = (
+/turf/open/floor/plating/asteroid/snow{
+	floor_variance = 0;
+	icon_state = "snow_dug";
+	slowdown = 1
+	},
+/area/awaymission/skihell/rock)
 "egf" = (
 /obj/structure/urbanismbigcrate/alt{
 	icon_state = "boxalt4";
@@ -6074,6 +6081,12 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell)
+"eLq" = (
+/obj/structure/urbanismbigcrate/alt{
+	icon_state = "boxalt1"
+	},
+/turf/open/floor/plating/cobblestone,
+/area/awaymission/skihell/center)
 "eLQ" = (
 /obj/effect/turf_decal/weather/snow/corner,
 /obj/structure/urbanismeffect{
@@ -12810,6 +12823,13 @@
 	},
 /turf/open/floor/carpet/green,
 /area/awaymission/skihell/center)
+"kdw" = (
+/obj/effect/decal/cleanable/glass/plastitanium,
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper{
+	dir = 1
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "kdH" = (
 /obj/structure/bookcase/random/reference,
 /obj/effect/turf_decal/siding/wideplating_new/dark,
@@ -14246,11 +14266,8 @@
 	},
 /area/awaymission/skihell/trainway)
 "lms" = (
-/obj/structure/curtain{
-	color = "#560319"
-	},
-/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper,
-/turf/open/floor/plasteel/sepia,
+/obj/structure/flora/rock/pile/icy,
+/turf/open/floor/plating/cobblestone,
 /area/awaymission/skihell/center)
 "lmP" = (
 /obj/structure/plasticflaps/opaque,
@@ -15253,6 +15270,14 @@
 /obj/effect/turf_decal/trimline/dark/filled/line,
 /turf/open/floor/carpet/green,
 /area/awaymission/skihell/center)
+"mgP" = (
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper,
+/turf/open/floor/plating/asteroid/snow{
+	floor_variance = 0;
+	icon_state = "snow_dug";
+	slowdown = 1
+	},
+/area/awaymission/skihell/rock)
 "mgV" = (
 /obj/structure/filingcabinet/chestdrawer,
 /obj/effect/turf_decal/siding/wideplating_new/dark{
@@ -15285,6 +15310,7 @@
 /obj/effect/turf_decal/siding/white{
 	dir = 9
 	},
+/obj/structure/table/reinforced,
 /turf/open/floor/plating/cobblestone,
 /area/awaymission/skihell/center)
 "mij" = (
@@ -19176,6 +19202,16 @@
 	},
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"pAT" = (
+/obj/effect/turf_decal/weather/snow/corner{
+	dir = 5
+	},
+/obj/structure/flora/rock/pile/icy,
+/turf/open/floor/plating/layeniaredder{
+	icon_state = "concrete2";
+	name = "concrete"
+	},
+/area/awaymission/skihell/center)
 "pBj" = (
 /obj/machinery/door/airlock/wood,
 /turf/open/floor/plasteel/sepia,
@@ -19493,6 +19529,13 @@
 	name = "concrete"
 	},
 /area/awaymission/skihell/rock)
+"pQO" = (
+/obj/effect/turf_decal/siding/red{
+	dir = 8
+	},
+/obj/structure/lattice,
+/turf/open/floor/plating/cobblestone,
+/area/awaymission/skihell/center)
 "pRn" = (
 /obj/structure/lattice,
 /turf/open/floor/plating/asteroid/snow{
@@ -22270,6 +22313,13 @@
 /obj/effect/turf_decal/weather/snow/corner,
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell/entrance)
+"seh" = (
+/obj/effect/turf_decal/siding/red{
+	dir = 4
+	},
+/obj/effect/decal/cleanable/shreds,
+/turf/open/floor/plating/cobblestone,
+/area/awaymission/skihell/center)
 "seq" = (
 /obj/structure/chair/comfy/shuttle{
 	dir = 4;
@@ -23457,6 +23507,10 @@
 /obj/structure/rack/shelf,
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"sXZ" = (
+/obj/effect/decal/cleanable/shreds,
+/turf/open/floor/plating/cobblestone,
+/area/awaymission/skihell/center)
 "sYg" = (
 /obj/machinery/computer{
 	dir = 8;
@@ -23941,6 +23995,7 @@
 /obj/effect/turf_decal/siding/white{
 	dir = 10
 	},
+/obj/structure/flora/rock/pile/icy,
 /turf/open/floor/plating/cobblestone,
 /area/awaymission/skihell/center)
 "tsQ" = (
@@ -27303,9 +27358,7 @@
 	pixel_x = 0;
 	pixel_y = 9
 	},
-/turf/open/floor/plating/asteroid/snow{
-	slowdown = 0
-	},
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
 "wic" = (
 /obj/effect/turf_decal/weather/snow/corner{
@@ -27797,6 +27850,10 @@
 /obj/machinery/door/poddoor,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/trainway)
+"wzf" = (
+/obj/structure/lattice,
+/turf/open/floor/plating/cobblestone,
+/area/awaymission/skihell/center)
 "wzD" = (
 /obj/structure/table/reinforced,
 /turf/open/floor/plating/snowed/smoothed,
@@ -28138,6 +28195,16 @@
 	pixel_y = 3
 	},
 /turf/open/floor/plasteel/dark,
+/area/awaymission/skihell/center)
+"wOw" = (
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersniper{
+	dir = 1;
+	pixel_x = 0;
+	pixel_y = 9
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
 /area/awaymission/skihell/center)
 "wOx" = (
 /obj/machinery/holopad,
@@ -40863,11 +40930,11 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
-lyA
-lyA
-lyA
+efH
+efH
+efH
+efH
+efH
 lyA
 lyA
 lyA
@@ -41112,13 +41179,13 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
-lyA
-lyA
-lyA
-lyA
-lyA
+efH
+efH
+efH
+efH
+efH
+efH
+efH
 lyA
 lyA
 lyA
@@ -41364,8 +41431,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+mgP
 hrW
 hrW
 hrW
@@ -41616,8 +41683,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+efH
 hrW
 hrW
 hrW
@@ -41868,8 +41935,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+efH
 hrW
 hrW
 hrW
@@ -42171,7 +42238,7 @@ hrW
 hrW
 hrW
 hrW
-ifP
+lLk
 sQr
 xfJ
 mTH
@@ -42424,7 +42491,7 @@ hrW
 hrW
 hrW
 lLk
-jeI
+kdw
 lLk
 kfL
 uwS
@@ -43158,7 +43225,7 @@ tRC
 bdy
 aRH
 wOx
-lms
+lzr
 ciO
 hrW
 hrW
@@ -44640,8 +44707,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+efH
 hrW
 hrW
 hrW
@@ -44892,8 +44959,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+efH
 hrW
 hrW
 hrW
@@ -45144,8 +45211,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+mgP
 hrW
 hrW
 hrW
@@ -45396,8 +45463,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+efH
 hrW
 hrW
 hrW
@@ -45648,8 +45715,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+efH
 hrW
 hrW
 hrW
@@ -45901,7 +45968,7 @@ lyA
 lyA
 lyA
 lyA
-lyA
+efH
 hrW
 hrW
 hrW
@@ -46153,7 +46220,7 @@ lyA
 lyA
 lyA
 lyA
-lyA
+efH
 hrW
 nOY
 hrW
@@ -46405,7 +46472,7 @@ lyA
 lyA
 lyA
 lyA
-lyA
+efH
 hrW
 hrW
 hrW
@@ -46657,7 +46724,7 @@ lyA
 lyA
 lyA
 lyA
-lyA
+efH
 hrW
 hrW
 hrW
@@ -46909,7 +46976,7 @@ lyA
 lyA
 lyA
 lyA
-lyA
+efH
 hrW
 hrW
 hrW
@@ -47161,7 +47228,7 @@ lyA
 lyA
 lyA
 lyA
-lyA
+efH
 hrW
 hrW
 hrW
@@ -47413,7 +47480,7 @@ lyA
 lyA
 lyA
 lyA
-lyA
+efH
 hrW
 hrW
 hrW
@@ -47442,7 +47509,7 @@ pVP
 xfJ
 xfJ
 lZa
-cgi
+lzr
 ciO
 hrW
 hrW
@@ -47665,7 +47732,7 @@ lyA
 lyA
 lyA
 lyA
-lyA
+efH
 hrW
 hrW
 hrW
@@ -47916,8 +47983,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+efH
 hrW
 hrW
 hrW
@@ -48168,8 +48235,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+efH
 hrW
 hrW
 hrW
@@ -48420,8 +48487,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+efH
 hrW
 hrW
 hrW
@@ -48672,8 +48739,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+mgP
 hrW
 hrW
 hrW
@@ -48924,8 +48991,8 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
+efH
+efH
 hrW
 hrW
 hrW
@@ -49177,7 +49244,7 @@ lyA
 lyA
 lyA
 lyA
-lyA
+efH
 hrW
 hrW
 hrW
@@ -50992,7 +51059,7 @@ hrW
 hrW
 hrW
 hrW
-xfJ
+whv
 dCu
 jyV
 lXP
@@ -57021,7 +57088,7 @@ oft
 oft
 oft
 kJp
-whv
+wOw
 oft
 oft
 oft
@@ -60479,7 +60546,7 @@ nRM
 nRM
 rvQ
 rvQ
-rvQ
+rNF
 rvQ
 clM
 glb
@@ -60987,7 +61054,7 @@ clM
 fvL
 tEN
 oft
-inh
+pAT
 rvQ
 oRk
 rvQ
@@ -62022,7 +62089,7 @@ rds
 rds
 rds
 hTt
-rds
+pQO
 fKT
 xXn
 oCs
@@ -62277,8 +62344,8 @@ qmJ
 adJ
 adJ
 adJ
-adJ
-adJ
+sXZ
+lms
 adJ
 adJ
 adJ
@@ -62533,7 +62600,7 @@ adJ
 adJ
 adJ
 adJ
-adJ
+sXZ
 adJ
 vGw
 qfp
@@ -62785,7 +62852,7 @@ adJ
 adJ
 adJ
 adJ
-adJ
+lms
 adJ
 adJ
 adJ
@@ -63031,11 +63098,11 @@ adJ
 adJ
 adJ
 adJ
+lms
 adJ
 adJ
-adJ
-adJ
-adJ
+afi
+eLq
 adJ
 adJ
 qmJ
@@ -63287,7 +63354,7 @@ qmJ
 adJ
 adJ
 adJ
-adJ
+wew
 adJ
 adJ
 adJ
@@ -63541,11 +63608,11 @@ adJ
 adJ
 adJ
 adJ
-adJ
+sXZ
 adJ
 qmJ
 adJ
-adJ
+wzf
 sus
 lXP
 lyA
@@ -63792,12 +63859,12 @@ adJ
 adJ
 adJ
 adJ
-adJ
+lms
 adJ
 adJ
 qmJ
 adJ
-adJ
+lms
 sus
 lXP
 lyA
@@ -64041,7 +64108,7 @@ veX
 nOU
 yfk
 veX
-veX
+seh
 kZn
 gjP
 qmJ
@@ -64300,7 +64367,7 @@ qmJ
 adJ
 adJ
 adJ
-adJ
+wzf
 adJ
 sus
 lXP
@@ -64551,9 +64618,9 @@ adJ
 adJ
 adJ
 adJ
+wzf
 adJ
-adJ
-adJ
+wzf
 sus
 lXP
 lyA

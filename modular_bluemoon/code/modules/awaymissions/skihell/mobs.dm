@@ -22,6 +22,7 @@
 	icon_dead = "fortificator_dead"
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
+	sentience_type = SENTIENCE_BOSS
 	var/has_dropped_ammo = FALSE
 
 /mob/living/simple_animal/hostile/syndicate/ranged/orderfortificator/death(gibbed)
@@ -87,6 +88,7 @@
 	attack_sound = 'sound/weapons/slam.ogg'
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
+	sentience_type = SENTIENCE_BOSS
 	sharpness = SHARP_NONE
 	var/has_dropped_shield = FALSE
 
@@ -154,6 +156,7 @@
 	icon_dead = "combatant_dead"
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
+	sentience_type = SENTIENCE_BOSS
 	var/grenade_cooldown = 10 SECONDS
 	var/last_grenade_throw = 0
 
@@ -275,6 +278,7 @@
 	icon_dead = "prometheus_dead"
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
+	sentience_type = SENTIENCE_BOSS
 
 
 
@@ -300,6 +304,7 @@
 	minimum_distance = 4
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
+	sentience_type = SENTIENCE_BOSS
 	var/stealthed = FALSE
 	var/next_roll_time = 0
 	var/roll_cooldown = 10
@@ -413,6 +418,7 @@
 	loot = list(/obj/item/ectoplasm)
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
+	sentience_type = SENTIENCE_BOSS
 	var/datum/proximity_monitor/advanced/demoraliser/demoraliser_monitor
 	var/fear_check_range = 6
 	var/fear_check_interval = 40
@@ -510,6 +516,7 @@
 	casingtype =  /obj/item/ammo_casing/energy/electrode
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
+	sentience_type = SENTIENCE_BOSS
 	var/healing_range = 8
 	var/heal_cooldown = 10 SECONDS
 	var/last_heal = 0
@@ -639,8 +646,9 @@
 	environment_smash = ENVIRONMENT_SMASH_NONE
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
+	sentience_type = SENTIENCE_BOSS
 	var/aiming = FALSE
-	var/aim_time = 2 SECONDS
+	var/aim_time = 1.5 SECONDS
 	var/last_aim = 0
 	var/datum/beam/current_beam = null
 	var/atom/aiming_target = null
@@ -730,9 +738,6 @@
 		stop_aiming()
 		return
 	if(!target || QDELETED(target) || !los_check(target))
-		if(world.time < lose_target_time + grace_time)
-			addtimer(CALLBACK(src, PROC_REF(aim_process), target, end_time), 2)
-			return
 		if(aiming)
 			last_aim = world.time // Cooldown on LOS loss
 		stop_aiming()
@@ -747,44 +752,23 @@
 	if(!target || !aiming)
 		stop_aiming()
 		return
-	if(!los_check(target) && world.time > lose_target_time + grace_time)
+	if(!los_check(target))
 		stop_aiming()
 		return
 	stop_aiming()
 	last_aim = world.time
 
-	var/atom/final_target = target
-	var/turf/T = get_turf(target)
-	if(T && isliving(target))
-		var/mob/living/L = target
-		var/dist = get_dist(src, T)
-		var/time_to_hit = dist / 17.5 // Projectile speed estimation
-		var/speed = 0
-		if(L.m_intent == MOVE_INTENT_RUN)
-			speed = 4.5
-		else if(L.m_intent == MOVE_INTENT_WALK)
-			speed = 2
-
-		if(speed > 0)
-			var/lead_tiles = round(time_to_hit * speed)
-			if(lead_tiles > 0)
-				var/turf/lead_T = T
-				for(var/i in 1 to lead_tiles)
-					var/turf/next = get_step(lead_T, L.dir)
-					if(!next || next.density || next.opacity)
-						break
-					lead_T = next
-				final_target = lead_T
-
-	Shoot(final_target)
+	Shoot(target)
 	visible_message("<span class='danger'>[src] fires a precise shot!</span>")
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/proc/stop_aiming()
-	if(current_beam)
-		UnregisterSignal(current_beam, COMSIG_PARENT_QDELETING)
-		QDEL_NULL(current_beam)
 	aiming = FALSE
 	aiming_target = null
+	if(current_beam)
+		var/datum/beam/B = current_beam
+		current_beam = null
+		UnregisterSignal(B, COMSIG_PARENT_QDELETING)
+		qdel(B)
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/Destroy()
 	stop_aiming()

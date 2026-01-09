@@ -236,19 +236,27 @@
 	for(var/turf/T in getline(T1, T2))
 		if(T == T1 || T == T2)
 			continue
-		if(T.opacity || T.density)
+		if(T.opacity)
+			return FALSE
+		if(T.density && !isgroundlessturf(T) && !istype(T, /turf/open/chasm))
 			return FALSE
 		for(var/atom/movable/AM in T)
-			if(AM.invisibility > see_invisible)
+			if(AM == target || AM == src || AM.invisibility > see_invisible)
 				continue
-			if(AM.opacity || (AM.density && !(AM.pass_flags_self & PASSTABLE)))
+			if(AM.opacity)
+				return FALSE
+			if(AM.density)
+				if(isgroundlessturf(T) || istype(T, /turf/open/chasm)) // Ignore density of objects on chasms/space
+					continue
+				if(AM.pass_flags_self & PASSTABLE)
+					continue
 				return FALSE
 	return TRUE
 
 /mob/living/simple_animal/hostile/blackmesa/xen/houndeye/Life()
 	. = ..()
 	if(world.time > last_repulse + repulse_cooldown)
-		for(var/mob/living/L in oview(4, src))
+		for(var/mob/living/L in oview(3, src))
 			if(!faction_check_mob(L, TRUE) && L.stat != DEAD && CheckLos(L))
 				repulse_attack()
 				break
@@ -259,10 +267,10 @@
 	last_repulse = world.time
 	playsound(get_turf(src), 'modular_bluemoon/sound/creatures/mesa/houndeye/houndeyeattack.ogg', 30, 1)
 	visible_message("<span class='danger'>[src] unleashes a repulsing shockwave!</span>")
-	for(var/turf/T in view(3, src))
+	for(var/turf/T in view(2, src))
 		if(CheckLos(T))
 			new /obj/effect/temp_visual/emp/pulse(T)
-	for(var/mob/living/L in oview(4, src))
+	for(var/mob/living/L in oview(3, src))
 		if(faction_check_mob(L, TRUE) || L.stat == DEAD || !CheckLos(L))
 			continue
 		var/turf/throwtarget = get_edge_target_turf(src, get_dir(src, get_step_away(L, src)))

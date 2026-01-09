@@ -12,7 +12,7 @@
 	flavour_text = "Ты старший научный научный сотрудник сектора H. Недавно тебя повысили в должности, перенаправив в этот сектор, но что-то пошло не так. Исходя из оповещений BMAS, По всему сектору начались портальные штормы. По этому вы, засев в одном из кабинетов, ждёте помощи."
 	important_info = "(ПРИ ИСПОЛЬЗОВАНИИ АКТУАЛИЗАТОРА СТРОГО ЗАПРЕЩЕНО ВЫБИРАТЬ ЛЮБУЮ ДРУГУЮ РАСУ КРОМЕ ЧЕЛОВЕКА. ПРИ НАРУШЕНИЯХ ИЛИ ОШИБКАХ ПРОСЬБА ОБРАТИТСЯ К АДМИНИСТРАЦИИ) Не пытайся исследовать комплекс до прибытия экспедиционной группы. В случае, когда прошло 20 минут от начала раунда, а исследователи так и не пришли, ты можешь постепенно продвигаться по комплексу."
 	category = "offstation"
-	faction = list(FACTION_BLACKMESA)
+	faction = FACTION_BLACKMESA
 	antagonist_type = /datum/antagonist/ghost_role/black_mesa
 	color = "#9a74ac"
 
@@ -144,6 +144,7 @@
 	death = FALSE
 	density = TRUE
 	category = "offstation"
+	faction = FACTION_HECU
 	antagonist_type = /datum/antagonist/ghost_role/hecu
 
 /obj/effect/mob_spawn/human/black_mesa/hecu/special(mob/living/carbon/human/spawned_human)
@@ -180,6 +181,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	r_hand = /obj/item/choice_beacon/mesagrunt
@@ -199,6 +201,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu/engi
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	r_hand = /obj/item/gun/ballistic/automatic/mp5
@@ -225,6 +228,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/bandolier
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	r_hand = /obj/item/choice_beacon/mesabreacher
@@ -246,6 +250,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	r_hand = /obj/item/choice_beacon/mesamedic
@@ -269,6 +274,7 @@
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
 	belt = /obj/item/storage/belt/military/russianweb
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/grenade/smokebomb
 	r_pocket = /obj/item/binoculars
 	r_hand = /obj/item/gun/ballistic/automatic/mp5
@@ -301,6 +307,7 @@
 	death = FALSE
 	density = TRUE
 	category = "offstation"
+	faction = FACTION_HECU
 	antagonist_type = /datum/antagonist/ghost_role/losthecu
 
 /obj/effect/mob_spawn/human/black_mesa/hecu/lost/special(mob/living/carbon/human/spawned_human)
@@ -318,6 +325,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	r_hand = /obj/item/gun/ballistic/automatic/m16a4/mesa
@@ -354,6 +362,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	back = /obj/item/storage/backpack/hecu
@@ -395,6 +404,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu/black/blackops
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	back = /obj/item/gun/ballistic/automatic/m16a4
