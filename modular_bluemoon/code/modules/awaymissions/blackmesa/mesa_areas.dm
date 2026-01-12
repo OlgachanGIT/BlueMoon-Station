@@ -132,3 +132,12 @@
 /area/awaymission/ihategordon/outsideofmesa/hecu_camp
 	name = "Facility hecu main camp"
 	icon_state = "awaycontent15"
+
+/area/awaymission/ihategordon/outsideofmesa/restricted_zone
+	name = "Facility restricted zone"
+	icon_state = "awaycontent25"
+
+
+/area/awaymission/ihategordon/hecuannouce
+	name = "hecu warning announcement area"
+	icon_state = "3"

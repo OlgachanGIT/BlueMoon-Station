@@ -154,6 +154,9 @@
 	spawned_human.grant_language(/datum/language/signlanguage, source = LANGUAGE_MIND)
 	spawned_human.remove_language(/datum/language/common)
 
+/obj/effect/mob_spawn/human/black_mesa/hecu/blackops/special(mob/living/carbon/human/spawned_human)
+	. = ..()
+
 /obj/effect/mob_spawn/human/black_mesa/hecu/breacher
 	name = "HECU breacher"
 	outfit = /datum/outfit/hecu_breacher
@@ -387,13 +390,6 @@
 	important_info = "(ПРИ ИСПОЛЬЗОВАНИИ АКТУАЛИЗАТОРА СТРОГО ЗАПРЕЩЕНО ВЫБИРАТЬ ЛЮБУЮ ДРУГУЮ РАСУ КРОМЕ ЧЕЛОВЕКА. ПРИ НАРУШЕНИЯХ ИЛИ ОШИБКАХ ПРОСЬБА ОБРАТИТСЯ К АДМИНИСТРАЦИИ) Не пытайтесь исследовать карту далее основного атриума, комнат с туррелями ( не ломайте стены в комнаты, закрытые ключ картами/заболтироваными дверьми ). Вы можете покинуть гейт/исследовать его ТОЛЬКО В ТОМ СЛУЧАЕ, когда договоритесь с исследовательской командой. Если вы решили враждовать с исследователями, то вам после этого запрещено покидать гейт и как либо пытатся продвигатся далее по локации"
 	category = "offstation"
 	antagonist_type = /datum/antagonist/ghost_role/black_mesa
-
-/obj/effect/mob_spawn/human/black_mesa/hecu/special(mob/living/carbon/human/spawned_human)
-	. = ..()
-	spawned_human.grant_language(/datum/language/modular_sand/solcommon, source = LANGUAGE_MIND)
-	spawned_human.grant_language(/datum/language/old_codes, source = LANGUAGE_MIND)
-	spawned_human.grant_language(/datum/language/signlanguage, source = LANGUAGE_MIND)
-	spawned_human.remove_language(/datum/language/common)
 
 /datum/outfit/blackops
 	name = "male black operative"

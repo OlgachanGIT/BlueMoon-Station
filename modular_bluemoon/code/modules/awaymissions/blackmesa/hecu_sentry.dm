@@ -62,6 +62,19 @@
 		return FALSE
 	return 10
 
+/obj/machinery/porta_turret/hecu/attackby(obj/item/I, mob/living/user, params)
+	if(I.tool_behaviour == TOOL_WRENCH)
+		if(machine_stat & BROKEN)
+			to_chat(user, "<span class='warning'>The [src] is too damaged to be folded!</span>")
+			return
+		user.visible_message("<span class='notice'>[user] begins folding the [src]...</span>", "<span class='notice'>You begin folding the [src]...</span>")
+		if(I.use_tool(src, user, 30, volume=50))
+			user.visible_message("<span class='notice'>[user] folds the [src].</span>", "<span class='notice'>You fold the [src].</span>")
+			new /obj/item/hecusentry(get_turf(src))
+			qdel(src)
+		return
+	return ..()
+
 /obj/machinery/porta_turret/hecu/update_icon_state()
 	if(machine_stat & BROKEN)
 		icon_state = "sentry_broken"

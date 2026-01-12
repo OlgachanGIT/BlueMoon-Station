@@ -48,6 +48,9 @@
 	)
 
 
+/mob/living/simple_animal/hostile/blackmesa/hecu/Initialize(mapload)
+	. = ..()
+
 /mob/living/simple_animal/hostile/blackmesa/hecu/ranged
 	ranged = TRUE
 	retreat_distance = 5
@@ -208,6 +211,9 @@
 		'modular_bluemoon/sound/creatures/mesa/blackops/bo_alert08.ogg'
 	)
 
+
+/mob/living/simple_animal/hostile/blackmesa/blackops/Initialize(mapload)
+	. = ..()
 
 /mob/living/simple_animal/hostile/blackmesa/blackops/ranged
 	ranged = TRUE

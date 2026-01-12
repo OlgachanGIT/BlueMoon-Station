@@ -4399,6 +4399,8 @@
 #include "modular_bluemoon\code\modules\awaymissions\blackmesa\hecu_sentry.dm"
 #include "modular_bluemoon\code\modules\awaymissions\blackmesa\mesa_areas.dm"
 #include "modular_bluemoon\code\modules\awaymissions\blackmesa\mesa_clothing.dm"
+#include "modular_bluemoon\code\modules\awaymissions\blackmesa\mesa_event_manager.dm"
+#include "modular_bluemoon\code\modules\awaymissions\blackmesa\mesa_events.dm"
 #include "modular_bluemoon\code\modules\awaymissions\blackmesa\mesa_floor.dm"
 #include "modular_bluemoon\code\modules\awaymissions\blackmesa\mesa_ghost_spawners.dm"
 #include "modular_bluemoon\code\modules\awaymissions\blackmesa\mesa_structures.dm"

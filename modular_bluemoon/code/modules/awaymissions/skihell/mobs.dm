@@ -280,6 +280,11 @@
 	minbodytemp = 0
 	sentience_type = SENTIENCE_BOSS
 
+/mob/living/simple_animal/hostile/syndicate/ranged/orderprometheus/death(gibbed)
+	if(prob(30))
+		explosion(src, devastation_range = -1, heavy_impact_range = 1, light_impact_range = 2, flash_range = 3, flame_range = 3)
+	return ..()
+
 
 
 //saggitarius
