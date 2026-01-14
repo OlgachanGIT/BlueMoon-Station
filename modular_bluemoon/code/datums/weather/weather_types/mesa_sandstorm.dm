@@ -89,7 +89,7 @@
 			player.overlay_fullscreen("rain_mist", /atom/movable/screen/fullscreen/tiled/rain_mist)
 
 /datum/weather/ash_storm/mesa_rain/process()
-	if(aesthetic || (stage != MAIN_STAGE))
+	if(stage != MAIN_STAGE)
 		return
 	for(var/mob/living/L in GLOB.mob_living_list)
 		var/turf/mob_turf = get_turf(L)
