@@ -18,6 +18,7 @@
 /datum/round_event_control/blackmesa
 	name = "Black Mesa: Base"
 	typepath = /datum/round_event/blackmesa
+	description = "Base control for Black Mesa events."
 	weight = 0
 	max_occurrences = 0
 	category = EVENT_CATEGORY_INVASION
@@ -116,8 +117,10 @@
 /datum/round_event_control/blackmesa/power_outage
 	name = "Black Mesa: Power Outage"
 	typepath = /datum/round_event/blackmesa/power_outage
+	description = "Causes a temporary power failure in Sector H."
 	weight = 0
 	max_occurrences = 3
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event/blackmesa/power_outage/start()
 	var/list/areas = get_mesa_areas()
@@ -154,18 +157,21 @@
 	typepath = /datum/round_event/blackmesa/portal_storm/light
 	weight = 0
 	max_occurrences = 3
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/portal_storm/medium
 	name = "Black Mesa: Portal Storm (Medium)"
 	typepath = /datum/round_event/blackmesa/portal_storm/medium
 	weight = 0
 	max_occurrences = 2
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/portal_storm/dangerous
 	name = "Black Mesa: Portal Storm (Dangerous)"
 	typepath = /datum/round_event/blackmesa/portal_storm/dangerous
 	weight = 0
 	max_occurrences = 1
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event/blackmesa/portal_storm
 	var/spawn_count = 3
@@ -225,9 +231,10 @@
 		/mob/living/simple_animal/hostile/blackmesa/xen/vortigaunt,
 		/mob/living/simple_animal/hostile/headcrab/mesa
 	))
-	new mob_type(T)
+	var/mob/living/L = new mob_type(T)
 	new /obj/effect/temp_visual/dir_setting/ninja/phase(T)
 	playsound(T, 'sound/magic/Teleport_app.ogg', 50, TRUE)
+	return L
 
 /datum/round_event/blackmesa/portal_storm/tick()
 	return
@@ -238,6 +245,7 @@
 	typepath = /datum/round_event/blackmesa/supply_drop
 	weight = 0
 	max_occurrences = 2
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event/blackmesa/supply_drop
 	excluded_areas = list(
@@ -299,24 +307,62 @@
 
 		new /obj/effect/pod_landingzone(T, pod)
 
-// Event 4: Black Ops Incursion
+// Event 9: Sandstorm (Cosmetic)
+/datum/round_event_control/blackmesa/sandstorm
+	name = "Black Mesa: Sandstorm"
+	typepath = /datum/round_event/blackmesa/sandstorm
+	weight = 0
+	max_occurrences = 2
+	category = EVENT_CATEGORY_INVASION
+
+/datum/round_event/blackmesa/sandstorm/start()
+	var/turf/T = get_random_mesa_turf()
+	if(!T)
+		return
+
+	SSweather.run_weather(/datum/weather/ash_storm/mesa_sandstorm, list(T.z))
+
+// Event 10: Rain (Rare/Cosmetic)
+/datum/round_event_control/blackmesa/rain
+	name = "Black Mesa: Rain"
+	typepath = /datum/round_event/blackmesa/rain
+	weight = 0
+	max_occurrences = 1
+	category = EVENT_CATEGORY_INVASION
+
+/datum/round_event/blackmesa/rain
+
+/datum/round_event/blackmesa/rain/start()
+	var/turf/T = get_random_mesa_turf()
+	if(!T)
+		return
+
+	SSweather.run_weather(/datum/weather/ash_storm/mesa_rain, list(T.z))
+
+/datum/round_event/blackmesa/rain/end()
+	return ..()
+
+
 /datum/round_event_control/blackmesa/blackops_incursion
 	name = "Black Mesa: Black Ops Incursion (Light)"
 	typepath = /datum/round_event/blackmesa/blackops_incursion/light
 	weight = 0
 	max_occurrences = 3
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/blackops_incursion/medium
 	name = "Black Mesa: Black Ops Incursion (Medium)"
 	typepath = /datum/round_event/blackmesa/blackops_incursion/medium
 	weight = 0
 	max_occurrences = 2
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/blackops_incursion/dangerous
 	name = "Black Mesa: Black Ops Incursion (Dangerous)"
 	typepath = /datum/round_event/blackmesa/blackops_incursion/dangerous
 	weight = 0
 	max_occurrences = 1
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event/blackmesa/blackops_incursion
 	var/spawn_count = 3
@@ -355,29 +401,23 @@
 	for(var/obj/effect/landmark/awaymission/blackmesa/blackops_spawn/L in GLOB.landmarks_list)
 		landmarks += L
 
-	var/notified = FALSE
 	for(var/i in 1 to actual_count)
 		var/turf/T
 		if(landmarks.len && prob(80))
 			var/obj/effect/landmark/L = pick(landmarks)
 			T = get_safe_spawn_turf(get_turf(L))
-			if(T && !notified)
-				notify_ghosts("Black Ops Incursion detected at Black Mesa!", source = L, action = NOTIFY_ORBIT, header = "Black Ops")
-				notified = TRUE
 		else
 			T = get_random_mesa_turf()
-			if(T && !notified)
-				notify_ghosts("Black Ops Incursion detected at Black Mesa!", source = T, action = NOTIFY_ORBIT, header = "Black Ops")
-				notified = TRUE
 
 		if(T)
 			spawn_blackops(T)
 
 /datum/round_event/blackmesa/blackops_incursion/proc/spawn_blackops(turf/T)
 	var/mob_type = prob(70) ? /mob/living/simple_animal/hostile/blackmesa/blackops/ranged : /mob/living/simple_animal/hostile/blackmesa/blackops
-	new mob_type(T)
+	var/mob/living/L = new mob_type(T)
 	new /obj/effect/temp_visual/dir_setting/ninja/phase(T)
 	playsound(T, 'sound/magic/blink.ogg', 50, TRUE)
+	return L
 
 // Event 5: HECU Reinforcements
 /datum/round_event_control/blackmesa/hecu_reinforcements
@@ -385,30 +425,33 @@
 	typepath = /datum/round_event/blackmesa/hecu_reinforcements/light
 	weight = 0
 	max_occurrences = 3
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/hecu_reinforcements/medium
 	name = "Black Mesa: HECU Reinforcements (Medium)"
 	typepath = /datum/round_event/blackmesa/hecu_reinforcements/medium
 	weight = 0
 	max_occurrences = 2
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/hecu_reinforcements/dangerous
 	name = "Black Mesa: HECU Reinforcements (Dangerous)"
 	typepath = /datum/round_event/blackmesa/hecu_reinforcements/dangerous
 	weight = 0
 	max_occurrences = 1
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event/blackmesa/hecu_reinforcements
 	var/spawn_count = 3
 
 /datum/round_event/blackmesa/hecu_reinforcements/light
-	spawn_count = 4
+	spawn_count = 7
 
 /datum/round_event/blackmesa/hecu_reinforcements/medium
-	spawn_count = 8
+	spawn_count = 10
 
 /datum/round_event/blackmesa/hecu_reinforcements/dangerous
-	spawn_count = 15
+	spawn_count = 17
 
 /datum/round_event/blackmesa/hecu_reinforcements/start()
 	var/warning_text = ""
@@ -437,20 +480,13 @@
 	for(var/obj/effect/landmark/awaymission/blackmesa/hecu_spawn/L in GLOB.landmarks_list)
 		landmarks += L
 
-	var/notified = FALSE
 	for(var/i in 1 to actual_count)
 		var/turf/T
 		if(landmarks.len && prob(80))
 			var/obj/effect/landmark/L = pick(landmarks)
 			T = get_safe_spawn_turf(get_turf(L))
-			if(T && !notified)
-				notify_ghosts("HECU Reinforcements arriving at Black Mesa!", source = L, action = NOTIFY_ORBIT, header = "HECU Reinforcements")
-				notified = TRUE
 		else
 			T = get_random_mesa_turf()
-			if(T && !notified)
-				notify_ghosts("HECU Reinforcements arriving at Black Mesa!", source = T, action = NOTIFY_ORBIT, header = "HECU Reinforcements")
-				notified = TRUE
 
 		if(T)
 			spawn_hecu(T)
@@ -461,9 +497,10 @@
 		/mob/living/simple_animal/hostile/blackmesa/hecu/ranged,
 		/mob/living/simple_animal/hostile/blackmesa/hecu/ranged/smg
 	))
-	new mob_type(T)
+	var/mob/living/L = new mob_type(T)
 	new /obj/effect/temp_visual/dir_setting/ninja/phase(T)
 	playsound(T, 'sound/effects/phasein.ogg', 50, TRUE)
+	return L
 
 // Event 6: HECU Ghost Squad
 /datum/round_event_control/blackmesa/hecu_ghost_squad
@@ -471,6 +508,7 @@
 	typepath = /datum/round_event/blackmesa/hecu_ghost_squad
 	weight = 0
 	max_occurrences = 1
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event/blackmesa/hecu_ghost_squad
 	var/static/occurred = FALSE
@@ -537,19 +575,22 @@
 	name = "Black Mesa: Orbital Bombardment (Light)"
 	typepath = /datum/round_event/blackmesa/bombardment/light
 	weight = 0
-	max_occurrences = 5
+	max_occurrences = 3
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/bombardment/medium
 	name = "Black Mesa: Orbital Bombardment (Medium)"
 	typepath = /datum/round_event/blackmesa/bombardment/medium
 	weight = 0
-	max_occurrences = 3
+	max_occurrences = 2
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/bombardment/dangerous
 	name = "Black Mesa: Orbital Bombardment (Dangerous)"
 	typepath = /datum/round_event/blackmesa/bombardment/dangerous
 	weight = 0
-	max_occurrences = 2
+	max_occurrences = 1
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event/blackmesa/bombardment
 	var/missile_count = 5
@@ -631,6 +672,7 @@
 	typepath = /datum/round_event/blackmesa/medical_drop
 	weight = 0
 	max_occurrences = 3
+	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event/blackmesa/medical_drop/start()
 	SSblackmesa_events.mesa_announce("Внимание! Отправлены медицинские капсулы для передовых групп HECU. Ожидайте прибытия припасов.", "Medical Support", 'modular_bluemoon/sound/ambience/mesa/BMAS3.ogg')
@@ -661,4 +703,43 @@
 			G.name = "global positioning system ([C.gpstag])"
 
 		new /obj/effect/pod_landingzone(T, pod)
+
+// Event 9: Lockdown
+/datum/round_event_control/blackmesa/lockdown
+	name = "Black Mesa: Lockdown"
+	typepath = /datum/round_event/blackmesa/lockdown
+	description = "Triggers a facility lockdown, bolting all doors."
+	weight = 0
+	max_occurrences = 2
+	category = EVENT_CATEGORY_INVASION
+
+/datum/round_event/blackmesa/lockdown
+	var/list/locked_doors = list()
+	var/lockdown_duration = 0
+
+/datum/round_event/blackmesa/lockdown/start()
+	lockdown_duration = rand(300, 600)
+	SSblackmesa_events.mesa_announce("ВНИМАНИЕ! АКТИВИРОВАНА СИСТЕМА АВАРИЙНОЙ БЛОКИРОВКИ! Все двери заблокированы на время экстренной ситуации!", "LOCKDOWN ACTIVATED", 'modular_bluemoon/sound/ambience/mesa/BMAS2.ogg')
+	
+	var/list/areas = get_mesa_areas()
+	if(!areas.len)
+		return
+	
+	for(var/area/A in areas)
+		for(var/obj/machinery/door/D in A.contents)
+			if(!D.locked)
+				D.locked = TRUE
+				D.update_icon()
+				locked_doors += D
+	
+	addtimer(CALLBACK(src, PROC_REF(end_lockdown)), lockdown_duration)
+
+/datum/round_event/blackmesa/lockdown/proc/end_lockdown()
+	for(var/obj/machinery/door/D in locked_doors)
+		if(!QDELETED(D))
+			D.locked = FALSE
+			D.update_icon()
+	
+	locked_doors.Cut()
+	SSblackmesa_events.mesa_announce("Система аварийной блокировки отключена. Все двери разблокированы.", "Lockdown Ended", 'modular_bluemoon/sound/ambience/mesa/BMAS1.ogg')
 

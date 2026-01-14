@@ -54,3 +54,13 @@
 
 /datum/looping_sound/void_loop/start(atom/add_thing)
 	. = ..()
+
+/datum/looping_sound/mesa_rain
+	mid_sounds = list(
+		'sound/ambience/VoidsEmbrace.ogg'=1
+	)
+	mid_length = 1669
+	start_sound = 'modular_bluemoon/sound/ambience/mesa/rain.ogg'
+	start_length = 100
+	volume = 70
+	extra_range = 5
