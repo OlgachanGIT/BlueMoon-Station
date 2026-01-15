@@ -612,7 +612,8 @@
 		/area/awaymission/ihategordon/gonome,
 		/area/awaymission/ihategordon/sec_armory,
 		/area/awaymission/ihategordon/tram_tunnel,
-		/area/awaymission/ihategordon/entrance
+		/area/awaymission/ihategordon/entrance,
+		/area/awaymission/ihategordon/dorm_rooms
 	)
 
 /datum/round_event/blackmesa/bombardment/light

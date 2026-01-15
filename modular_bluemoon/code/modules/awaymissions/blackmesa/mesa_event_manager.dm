@@ -94,6 +94,8 @@ SUBSYSTEM_DEF(blackmesa_events)
 	for(var/mob/M in GLOB.player_list)
 		if(isnewplayer(M))
 			continue
+		if(istype(M, /mob/dead/observer))
+			continue
 		var/area/A = get_area(M)
 		if(istype(A, /area/awaymission/ihategordon) || istype(A, /area/command/gateway))
 			to_chat(M, announcement)
