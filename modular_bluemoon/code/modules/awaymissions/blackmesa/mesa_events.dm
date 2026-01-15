@@ -615,7 +615,8 @@
 		/area/awaymission/ihategordon/tram_tunnel,
 		/area/awaymission/ihategordon/entrance,
 		/area/awaymission/ihategordon/dorm_rooms,
-		/area/awaymission/ihategordon/hecu_camp_hall
+		/area/awaymission/ihategordon/hecu_camp_hall,
+		/area/awaymission/ihategordon/sci_medbay
 	)
 
 /datum/round_event/blackmesa/bombardment/light
