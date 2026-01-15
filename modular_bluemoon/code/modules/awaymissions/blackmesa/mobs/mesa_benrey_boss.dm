@@ -43,6 +43,13 @@
 	footstep_type = FOOTSTEP_MOB_SHOE
 	alert_sounds = list('modular_bluemoon/sound/creatures/mesa/benrey/benreylaugh.ogg','modular_bluemoon/sound/creatures/mesa/benrey/youdie.ogg')
 
+/mob/living/simple_animal/hostile/boss/benrey/Initialize(mapload)
+	. = ..()
+	RegisterSignal(src, COMSIG_ATOM_INTERCEPT_TELEPORT, PROC_REF(block_teleport))
+
+/mob/living/simple_animal/hostile/boss/benrey/proc/block_teleport(datum/source, channel, turf/origin, turf/destination)
+	return TRUE
+
 
 /datum/action/boss/benrey_summon_sketelons
 	name = "Summon skeletons"
