@@ -605,6 +605,7 @@
 		/area/awaymission/ihategordon/secret_rooms,
 		/area/awaymission/ihategordon/underground_tunnels,
 		/area/awaymission/ihategordon/sectorhnorthoffices,
+		/area/awaymission/ihategordon/sectorhsecoffices,
 		/area/awaymission/ihategordon/opposing/end,
 		/area/awaymission/ihategordon/opposing/comlpex,
 		/area/awaymission/ihategordon/opposing,
@@ -616,6 +617,7 @@
 		/area/awaymission/ihategordon/entrance,
 		/area/awaymission/ihategordon/dorm_rooms,
 		/area/awaymission/ihategordon/hecu_camp_hall,
+		/area/awaymission/ihategordon/hecu_camp_medbay,
 		/area/awaymission/ihategordon/sci_medbay
 	)
 
