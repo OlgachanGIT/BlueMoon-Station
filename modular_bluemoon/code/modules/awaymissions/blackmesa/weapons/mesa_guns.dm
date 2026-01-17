@@ -631,6 +631,46 @@
 	new /obj/item/gun/medbeam(src)
 	new /obj/item/storage/firstaid/tactical(src)
 
+//leader
+
+/obj/item/choice_beacon/mesaleader
+	name = "leader type choice beacon"
+	desc = "Secret USA army technology. Select your primary weapon."
+
+/obj/item/choice_beacon/mesaleader/generate_display_names()
+	var/static/list/leader_item_list
+	if(!leader_item_list)
+		leader_item_list = list()
+		var/list/templist = typesof(/obj/item/storage/box/basedleader)
+		for(var/V in templist)
+			var/atom/A = V
+			leader_item_list[initial(A.name)] = A
+	return leader_item_list
+
+/obj/item/storage/box/basedleader
+	name = "RSH-12 revolver kit"
+
+/obj/item/storage/box/basedleader/PopulateContents()
+	new /obj/item/gun/ballistic/revolver/rsh12(src)
+	new /obj/item/ammo_box/rsh12(src)
+	new /obj/item/ammo_box/rsh12(src)
+
+/obj/item/storage/box/basedleader/deagle
+	name = "Desert Eagle handgun kit"
+
+/obj/item/storage/box/basedleader/deagle/PopulateContents()
+	new /obj/item/gun/ballistic/automatic/pistol/deagle/hl(src)
+	new /obj/item/ammo_box/magazine/m50(src)
+	new /obj/item/ammo_box/magazine/m50(src)
+	new /obj/item/ammo_box/magazine/m50(src)
+
+/obj/item/storage/box/basedleader/hl357
+	name = ".357 pyton revolver kit"
+
+/obj/item/storage/box/basedleader/hl357/PopulateContents()
+	new /obj/item/gun/ballistic/revolver/mateba/hl357(src)
+	new /obj/item/ammo_box/a357(src)
+	new /obj/item/ammo_box/a357(src)
 
 //skihell
 
@@ -770,6 +810,177 @@
 		alarmed = 1
 	return
 
+/obj/item/gun/ballistic/revolver/rsh12
+	name = "RSH-12 revolver"
+	desc = "Противник даже слова сказать не успеет. Это прототип РШ12 который можно зарядить даже картечью. С этого дерьма даже стрелять опасно."
+	icon_state = "rs12"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	fire_sound = 'modular_bluemoon/sound/weapons/rsh.ogg'
+	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/rsh12
+	recoil = 6
+	fire_delay = 4
+
+/obj/item/gun/ballistic/revolver/rsh12/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	var/result = ..(user, pointblank, pbtarget, message, 35)
+	if(isliving(user))
+		user.apply_damage(4, BURN, BODY_ZONE_PRECISE_L_HAND)
+		user.apply_damage(4, BURN, BODY_ZONE_PRECISE_R_HAND)
+		user.adjustStaminaLoss(20)
+		if(prob(30))
+			user.adjustEarDamage(0, 20)
+	return result
+
+/obj/item/ammo_box/magazine/internal/cylinder/rsh12
+	name = "RS-12 revolver cylinder"
+	ammo_type = /obj/item/ammo_casing/rsh12
+	caliber = list("rs12", "shotgun")
+	max_ammo = 6
+	multiload = 0
+
+/obj/item/ammo_casing/rsh12
+	name = "RS-12 bullet casing"
+	desc = "An RS-12 bullet casing."
+	caliber = "rs12"
+	projectile_type = /obj/item/projectile/bullet/rsh12
+
+/obj/item/projectile/bullet/rsh12
+	name = "RS-12 bullet"
+	damage = 70
+	armour_penetration = 6
+	wound_bonus = -8
+	bare_wound_bonus = 8
+	stamina = 55
+
+/obj/item/ammo_box/rsh12
+	name = "speedloader (RS-12)"
+	desc = "A speedloader for RS-12 revolvers. Reloads quickly with pre-loaded ammunition."
+	icon_state = "357"
+	ammo_type = /obj/item/ammo_casing/rsh12
+	caliber = "rs12"
+	max_ammo = 6
+	speedloader = TRUE
+	multiple_sprites = 1
+
+/obj/item/gun/ballistic/automatic/pistol/deagle/hl
+	name = "Desert Eagle handgun"
+	desc = "Карманная артиллерия прямо у вас в руках. пустынный орёл способен пробивать бронежилеты большинства стандартных образцов, что делает его идеальным выбором для лидеров отрядов HECU"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	icon_state = "hldeagle"
+	w_class = WEIGHT_CLASS_NORMAL
+	can_suppress = FALSE
+	burst_size = 1
+	spread = 5
+	fire_delay = 6
+	can_flashlight = 0
+	unique_reskin = FALSE
+
+/obj/item/gun/ballistic/automatic/pistol/deagle/hl/update_overlays()
+	. = ..()
+	if(magazine)
+		. += "hldeagle"
+
+/obj/item/gun/ballistic/automatic/pistol/deagle/hl/update_icon_state()
+	icon_state = "[initial(icon_state)][chambered ? "" : "_mag"]"
+
+/obj/item/gun/ballistic/revolver/mateba/hl357
+	name = "\improper .357 revolver"
+	desc = "Достаточно неплохого калибра револьвер, специально выбранный для быстрого устранения... Крупной дичи"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	icon_state = "hl357"
+	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/rev357
+/obj/item/ammo_box/magazine/internal/cylinder/rev357
+	name = "revolver cylinder (.357)"
+	desc = "A revolver cylinder chambered for .357 Magnum rounds."
+	caliber = list("357")
+	ammo_type = /obj/item/ammo_casing/a357
+	max_ammo = 6
+
+/obj/item/gun/ballistic/automatic/m249
+	name = "M249 SAW"
+	desc = "FN M249 Squad Automatic Weapon - лёгкий пулемёт, предназначенный для обеспечения огневой поддержки отделения. Обычно используется с 100-патронной лентой."
+	icon = 'modular_bluemoon/icons/obj/guns/Machineguns.dmi'
+	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_lefthand.dmi'
+	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_righthand.dmi'
+	icon_state = "m249"
+	item_state = "m249"
+	fire_sound = 'modular_bluemoon/sound/weapons/m249.ogg'
+	mag_type = /obj/item/ammo_box/magazine/m249
+	w_class = WEIGHT_CLASS_BULKY
+	weapon_weight = WEAPON_HEAVY
+	recoil = 2
+	spread = 6
+	burst_size = 3
+	burst_shot_delay = 1
+	fire_delay = 2
+	can_suppress = FALSE
+	can_bayonet = FALSE
+	slot_flags = ITEM_SLOT_BACK
+	automatic_burst_overlay = FALSE
+	var/cover_open = FALSE
+
+/obj/item/gun/ballistic/automatic/m249/examine(mob/user)
+	. = ..()
+	if(cover_open && magazine)
+		. += "<span class='notice'>It seems like you could use an <b>empty hand</b> to remove the magazine.</span>"
+
+/obj/item/gun/ballistic/automatic/m249/attack_self(mob/user)
+	cover_open = !cover_open
+	to_chat(user, "<span class='notice'>You [cover_open ? "open" : "close"] [src]'s cover.</span>")
+	if(cover_open)
+		playsound(user, 'sound/weapons/sawopen.ogg', 60, 1)
+	else
+		playsound(user, 'sound/weapons/sawclose.ogg', 60, 1)
+	update_icon()
+
+/obj/item/gun/ballistic/automatic/m249/update_icon_state()
+	var/ammo_state = magazine ? CEILING(get_ammo(0)/25, 1)*25 : "-empty"
+	icon_state = "m249[cover_open ? "open" : "closed"][ammo_state]"
+
+/obj/item/gun/ballistic/automatic/m249/afterattack(atom/target as mob|obj|turf, mob/living/user as mob|obj, flag, params)
+	if(cover_open)
+		to_chat(user, "<span class='warning'>[src]'s cover is open! Close it before firing!</span>")
+	else
+		. = ..()
+		update_icon()
+
+/obj/item/gun/ballistic/automatic/m249/on_attack_hand(mob/user, act_intent = user.a_intent, unarmed_attack_flags)
+	if(loc != user)
+		..()
+		return
+	if(!cover_open || (cover_open && !magazine))
+		..()
+	else if(cover_open && magazine)
+		magazine.update_icon()
+		magazine.forceMove(drop_location())
+		user.put_in_hands(magazine)
+		magazine = null
+		update_icon()
+		to_chat(user, "<span class='notice'>You remove the magazine from [src].</span>")
+		playsound(user, 'sound/weapons/magout.ogg', 60, 1)
+
+/obj/item/gun/ballistic/automatic/m249/attackby(obj/item/A, mob/user, params)
+	if(!cover_open && istype(A, mag_type))
+		to_chat(user, "<span class='warning'>[src]'s cover is closed! You can't insert a new mag.</span>")
+		return
+	..()
+	update_icon()
+
+/obj/item/ammo_box/magazine/m249
+	name = "M249 ammo belt (5.56mm)"
+	desc = "100-патронная лента для M249 SAW. Содержит стандартные 5.56x45mm НАТО патроны."
+	icon = 'modular_bluemoon/icons/obj/ammo.dmi'
+	icon_state = "m249"
+	ammo_type = /obj/item/ammo_casing/a556
+	max_ammo = 100
+	caliber = "5.56"
+
+/obj/item/ammo_box/magazine/m249/update_icon()
+	. = ..()
+	if(ammo_count())
+		icon_state = "[initial(icon_state)]-ammo"
+	else
+		icon_state = "[initial(icon_state)]"
+
 //одежда
 
 /obj/item/clothing/suit/armor/saggitarius
@@ -810,3 +1021,12 @@
 	mob_overlay_icon = 'modular_bluemoon/fluffs/icons/mob/clothing/accessories.dmi'
 	icon_state = "dogtag"
 	item_state = "dogtag"
+
+/obj/item/clothing/head/machinegunner
+	name = "machinegunner bandana"
+	desc = "A fine bandana with nanotech lining, perfect for a heavy weapons specialist."
+	icon_state = "machinegunner"
+	item_state = "machinegunner"
+	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
+	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/hats.dmi'
+	alternate_worn_layer = null

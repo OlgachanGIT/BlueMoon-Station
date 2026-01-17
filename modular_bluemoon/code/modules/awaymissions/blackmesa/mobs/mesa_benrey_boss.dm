@@ -4,6 +4,12 @@
 	var/alert_cooldown = 3 SECONDS
 	var/alert_cooldown_time
 
+/mob/living/simple_animal/hostile/boss/benrey/CanAttack(atom/the_target)
+	. = ..()
+	if(. && isliving(the_target))
+		var/mob/living/L = the_target
+		if(HAS_TRAIT(L, TRAIT_PACIFISM) && L.has_status_effect(/datum/status_effect/stabilized/lightpink))
+			return FALSE
 
 /mob/living/simple_animal/hostile/boss/benrey/Aggro()
 	if(alert_sounds)

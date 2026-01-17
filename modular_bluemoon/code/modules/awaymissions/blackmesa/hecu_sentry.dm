@@ -26,7 +26,7 @@
 	installation = null
 	lethal_projectile = /obj/item/projectile/bullet/c10mm/hecu
 	lethal_projectile_sound = 'modular_bluemoon/sound/weapons/mesa/mp5.ogg'
-	shot_delay = 2
+	shot_delay = 3
 	scan_range = 7
 	max_integrity = 200
 	anchored = TRUE

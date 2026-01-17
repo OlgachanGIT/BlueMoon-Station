@@ -136,7 +136,7 @@
 "adA" = (
 /obj/item/pizzabox/infinite,
 /turf/open/floor/plating/ironsand,
-/area/awaymission/ihategordon/rocks)
+/area/awaymission/ihategordon/secret_rooms)
 "adD" = (
 /obj/structure/rockpilemesa{
 	icon_state = "stone3"
@@ -7629,7 +7629,7 @@
 "cDD" = (
 /obj/item/dice/d20/fate/one_use,
 /turf/open/floor/plating/ironsand,
-/area/awaymission/ihategordon/outsideofmesa)
+/area/awaymission/ihategordon/secret_rooms)
 "cDG" = (
 /obj/effect/turf_decal/trimline/dark_blue/filled/corner{
 	dir = 1
@@ -25290,7 +25290,7 @@
 "ihM" = (
 /obj/item/reagent_containers/hypospray/medipen/stimulants/baseball,
 /turf/open/floor/plating/ironsand,
-/area/awaymission/ihategordon/outsideofmesa)
+/area/awaymission/ihategordon/secret_rooms)
 "iiy" = (
 /obj/structure/fluff/paper/stack{
 	dir = 6
@@ -28261,7 +28261,7 @@
 "jgj" = (
 /obj/item/crowbar/freeman/ultimate,
 /turf/open/floor/plating/ironsand,
-/area/awaymission/ihategordon/outsideofmesa)
+/area/awaymission/ihategordon/secret_rooms)
 "jgv" = (
 /obj/effect/turf_decal/trimline/dark_green/filled/line{
 	dir = 8
@@ -62052,7 +62052,7 @@
 "tTA" = (
 /obj/structure/deadmesa/hecughost,
 /turf/open/floor/plating/ironsand,
-/area/awaymission/ihategordon/rocks)
+/area/awaymission/ihategordon/secret_rooms)
 "tTD" = (
 /obj/effect/turf_decal/trimline/purple/filled/corner{
 	dir = 8
@@ -74779,6 +74779,7 @@
 /area/awaymission/ihategordon/sectorhsecoffices)
 "yhX" = (
 /obj/structure/closet/crate/large/urbanismcratelarge/mil,
+/obj/item/gun/ballistic/automatic/fal,
 /turf/open/floor/plasteel/rivets,
 /area/awaymission/ihategordon/big_offices)
 "yib" = (
@@ -119053,7 +119054,7 @@ rxG
 rxG
 bWZ
 bWZ
-tlv
+hCm
 bWZ
 bWZ
 bWZ
@@ -119303,17 +119304,17 @@ sey
 eLu
 cwJ
 eLu
-sey
+hCm
 jgj
-sey
-sey
-sey
-sey
-sey
-sey
-sey
-sey
-sey
+hCm
+hCm
+hCm
+hCm
+hCm
+hCm
+hCm
+hCm
+hCm
 bWZ
 bWZ
 bWZ
@@ -119560,17 +119561,17 @@ gbu
 eLu
 cwJ
 eLu
-sey
-sey
-sey
-sey
-sey
-sey
-sey
-sey
+hCm
+hCm
+hCm
+hCm
+hCm
+hCm
+hCm
+hCm
 cDD
-tlv
-tlv
+hCm
+hCm
 bWZ
 bWZ
 bWZ
@@ -119826,8 +119827,8 @@ bWZ
 bWZ
 bWZ
 bWZ
-tlv
-tlv
+hCm
+hCm
 bWZ
 bWZ
 bWZ
@@ -120338,7 +120339,7 @@ bWZ
 bWZ
 bWZ
 bWZ
-tlv
+hCm
 bWZ
 bWZ
 fWF
@@ -120594,10 +120595,10 @@ bWZ
 bWZ
 bWZ
 bWZ
-tlv
-tlv
-tlv
-tlv
+hCm
+hCm
+hCm
+hCm
 nWj
 hCm
 pWr

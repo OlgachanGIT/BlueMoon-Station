@@ -76,6 +76,16 @@
 	w_class = WEIGHT_CLASS_NORMAL
 	weapon_weight = WEAPON_MEDIUM
 
+/obj/item/gun/ballistic/shotgun/rsh12/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	var/result = ..(user, pointblank, pbtarget, message, 35)
+	if(isliving(user))
+		user.apply_damage(5, BURN, BODY_ZONE_PRECISE_L_HAND)
+		user.apply_damage(5, BURN, BODY_ZONE_PRECISE_R_HAND)
+		user.adjustStaminaLoss(25)
+		if(prob(35))
+			user.adjustEarDamage(0, 25)
+	return result
+
 //HoS G22 pistol
 /obj/item/gun/ballistic/automatic/pistol/g22
 	name = "\improper G22 Mark. 1"

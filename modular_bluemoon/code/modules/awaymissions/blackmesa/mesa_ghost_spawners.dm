@@ -175,6 +175,11 @@
 	. = ..()
 	spawned_human.remove_language(/datum/language/common)
 
+/obj/effect/mob_spawn/human/black_mesa/hecu/machinegunner
+	name = "HECU machinegunner"
+	outfit = /datum/outfit/hecu_machingunner
+	short_desc = "Ты являешься профессиональным пулемётчиком небольшого отряда поддержки HECU."
+
 /datum/outfit/hecu
 	name = "HECU grunt"
 	uniform = /obj/item/clothing/under/rank/security/officer/urban_camo
@@ -280,15 +285,16 @@
 	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/grenade/smokebomb
 	r_pocket = /obj/item/binoculars
-	r_hand = /obj/item/gun/ballistic/automatic/mp5
+	l_hand = /obj/item/gun/ballistic/automatic/m16a4/mesa
+	r_hand = /obj/item/choice_beacon/mesaleader
 	back = /obj/item/storage/backpack/rucksack/green
 	backpack_contents = list(
 		/obj/item/storage/box/survival/radio,
 		/obj/item/storage/firstaid/emergency,
 		/obj/item/kitchen/knife/combat,
 		/obj/item/book/granter/martial/cqc,
-		/obj/item/gun/ballistic/automatic/pistol/deagle,
-		/obj/item/ammo_box/magazine/m50,
+		/obj/item/ammo_box/magazine/m16,
+		/obj/item/ammo_box/magazine/m16,
 	)
 
 
@@ -372,6 +378,27 @@
 	backpack_contents = list(
 		/obj/item/storage/box/survival/radio,
 		/obj/item/storage/firstaid/emergency,
+	)
+
+/datum/outfit/hecu_machingunner
+	name = "HECU machine gunner"
+	uniform = /obj/item/clothing/under/rank/security/officer/urban_camo
+	head = /obj/item/clothing/head/machinegunner
+	suit = /obj/item/clothing/suit/armor/hecu
+	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
+	belt = /obj/item/storage/belt/bandolier/durathread
+	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
+	l_pocket = /obj/item/grenade/smokebomb
+	r_pocket = /obj/item/binoculars
+	l_hand = /obj/item/gun/ballistic/automatic/m249
+	back = /obj/item/storage/backpack/rucksack/green
+	backpack_contents = list(
+		/obj/item/storage/box/survival/radio,
+		/obj/item/storage/firstaid/emergency,
+		/obj/item/kitchen/knife/combat,
+		/obj/item/ammo_box/magazine/m249,
+		/obj/item/ammo_box/magazine/m249,
 	)
 
 //Чёрные оперативники
