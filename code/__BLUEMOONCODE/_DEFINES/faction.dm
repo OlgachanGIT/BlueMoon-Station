@@ -10,5 +10,6 @@
 	/area/awaymission/ihategordon/gonome,\
 	/area/awaymission/ihategordon/hecu_camp_hall,\
 	/area/awaymission/ihategordon/hecu_camp_medbay,\
-	/area/awaymission/ihategordon/hecu_camp_bus_stop\
+	/area/awaymission/ihategordon/hecu_camp_bus_stop,\
+	/area/awaymission/ihategordon/big_offices\
 )

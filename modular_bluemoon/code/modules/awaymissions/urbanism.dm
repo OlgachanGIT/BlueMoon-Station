@@ -461,3 +461,8 @@
 //八月正午的陽光 都沒你耀眼
 //熱愛105度的你
 //滴滴清純的蒸餾水
+
+/obj/structure/fence/nocut
+	name = "reinforced fence"
+	desc = "A chain link fence reinforced to prevent cutting."
+	cuttable = FALSE

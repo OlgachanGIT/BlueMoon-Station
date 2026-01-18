@@ -907,31 +907,22 @@
 	mag_type = /obj/item/ammo_box/magazine/m249
 	w_class = WEIGHT_CLASS_BULKY
 	weapon_weight = WEAPON_HEAVY
-	recoil = 2
+	recoil = 1
 	spread = 6
 	burst_size = 3
 	burst_shot_delay = 1
-	fire_delay = 2
+	fire_delay = 1.5
 	can_suppress = FALSE
 	can_bayonet = FALSE
 	slot_flags = ITEM_SLOT_BACK
 	automatic_burst_overlay = FALSE
 	var/cover_open = FALSE
-	var/box_attached = TRUE
+	slowdown = 1.0
 
 /obj/item/gun/ballistic/automatic/m249/examine(mob/user)
 	. = ..()
 	if(cover_open && magazine)
 		. += "<span class='notice'>It seems like you could use an <b>empty hand</b> to remove the magazine.</span>"
-	. += "<span class='notice'>The ammo box is currently [box_attached ? "attached" : "detached"]. You could use <b>right-click</b> to toggle it.</span>"
-
-/obj/item/gun/ballistic/automatic/m249/proc/toggle_box()
-	box_attached = !box_attached
-	update_icon()
-	if(box_attached)
-		to_chat(usr, "<span class='notice'>You attach the ammo box to [src].</span>")
-	else
-		to_chat(usr, "<span class='notice'>You detach the ammo box from [src].</span>")
 
 /obj/item/gun/ballistic/automatic/m249/attack_self(mob/user)
 	cover_open = !cover_open
@@ -943,9 +934,12 @@
 	update_icon()
 
 /obj/item/gun/ballistic/automatic/m249/update_icon_state()
-	var/panel_state = cover_open ? "_panel" : ""
-	var/ammo_state = !box_attached ? "_nomag_empty" : ((magazine && get_ammo(0) > 0) ? "" : "_empty")
-	icon_state = "m249[panel_state][ammo_state]"
+	var/ammo_state = ""
+	if(!magazine)
+		ammo_state = "_nomag_empty"
+	else if(get_ammo(0) <= 0)
+		ammo_state = "_empty"
+	icon_state = "m249[cover_open ? "_panel" : ""][ammo_state]"
 
 /obj/item/gun/ballistic/automatic/m249/afterattack(atom/target as mob|obj|turf, mob/living/user as mob|obj, flag, params)
 	if(cover_open)
@@ -957,9 +951,6 @@
 /obj/item/gun/ballistic/automatic/m249/on_attack_hand(mob/user, act_intent = user.a_intent, unarmed_attack_flags)
 	if(loc != user)
 		..()
-		return
-	if(act_intent == INTENT_DISARM)
-		toggle_box()
 		return
 	if(!cover_open || (cover_open && !magazine))
 		..()
