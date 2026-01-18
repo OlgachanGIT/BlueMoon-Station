@@ -4,11 +4,12 @@
 	var/alert_cooldown_time
 
 /mob/living/simple_animal/hostile/blackmesa/CanAttack(atom/the_target)
-	. = ..()
-	if(. && isliving(the_target))
+	if(isliving(the_target))
 		var/mob/living/L = the_target
-		if(HAS_TRAIT(L, TRAIT_PACIFISM) && L.has_status_effect(/datum/status_effect/stabilized/lightpink))
-			return FALSE
+		if(L.has_status_effect(/datum/status_effect/stabilized/lightpink))
+			return TRUE
+	. = ..()
+	return .
 
 /mob/living/simple_animal/hostile/blackmesa/xen
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
@@ -222,8 +223,8 @@
 	health = 100
 	obj_damage = 50
 	harm_intent_damage = 10
-	melee_damage_lower = 20
-	melee_damage_upper = 20
+	melee_damage_lower = 10
+	melee_damage_upper = 15
 	attack_sound = 'sound/weapons/bite.ogg'
 	gold_core_spawnable = HOSTILE_SPAWN
 	//Since those can survive on Xen, I'm pretty sure they can thrive on any atmosphere

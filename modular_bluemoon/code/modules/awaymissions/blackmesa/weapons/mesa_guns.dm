@@ -812,7 +812,7 @@
 
 /obj/item/gun/ballistic/revolver/rsh12
 	name = "RSH-12 revolver"
-	desc = "Противник даже слова сказать не успеет. Это прототип РШ12 который можно зарядить даже картечью. С этого дерьма даже стрелять опасно."
+	desc = "Противник даже слова сказать не успеет. Это прототип РШ12 который можно зарядить картечью. С этого дерьма даже стрелять опасно!"
 	icon_state = "rs12"
 	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
 	fire_sound = 'modular_bluemoon/sound/weapons/rsh.ogg'
@@ -899,8 +899,8 @@
 	name = "M249 SAW"
 	desc = "FN M249 Squad Automatic Weapon - лёгкий пулемёт, предназначенный для обеспечения огневой поддержки отделения. Обычно используется с 100-патронной лентой."
 	icon = 'modular_bluemoon/icons/obj/guns/Machineguns.dmi'
-	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_lefthand.dmi'
-	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_righthand.dmi'
+	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/left48x32.dmi'
+	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/right48x32.dmi'
 	icon_state = "m249"
 	item_state = "m249"
 	fire_sound = 'modular_bluemoon/sound/weapons/m249.ogg'
@@ -917,11 +917,21 @@
 	slot_flags = ITEM_SLOT_BACK
 	automatic_burst_overlay = FALSE
 	var/cover_open = FALSE
+	var/box_attached = TRUE
 
 /obj/item/gun/ballistic/automatic/m249/examine(mob/user)
 	. = ..()
 	if(cover_open && magazine)
 		. += "<span class='notice'>It seems like you could use an <b>empty hand</b> to remove the magazine.</span>"
+	. += "<span class='notice'>The ammo box is currently [box_attached ? "attached" : "detached"]. You could use <b>right-click</b> to toggle it.</span>"
+
+/obj/item/gun/ballistic/automatic/m249/proc/toggle_box()
+	box_attached = !box_attached
+	update_icon()
+	if(box_attached)
+		to_chat(usr, "<span class='notice'>You attach the ammo box to [src].</span>")
+	else
+		to_chat(usr, "<span class='notice'>You detach the ammo box from [src].</span>")
 
 /obj/item/gun/ballistic/automatic/m249/attack_self(mob/user)
 	cover_open = !cover_open
@@ -933,8 +943,9 @@
 	update_icon()
 
 /obj/item/gun/ballistic/automatic/m249/update_icon_state()
-	var/ammo_state = magazine ? CEILING(get_ammo(0)/25, 1)*25 : "-empty"
-	icon_state = "m249[cover_open ? "open" : "closed"][ammo_state]"
+	var/panel_state = cover_open ? "_panel" : ""
+	var/ammo_state = !box_attached ? "_nomag_empty" : ((magazine && get_ammo(0) > 0) ? "" : "_empty")
+	icon_state = "m249[panel_state][ammo_state]"
 
 /obj/item/gun/ballistic/automatic/m249/afterattack(atom/target as mob|obj|turf, mob/living/user as mob|obj, flag, params)
 	if(cover_open)
@@ -946,6 +957,9 @@
 /obj/item/gun/ballistic/automatic/m249/on_attack_hand(mob/user, act_intent = user.a_intent, unarmed_attack_flags)
 	if(loc != user)
 		..()
+		return
+	if(act_intent == INTENT_DISARM)
+		toggle_box()
 		return
 	if(!cover_open || (cover_open && !magazine))
 		..()
