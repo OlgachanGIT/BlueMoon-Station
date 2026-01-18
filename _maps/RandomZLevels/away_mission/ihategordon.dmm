@@ -12413,6 +12413,7 @@
 	color = "#454545";
 	dir = 2
 	},
+/obj/item/ammo_box/magazine/m249,
 /turf/open/floor/plating/cobblestone,
 /area/awaymission/ihategordon/underground_tunnels)
 "eeG" = (
@@ -15542,6 +15543,10 @@
 	icon_state = "iron6"
 	},
 /area/awaymission/ihategordon/outsideofmesa)
+"faD" = (
+/obj/structure/fence/nocut,
+/turf/open/floor/plating/ironsand,
+/area/awaymission/ihategordon/outsideofmesa/restricted_zone)
 "faI" = (
 /obj/effect/decal/cleanable/oil,
 /obj/effect/turf_decal/stripes/yellow/line,
@@ -25676,6 +25681,13 @@
 	},
 /turf/open/floor/plasteel/dark/smooth/diagonal,
 /area/awaymission/ihategordon/outsideofmesa)
+"ipt" = (
+/obj/structure/fence/nocut{
+	resistance_flags = 115;
+	dir = 4
+	},
+/turf/open/floor/plating/ironsand,
+/area/awaymission/ihategordon/rocks)
 "ipB" = (
 /obj/item/ammo_box/magazine/mp5,
 /turf/open/floor/plasteel/rivets,
@@ -26653,13 +26665,6 @@
 /obj/effect/turf_decal/trimline/dark/filled/line,
 /turf/open/floor/plasteel/rivets,
 /area/awaymission/ihategordon/facility_hallway)
-"iGD" = (
-/obj/structure/fence/nocut{
-	resistance_flags = 115;
-	dir = 4
-	},
-/turf/open/floor/plating/ironsand,
-/area/awaymission/ihategordon/outsideofmesa/restricted_zone)
 "iGF" = (
 /mob/living/simple_animal/hostile/headcrab/mesa,
 /obj/effect/turf_decal/tile/brown/half/contrasted,
@@ -49194,6 +49199,7 @@
 /obj/item/ammo_box/magazine/mp5,
 /obj/item/multitool/advanced,
 /obj/item/ammo_box/rsh12,
+/obj/item/ammo_box/magazine/m249,
 /turf/open/floor/plasteel/rivets,
 /area/awaymission/ihategordon/secret_rooms)
 "pQO" = (
@@ -53731,10 +53737,6 @@
 /obj/effect/mapping_helpers/airlock/locked,
 /turf/open/floor/plasteel/rivets,
 /area/awaymission/ihategordon/science_tunnel)
-"rtP" = (
-/obj/structure/fence/nocut,
-/turf/open/floor/plating/ironsand,
-/area/awaymission/ihategordon/outsideofmesa/restricted_zone)
 "rtV" = (
 /mob/living/simple_animal/hostile/blackmesa/xen/houndeye,
 /turf/open/floor/plasteel/white,
@@ -70630,13 +70632,6 @@
 	},
 /turf/open/floor/plasteel/rivets/large,
 /area/awaymission/ihategordon/sectorhnorthoffices)
-"wIn" = (
-/obj/structure/fence/nocut{
-	resistance_flags = 115;
-	dir = 4
-	},
-/turf/open/floor/plating/ironsand,
-/area/awaymission/ihategordon/rocks)
 "wIr" = (
 /obj/structure/rack/shelf,
 /obj/item/storage/toolbox/artistic,
@@ -70711,6 +70706,13 @@
 /obj/structure/window/reinforced/spawner/north,
 /turf/open/floor/plasteel/rivets,
 /area/awaymission/ihategordon/cryo_room)
+"wKq" = (
+/obj/structure/fence/nocut{
+	resistance_flags = 115;
+	dir = 4
+	},
+/turf/open/floor/plating/ironsand,
+/area/awaymission/ihategordon/outsideofmesa/restricted_zone)
 "wKE" = (
 /obj/structure/closet/l3closet/scientist,
 /obj/effect/turf_decal/trimline/dark_green/filled/line{
@@ -89153,7 +89155,7 @@ bWZ
 bWZ
 bWZ
 bWZ
-wIn
+ipt
 qjd
 coJ
 sNH
@@ -89410,7 +89412,7 @@ bWZ
 klO
 bWZ
 bWZ
-wIn
+ipt
 iyn
 coJ
 sNH
@@ -89667,7 +89669,7 @@ jVs
 klO
 bWZ
 bWZ
-wIn
+ipt
 sey
 coJ
 sNH
@@ -89924,7 +89926,7 @@ klO
 klO
 klO
 klO
-wIn
+ipt
 fMs
 coJ
 sNH
@@ -90181,7 +90183,7 @@ vme
 vme
 cTl
 klO
-wIn
+ipt
 vvQ
 coJ
 sNH
@@ -90438,7 +90440,7 @@ eVg
 noL
 mDl
 klO
-wIn
+ipt
 sey
 gHw
 sNH
@@ -90695,7 +90697,7 @@ eVg
 bIx
 djn
 klO
-wIn
+ipt
 awj
 coJ
 sNH
@@ -90952,7 +90954,7 @@ vky
 vky
 gwp
 klO
-wIn
+ipt
 sey
 coJ
 sNH
@@ -91209,7 +91211,7 @@ nNu
 klO
 klO
 klO
-wIn
+ipt
 mby
 coJ
 nWB
@@ -91466,7 +91468,7 @@ vme
 vme
 rzW
 klO
-wIn
+ipt
 sey
 coJ
 nWB
@@ -91723,7 +91725,7 @@ eVg
 eVg
 ayr
 klO
-wIn
+ipt
 awj
 coJ
 nWB
@@ -91980,7 +91982,7 @@ vky
 vky
 oVI
 klO
-wIn
+ipt
 sey
 coJ
 nWB
@@ -92237,7 +92239,7 @@ klO
 klO
 klO
 klO
-wIn
+ipt
 iyn
 coJ
 nWB
@@ -92494,7 +92496,7 @@ xUU
 mMp
 dQr
 klO
-wIn
+ipt
 pWl
 coJ
 nWB
@@ -92751,7 +92753,7 @@ lnW
 eJO
 ufz
 klO
-wIn
+ipt
 gbu
 coJ
 nWB
@@ -93008,7 +93010,7 @@ gZY
 eVg
 ufz
 klO
-wIn
+ipt
 pnB
 coJ
 nWB
@@ -93265,7 +93267,7 @@ fsF
 eVg
 ufz
 klO
-wIn
+ipt
 gbu
 coJ
 nWB
@@ -93522,7 +93524,7 @@ bne
 ice
 mLM
 klO
-wIn
+ipt
 vvQ
 coJ
 sNH
@@ -93779,7 +93781,7 @@ klO
 klO
 klO
 klO
-wIn
+ipt
 sey
 vAw
 sNH
@@ -94036,7 +94038,7 @@ ygW
 oqG
 cSe
 iOS
-iGD
+wKq
 ima
 coJ
 sNH
@@ -94293,7 +94295,7 @@ qMZ
 qMZ
 jJN
 aTA
-iGD
+wKq
 iVm
 coJ
 nCn
@@ -94550,7 +94552,7 @@ oYu
 fAC
 fPj
 oqG
-iGD
+wKq
 sey
 coJ
 nCn
@@ -94807,7 +94809,7 @@ oYu
 fAC
 fPj
 fTi
-iGD
+wKq
 dhM
 coJ
 nCn
@@ -95064,7 +95066,7 @@ oYu
 fAC
 fPj
 oqG
-iGD
+wKq
 iyn
 coJ
 nCn
@@ -95321,7 +95323,7 @@ oYu
 oYu
 fPj
 ygW
-iGD
+wKq
 sey
 coJ
 nCn
@@ -95578,7 +95580,7 @@ oYu
 fAC
 fPj
 bvO
-iGD
+wKq
 awj
 coJ
 nCn
@@ -95835,7 +95837,7 @@ oYu
 oYu
 fPj
 oqG
-iGD
+wKq
 sey
 coJ
 nCn
@@ -96092,7 +96094,7 @@ oYu
 oYu
 fPj
 rDu
-iGD
+wKq
 iyn
 coJ
 nCn
@@ -96349,7 +96351,7 @@ fAC
 oYu
 fPj
 oqG
-iGD
+wKq
 sey
 coJ
 nCn
@@ -96606,7 +96608,7 @@ oYu
 fAC
 fPj
 cSe
-iGD
+wKq
 qjW
 ler
 nCn
@@ -96863,7 +96865,7 @@ oYu
 oYu
 fPj
 iMf
-iGD
+wKq
 pgD
 coJ
 dWy
@@ -97120,7 +97122,7 @@ oYu
 fAC
 fPj
 iOS
-iGD
+wKq
 fMs
 coJ
 sNH
@@ -97377,7 +97379,7 @@ wqV
 fAC
 fPj
 oqG
-iGD
+wKq
 rDN
 coJ
 sNH
@@ -97634,7 +97636,7 @@ fAC
 fAC
 fPj
 aTA
-iGD
+wKq
 aqt
 coJ
 sNH
@@ -97891,7 +97893,7 @@ fAC
 oYu
 fPj
 oqG
-iGD
+wKq
 mby
 coJ
 sNH
@@ -98148,7 +98150,7 @@ ghS
 fAC
 fPj
 ygW
-iGD
+wKq
 sey
 coJ
 sNH
@@ -98405,7 +98407,7 @@ fAC
 fAC
 fPj
 oqG
-iGD
+wKq
 liu
 pKX
 aLH
@@ -98662,7 +98664,7 @@ ila
 fAC
 fPj
 oqG
-iGD
+wKq
 sey
 coJ
 aLH
@@ -98919,7 +98921,7 @@ fAC
 fAC
 fPj
 yaZ
-iGD
+wKq
 vdJ
 coJ
 sNH
@@ -99176,7 +99178,7 @@ fAC
 fAC
 fPj
 oqG
-iGD
+wKq
 geW
 coJ
 sNH
@@ -99433,7 +99435,7 @@ fAC
 gCN
 fPj
 oqG
-iGD
+wKq
 dhM
 vAw
 sNH
@@ -99690,7 +99692,7 @@ oYu
 fAC
 fPj
 lDQ
-iGD
+wKq
 ewX
 coJ
 sNH
@@ -99947,7 +99949,7 @@ fAC
 fAC
 fPj
 oqG
-iGD
+wKq
 hJO
 coJ
 sNH
@@ -100204,7 +100206,7 @@ mrY
 mrY
 pYs
 oqG
-iGD
+wKq
 iyn
 coJ
 sNH
@@ -100461,7 +100463,7 @@ klO
 oqG
 cSe
 ygW
-iGD
+wKq
 gbu
 coJ
 sNH
@@ -100718,7 +100720,7 @@ klO
 gFr
 oqG
 oqG
-iGD
+wKq
 vvQ
 coJ
 sNH
@@ -100975,7 +100977,7 @@ klO
 oqG
 cSe
 oqG
-iGD
+wKq
 gbu
 coJ
 sNH
@@ -101232,7 +101234,7 @@ klO
 ygW
 oqG
 pZD
-iGD
+wKq
 iyn
 coJ
 sNH
@@ -101489,7 +101491,7 @@ klO
 cpW
 aOx
 oqG
-iGD
+wKq
 sey
 coJ
 sNH
@@ -101746,7 +101748,7 @@ klO
 oqG
 oqG
 cSe
-iGD
+wKq
 ima
 coJ
 sNH
@@ -102003,7 +102005,7 @@ klO
 ygW
 lDQ
 oqG
-iGD
+wKq
 gbu
 coJ
 sNH
@@ -102260,7 +102262,7 @@ klO
 cSe
 oqG
 kev
-iGD
+wKq
 pnB
 coJ
 sNH
@@ -102517,7 +102519,7 @@ klO
 amc
 ygW
 fJs
-iGD
+wKq
 geW
 coJ
 sNH
@@ -102774,7 +102776,7 @@ klO
 tnX
 oqG
 oqG
-iGD
+wKq
 iyn
 coJ
 sNH
@@ -103031,7 +103033,7 @@ klO
 sMR
 cSe
 bvO
-iGD
+wKq
 aqt
 coJ
 sNH
@@ -103288,7 +103290,7 @@ klO
 iMZ
 oqG
 oqG
-iGD
+wKq
 fMs
 coJ
 sNH
@@ -103545,7 +103547,7 @@ klO
 ygW
 yaZ
 oqG
-iGD
+wKq
 rDN
 coJ
 sNH
@@ -103802,7 +103804,7 @@ klO
 oqG
 kev
 oqG
-iGD
+wKq
 jyH
 coJ
 sNH
@@ -104059,7 +104061,7 @@ klO
 lDQ
 oqG
 ygW
-iGD
+wKq
 sey
 coJ
 sNH
@@ -104316,7 +104318,7 @@ klO
 aTA
 ptM
 nGq
-iGD
+wKq
 sey
 coJ
 sNH
@@ -104572,7 +104574,7 @@ gUR
 klO
 klO
 klO
-rtP
+faD
 iQr
 awj
 coJ
