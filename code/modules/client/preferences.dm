@@ -1070,29 +1070,32 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 							dat += "<b>Penis Visibility:</b><a style='display:block;width:100px' href='?_src_=prefs;preference=cock_visibility;task=input'>[features["cock_visibility"]]</a>"
 							dat += "<b>Penis Always Accessible:</b><a style='display:block;width:100px' href='?_src_=prefs;preference=cock_accessible'>[features["cock_accessible"] ? "Yes" : "No"]</a>"
 							dat += "<b>Toys and Egg Stuffing:</b><a style='display:block;width:50px' href='?_src_=prefs;preference=cock_stuffing'>[features["cock_stuffing"] == TRUE ? "Yes" : "No"]</a>" //SPLURT Edit
-							dat += "<b>Has Testicles:</b><a style='display:block;width:50px' href='?_src_=prefs;preference=has_balls'>[features["has_balls"] == TRUE ? "Yes" : "No"]</a>"
-							if(features["has_balls"])
-								if(pref_species.use_skintones && features["genitals_use_skintone"] == TRUE)
-									dat += "<b>Testicles Color:</b></a><BR>"
-									dat += "<span style='border: 1px solid #161616; background-color: [SKINTONE2HEX(skin_tone)];'><font color='[color_hex2num(SKINTONE2HEX(skin_tone)) < 200 ? "FFFFFF" : "000000"]'>[SKINTONE2HEX(skin_tone)]</font></span>(Skin tone overriding)<br>"
-								else
-									dat += "<b>Testicles Color:</b></a><BR>"
-									dat += "<span style='border: 1px solid #161616; background-color: #[features["balls_color"]];'><font color='[color_hex2num(features["balls_color"]) < 200 ? "FFFFFF" : "000000"]'>#[features["balls_color"]]</font></span> <a href='?_src_=prefs;preference=balls_color;task=input'>Change</a><br>"
-								dat += "<b>Testicles Shape:</b> <a style='display:block;width:120px' href='?_src_=prefs;preference=balls_shape;task=input'>[features["balls_shape"]]</a>"
-								dat += "<b>Testicles Visibility:</b><a style='display:block;width:100px' href='?_src_=prefs;preference=balls_visibility;task=input'>[features["balls_visibility"]]</a>"
-								dat += "<b>Testicles Always Accessible:</b><a style='display:block;width:100px' href='?_src_=prefs;preference=balls_accessible'>[features["balls_accessible"] ? "Yes" : "No"]</a>"
+						
+						dat += "<h3>Testicles</h3>"
+						dat += "<a style='display:block;width:50px' href='?_src_=prefs;preference=has_balls'>[features["has_balls"] == TRUE ? "Yes" : "No"]</a>"
+						if(features["has_balls"])
+							if(pref_species.use_skintones && features["genitals_use_skintone"] == TRUE)
+								dat += "<b>Testicles Color:</b></a><BR>"
+								dat += "<span style='border: 1px solid #161616; background-color: [SKINTONE2HEX(skin_tone)];'><font color='[color_hex2num(SKINTONE2HEX(skin_tone)) < 200 ? "FFFFFF" : "000000"]'>[SKINTONE2HEX(skin_tone)]</font></span>(Skin tone overriding)<br>"
+							else
+								dat += "<b>Testicles Color:</b></a><BR>"
+								dat += "<span style='border: 1px solid #161616; background-color: #[features["balls_color"]];'><font color='[color_hex2num(features["balls_color"]) < 200 ? "FFFFFF" : "000000"]'>#[features["balls_color"]]</font></span> <a href='?_src_=prefs;preference=balls_color;task=input'>Change</a><br>"
+							dat += "<b>Testicles Shape:</b> <a style='display:block;width:120px' href='?_src_=prefs;preference=balls_shape;task=input'>[features["balls_shape"]]</a>"
+							dat += "<b>Testicles Size:</b> <a style='display:block;width:120px' href='?_src_=prefs;preference=balls_size;task=input'>[features["balls_size"]]</a>"
+							dat += "<b>Testicles Visibility:</b><a style='display:block;width:100px' href='?_src_=prefs;preference=balls_visibility;task=input'>[features["balls_visibility"]]</a>"
+							dat += "<b>Testicles Always Accessible:</b><a style='display:block;width:100px' href='?_src_=prefs;preference=balls_accessible'>[features["balls_accessible"] ? "Yes" : "No"]</a>"
 
-								//SPLURT Edit
-								dat += "<b>Toys and Egg Stuffing:</b><a style='display:block;width:50px' href='?_src_=prefs;preference=balls_stuffing'>[features["balls_stuffing"] == TRUE ? "Yes" : "No"]</a>"
-								dat += "<b>Max Size:</b><a style='display:block;width:50px' href='?_src_=prefs;preference=balls_max_size;task=input'>[features["balls_max_size"] ? features["balls_max_size"] : "Disabled"]</a>"
-								dat += "<b>Min Size:</b><a style='display:block;width:50px' href='?_src_=prefs;preference=balls_min_size;task=input'>[features["balls_min_size"] ? features["balls_min_size"] : "Disabled"]</a>"
-								dat += "<b>Produces:</b>"
-								var/datum/reagent/balls_fluid = find_reagent_object_from_type(features["balls_fluid"])
-								if(balls_fluid && (balls_fluid in GLOB.genital_fluids_list))
-									dat += "<a style='display:block;width:50px' href='?_src_=prefs;preference=balls_fluid;task=input'>[balls_fluid.name]</a>"
-								else
-									dat += "<a style='display:block;width:50px' href='?_src_=prefs;preference=balls_fluid;task=input'>Nothing?</a>"
-								//SPLURT Edit end
+							//SPLURT Edit
+							dat += "<b>Toys and Egg Stuffing:</b><a style='display:block;width:50px' href='?_src_=prefs;preference=balls_stuffing'>[features["balls_stuffing"] == TRUE ? "Yes" : "No"]</a>"
+							dat += "<b>Max Size:</b><a style='display:block;width:50px' href='?_src_=prefs;preference=balls_max_size;task=input'>[features["balls_max_size"] ? features["balls_max_size"] : "Disabled"]</a>"
+							dat += "<b>Min Size:</b><a style='display:block;width:50px' href='?_src_=prefs;preference=balls_min_size;task=input'>[features["balls_min_size"] ? features["balls_min_size"] : "Disabled"]</a>"
+							dat += "<b>Produces:</b>"
+							var/datum/reagent/balls_fluid = find_reagent_object_from_type(features["balls_fluid"])
+							if(balls_fluid && (balls_fluid in GLOB.genital_fluids_list))
+								dat += "<a style='display:block;width:50px' href='?_src_=prefs;preference=balls_fluid;task=input'>[balls_fluid.name]</a>"
+							else
+								dat += "<a style='display:block;width:50px' href='?_src_=prefs;preference=balls_fluid;task=input'>Nothing?</a>"
+							//SPLURT Edit end
 
 						dat += "</td>"
 						dat += APPEARANCE_CATEGORY_COLUMN
@@ -3385,6 +3388,11 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 					if(new_shape)
 						features["balls_shape"] = new_shape
 
+				if("balls_size")
+					var/new_size = tgui_input_number(user, "Testicles Size:\n([BALLS_SIZE_MIN]-[BALLS_SIZE_MAX])", "Character Preference", features["balls_size"], BALLS_SIZE_MAX, BALLS_SIZE_MIN)
+					if(new_size)
+						features["balls_size"] = clamp(round(new_size), BALLS_SIZE_MIN, BALLS_SIZE_MAX)
+
 				if("balls_visibility")
 					var/n_vis = tgui_input_list(user, "Testicles Visibility", "Character Preference", CONFIG_GET(str_list/safe_visibility_toggles))
 					if(n_vis)
@@ -4817,9 +4825,15 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 			if(href_list["loadout_addheirloom"])
 				// Выбран ли предмет среди категории неприемлемых для реликвии?
 				var/typepath = user_gear[LOADOUT_ITEM]
+				// FIX: Проверяем существование типа перед созданием
+				var/resolved_path = text2path(typepath)
+				if(!ispath(resolved_path, /datum/gear))
+					to_chat(user, "<font color='red'>Предмет лоадаута <b>[typepath]</b> повреждён. Удалите его из лоадаута через вкладку Errors.</font>")
+					ShowChoices(user)
+					return TRUE
 				var/forbidden = FALSE
-				var/datum/gear/temp_gear = new typepath()
-				if (is_typeof_list(temp_gear.path, LOADOUT_IS_DISALLOWED_HEIRLOOM))
+				var/datum/gear/temp_gear = new resolved_path()
+				if (ispath_in_list(temp_gear.path, LOADOUT_IS_DISALLOWED_HEIRLOOM))
 					forbidden = TRUE
 				qdel(temp_gear) // На всякий случай, чтобы не засирало память лишними датумами
 				// Выбран ли какой-либо другой предмет как семейная реликвия, и если да, то какой?
@@ -5101,9 +5115,11 @@ GLOBAL_LIST_EMPTY(preferences_datums)
 	var/list/L
 	LAZYINITLIST(L)
 	for(var/i in loadout_data["SAVE_[loadout_slot]"])
-		var/datum/gear/G = i[LOADOUT_ITEM]
-		var/occupied_slots = L[initial(G.category)] ? L[initial(G.category)] + 1 : 1
-		LAZYSET(L, initial(G.category), occupied_slots)
+		var/datum/gear/gear_path = text2path(i[LOADOUT_ITEM])
+		if(!ispath(gear_path, /datum/gear))
+			continue
+		var/occupied_slots = L[initial(gear_path.category)] ? L[initial(gear_path.category)] + 1 : 1
+		LAZYSET(L, initial(gear_path.category), occupied_slots)
 	switch(slot)
 		if(ITEM_SLOT_BACKPACK)
 			if(L[LOADOUT_CATEGORY_BACKPACK] < BACKPACK_SLOT_AMT)
