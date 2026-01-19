@@ -372,6 +372,10 @@
 	mutantrace_variation = STYLE_DIGITIGRADE|STYLE_NO_ANTHRO_ICON
 	var/list/poly_colors = list("#FFFFFF","#C5302D")
 
+/obj/item/clothing/under/costume/kimono/poly/ComponentInitialize()
+	. = ..()
+	AddElement(/datum/element/polychromic, list("#FFFFFF", "#C5302D"), 2)
+
 /obj/item/clothing/under/costume/irs
 	name = "internal revenue service outfit"
 	icon_state = "irs_jumpsuit"
