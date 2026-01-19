@@ -63,16 +63,6 @@
 	if(QDELETED(linked_swapper))
 		to_chat(user, span_warning("[src] не связан с другим устройством."))
 		return
-	var/area/user_area = get_area(user)
-	var/area/linked_area = get_area(linked_swapper)
-	if(istype(user_area, /area/awaymission/ihategordon) && istype(linked_area, /area/awaymission/ihategordon))
-		for(var/restricted_area in MESA_SWAPPER_RESTRICTED_AREAS)
-			if(istype(user_area, restricted_area) || istype(linked_area, restricted_area))
-				to_chat(user, span_userdanger("[src] НЕ РАБОТАЕТ! Квантовая синхронизация невозможна в этой зоне! Найдите место безопаснее."))
-				if(ismob(linked_swapper.loc))
-					var/mob/holder = linked_swapper.loc
-					to_chat(holder, span_userdanger("[linked_swapper] вибрирует и издаёт звуковой сигнал!"))
-				return
 	playsound(src, 'sound/weapons/flash.ogg', 25, TRUE)
 	to_chat(user, span_notice("Вы активировали [src]."))
 	playsound(linked_swapper, 'sound/weapons/flash.ogg', 25, TRUE)
