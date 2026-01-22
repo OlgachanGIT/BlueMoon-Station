@@ -651,9 +651,9 @@
 	name = "RSH-12 revolver kit"
 
 /obj/item/storage/box/basedleader/PopulateContents()
-	new /obj/item/gun/ballistic/revolver/rsh12(src)
-	new /obj/item/ammo_box/rsh12(src)
-	new /obj/item/ammo_box/rsh12(src)
+	new /obj/item/gun/ballistic/revolver/hlrsh12(src)
+	new /obj/item/ammo_box/hlrsh12(src)
+	new /obj/item/ammo_box/hlrsh12(src)
 
 /obj/item/storage/box/basedleader/deagle
 	name = "Desert Eagle handgun kit"
@@ -810,17 +810,17 @@
 		alarmed = 1
 	return
 
-/obj/item/gun/ballistic/revolver/rsh12
+/obj/item/gun/ballistic/revolver/hlrsh12
 	name = "RSH-12 revolver"
 	desc = "Противник даже слова сказать не успеет. Это прототип РШ12 который можно зарядить картечью. С этого дерьма даже стрелять опасно!"
 	icon_state = "rs12"
 	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
 	fire_sound = 'modular_bluemoon/sound/weapons/rsh.ogg'
-	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/rsh12
+	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/hlrsh12
 	recoil = 6
 	fire_delay = 4
 
-/obj/item/gun/ballistic/revolver/rsh12/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+/obj/item/gun/ballistic/revolver/hlrsh12/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
 	var/result = ..(user, pointblank, pbtarget, message, 35)
 	if(isliving(user))
 		user.apply_damage(4, BURN, BODY_ZONE_PRECISE_L_HAND)
@@ -830,20 +830,20 @@
 			user.adjustEarDamage(0, 20)
 	return result
 
-/obj/item/ammo_box/magazine/internal/cylinder/rsh12
+/obj/item/ammo_box/magazine/internal/cylinder/hlrsh12
 	name = "RS-12 revolver cylinder"
-	ammo_type = /obj/item/ammo_casing/rsh12
+	ammo_type = /obj/item/ammo_casing/hlrsh12
 	caliber = list("rs12", "shotgun")
 	max_ammo = 6
 	multiload = 0
 
-/obj/item/ammo_casing/rsh12
+/obj/item/ammo_casing/hlrsh12
 	name = "RS-12 bullet casing"
 	desc = "An RS-12 bullet casing."
 	caliber = "rs12"
-	projectile_type = /obj/item/projectile/bullet/rsh12
+	projectile_type = /obj/item/projectile/bullet/hlrsh12
 
-/obj/item/projectile/bullet/rsh12
+/obj/item/projectile/bullet/hlrsh12
 	name = "RS-12 bullet"
 	damage = 70
 	armour_penetration = 6
@@ -851,11 +851,11 @@
 	bare_wound_bonus = 8
 	stamina = 55
 
-/obj/item/ammo_box/rsh12
+/obj/item/ammo_box/hlrsh12
 	name = "speedloader (RS-12)"
 	desc = "A speedloader for RS-12 revolvers. Reloads quickly with pre-loaded ammunition."
 	icon_state = "357"
-	ammo_type = /obj/item/ammo_casing/rsh12
+	ammo_type = /obj/item/ammo_casing/hlrsh12
 	caliber = "rs12"
 	max_ammo = 6
 	speedloader = TRUE
