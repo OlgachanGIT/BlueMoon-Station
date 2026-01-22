@@ -31,6 +31,12 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/center)
+"aaY" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/trimline/dark/filled/line,
+/obj/structure/table/wood,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "abo" = (
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
@@ -494,6 +500,13 @@
 /obj/effect/turf_decal/siding/wideplating_new/dark/end,
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"atv" = (
+/obj/structure/rockpilemesa{
+	color = "#78aeff";
+	icon_state = "plasma2"
+	},
+/turf/open/floor/plating/snowed/smoothed,
+/area/awaymission/skihell/rock)
 "atM" = (
 /obj/structure/table/reinforced,
 /obj/item/storage/toolbox/mechanical,
@@ -1939,6 +1952,14 @@
 	},
 /turf/open/floor/carpet/green,
 /area/awaymission/skihell/center)
+"bCN" = (
+/obj/effect/turf_decal/siding/wideplating_new/corner{
+	dir = 8
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "bDc" = (
 /obj/structure/bed/roller{
 	icon_state = "up";
@@ -2752,6 +2773,14 @@
 	},
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
+"ceZ" = (
+/obj/structure/flora/grass/snowgrass{
+	icon_state = "snowgrass_esw"
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "cfE" = (
 /obj/structure/lattice,
 /obj/structure/fluff/broken_flooring{
@@ -3056,6 +3085,13 @@
 	icon_state = "concrete2";
 	name = "concrete"
 	},
+/area/awaymission/skihell/rock)
+"cnj" = (
+/obj/structure/closet/secure_closet/freezer/fridge,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/rock)
 "cnq" = (
 /obj/machinery/door/airlock/wood,
@@ -3496,6 +3532,15 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/trainway)
+"cEz" = (
+/obj/structure/rockpilemesa{
+	color = "#78aeff";
+	icon_state = "plasma2"
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "cED" = (
 /obj/structure/rack/shelf,
 /obj/item/reagent_containers/food/condiment/soysauce{
@@ -3895,6 +3940,14 @@
 /obj/structure/flora/rock/pile/icy,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/trainway)
+"cSW" = (
+/obj/structure/urbanismmounted{
+	icon_state = "panelmounted";
+	pixel_x = 26;
+	pixel_y = 1
+	},
+/turf/open/floor/plating/snowed/smoothed,
+/area/awaymission/skihell/rock)
 "cTu" = (
 /obj/structure/fluff/broken_flooring{
 	icon_state = "singular"
@@ -4825,6 +4878,19 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell)
+"dDS" = (
+/obj/structure/urbanismmounted{
+	pixel_x = -1;
+	pixel_y = 26
+	},
+/obj/structure/rockpilemesa{
+	color = "#78aeff";
+	icon_state = "stone2_depleted"
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "dEp" = (
 /obj/structure/railing{
 	dir = 2;
@@ -5528,6 +5594,11 @@
 	},
 /turf/open/floor/plating/cobblestone,
 /area/awaymission/skihell/center)
+"emv" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/structure/rack/shelf,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "emI" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 1
@@ -5783,6 +5854,15 @@
 /obj/effect/decal/cleanable/dirt,
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"evQ" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/trimline/dark/filled/line,
+/obj/structure/urbanismmachines{
+	icon_state = "boxcart";
+	name = "Boxes"
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "ewg" = (
 /obj/item/ammo_casing/c10mm,
 /turf/open/floor/plasteel/dark,
@@ -5965,6 +6045,15 @@
 	},
 /turf/open/floor/plating/snowed/smoothed,
 /area/awaymission/skihell/center)
+"eDo" = (
+/obj/structure/rockpilemesa{
+	color = "#78aeff";
+	icon_state = "stone2_depleted"
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "eER" = (
 /obj/effect/turf_decal/trimline/dark/filled/mid_joiner,
 /obj/effect/turf_decal/trimline/dark/filled/line{
@@ -6282,6 +6371,13 @@
 	pixel_y = -17
 	},
 /turf/open/floor/plating/cobblestone,
+/area/awaymission/skihell/center)
+"eTj" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/trimline/dark/filled/line,
+/obj/structure/barricade/wooden,
+/obj/structure/barricade/wooden/crude,
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
 "eTC" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark,
@@ -6776,6 +6872,17 @@
 	icon_state = "boxalt3"
 	},
 /turf/open/floor/plating/snowed/smoothed,
+/area/awaymission/skihell/center)
+"fjP" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 8
+	},
+/obj/structure/barricade/sandbags,
+/obj/structure/barricade/wooden,
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
 "fjU" = (
 /obj/machinery/light/cold{
@@ -7388,6 +7495,16 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/trainway)
+"fIz" = (
+/obj/structure/table,
+/obj/item/phone{
+	pixel_x = 7;
+	pixel_y = 6;
+	icon = 'modular_bluemoon/icons/obj/urbanism/urbanism.dmi';
+	icon_state = "phone"
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "fIA" = (
 /obj/effect/turf_decal/weather/snow/corner{
 	dir = 1
@@ -7573,6 +7690,21 @@
 	},
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"fNp" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 4
+	},
+/obj/structure/flora/rock/pile/icy,
+/obj/structure/urbanismeffect{
+	icon_state = "fire";
+	pixel_x = 6;
+	pixel_y = -1
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "fNt" = (
 /mob/living/simple_animal/hostile/syndicate/ranged/orderprometheus,
 /turf/open/floor/plating/asteroid/snow{
@@ -7593,6 +7725,11 @@
 	dir = 9
 	},
 /obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/structure/urbanismeffect{
+	icon_state = "fire";
+	pixel_x = 6;
+	pixel_y = -1
+	},
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
 "fOB" = (
@@ -7853,6 +7990,18 @@
 /obj/effect/decal/cleanable/blood/gibs,
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"fVM" = (
+/obj/effect/turf_decal/siding/wideplating_new{
+	dir = 8
+	},
+/obj/structure/rockpilemesa{
+	color = "#78aeff";
+	icon_state = "stone2_depleted"
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "fWh" = (
 /obj/effect/spawner/structure/window/plastitanium,
 /turf/open/floor/plasteel/dark,
@@ -8326,6 +8475,12 @@
 	slowdown = 1
 	},
 /area/awaymission/skihell/center)
+"gqc" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 9
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "gqp" = (
 /obj/structure/table/wood,
 /turf/open/floor/plating/asteroid/snow{
@@ -9127,6 +9282,15 @@
 	},
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"hav" = (
+/obj/effect/turf_decal/siding/wideplating_new{
+	dir = 8
+	},
+/obj/structure/flora/rock/pile/icy,
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "haz" = (
 /obj/structure/window/reinforced{
 	dir = 1;
@@ -9493,6 +9657,12 @@
 	name = "concrete"
 	},
 /area/awaymission/skihell/rock)
+"hrT" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 5
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "hrW" = (
 /turf/open/chasm/icemoon/complex,
 /area/awaymission/skihell/center)
@@ -9569,6 +9739,10 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/trainway)
+"huX" = (
+/obj/structure/lattice,
+/turf/open/floor/plating/snowed/smoothed,
+/area/awaymission/skihell/rock)
 "hvb" = (
 /obj/structure/urbanismeffect{
 	pixel_x = 11;
@@ -10319,6 +10493,21 @@
 	slowdown = 0
 	},
 /area/awaymission/skihell/trainway)
+"hUn" = (
+/obj/structure/urbanismmounted{
+	icon_state = "ventilation";
+	pixel_x = -29;
+	pixel_y = -4
+	},
+/obj/structure/urbanismbigcrate/alt{
+	icon_state = "boxalt1";
+	pixel_x = 0;
+	pixel_y = 2
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "hUq" = (
 /obj/effect/baseturf_helper/complex,
 /turf/closed/indestructible{
@@ -10642,6 +10831,12 @@
 	},
 /turf/open/floor/plating/cobblestone,
 /area/awaymission/skihell/center)
+"ikw" = (
+/obj/structure/lattice,
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "ikR" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark,
 /obj/effect/turf_decal/trimline/dark/filled/line,
@@ -10761,6 +10956,12 @@
 	},
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"ioD" = (
+/obj/machinery/gateway/away/required_key,
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "ioR" = (
 /obj/structure/fluff/broken_flooring{
 	icon_state = "singular"
@@ -10810,6 +11011,16 @@
 	},
 /turf/open/floor/carpet/green,
 /area/awaymission/skihell/center)
+"isl" = (
+/obj/structure/urbanismbigcrate/alt{
+	icon_state = "boxalt1";
+	pixel_x = 0;
+	pixel_y = 2
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "isF" = (
 /obj/structure/urbanismeffect{
 	pixel_x = 11;
@@ -10941,6 +11152,12 @@
 /obj/structure/lattice,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell)
+"iyj" = (
+/obj/item/key/gateway,
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "iyI" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark/corner,
 /obj/effect/turf_decal/trimline/dark/filled/corner,
@@ -11288,6 +11505,12 @@
 	},
 /turf/open/floor/wood,
 /area/awaymission/skihell)
+"iPz" = (
+/obj/structure/flora/grass/brown,
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "iPD" = (
 /obj/effect/turf_decal/caution/red,
 /obj/machinery/door/poddoor/preopen,
@@ -11652,6 +11875,15 @@
 /obj/structure/table/reinforced,
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/train)
+"jbQ" = (
+/obj/structure/urbanismbigcrate/alt{
+	icon_state = "boxalt2";
+	dir = 8
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "jcd" = (
 /obj/structure/fluff/paper/stack{
 	dir = 10
@@ -12535,6 +12767,18 @@
 	slowdown = 0
 	},
 /area/awaymission/skihell/center)
+"jMm" = (
+/obj/effect/turf_decal/siding/wideplating_new{
+	dir = 8
+	},
+/obj/structure/urbanismmachines{
+	icon_state = "boxcart";
+	name = "Boxes"
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "jMx" = (
 /obj/structure/girder/reinforced,
 /turf/open/floor/plating,
@@ -13383,6 +13627,16 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell)
+"kvN" = (
+/obj/structure/flora/rock/pile/icy,
+/obj/structure/urbanismmounted{
+	pixel_x = -29;
+	pixel_y = -1
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "kvS" = (
 /obj/structure/urbanismeffect{
 	icon_state = "water_vapor"
@@ -13569,6 +13823,15 @@
 /obj/machinery/space_heater,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell)
+"kAz" = (
+/obj/effect/turf_decal/siding/wideplating_new{
+	dir = 8
+	},
+/obj/structure/flora/grass/brown,
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "kAF" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark/corner{
 	dir = 4
@@ -13628,6 +13891,16 @@
 "kCN" = (
 /obj/machinery/door/airlock/wood,
 /turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
+"kCY" = (
+/obj/structure/urbanismmachines{
+	icon_state = "generatorold";
+	pixel_x = 2;
+	pixel_y = -10
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
 /area/awaymission/skihell/rock)
 "kEc" = (
 /obj/machinery/computer,
@@ -13720,6 +13993,12 @@
 	},
 /turf/open/floor/carpet/green,
 /area/awaymission/skihell/center)
+"kJu" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 10
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "kJT" = (
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersniper{
 	dir = 1;
@@ -13976,6 +14255,22 @@
 /mob/living/simple_animal/hostile/syndicate/ranged/orderprometheus,
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
+"kWj" = (
+/obj/structure/table/wood,
+/obj/structure/urbanismmachines{
+	icon_state = "boxdoc";
+	pixel_x = 4;
+	pixel_y = 6;
+	name = "box"
+	},
+/obj/structure/urbanismmachines{
+	icon_state = "boxdoc";
+	pixel_x = -23;
+	pixel_y = 7;
+	name = "box"
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "kWp" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark,
 /obj/machinery/light/cold,
@@ -14097,6 +14392,16 @@
 /turf/open/floor/plating/asteroid/snow{
 	slowdown = 0
 	},
+/area/awaymission/skihell/center)
+"ldT" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/trimline/dark/filled/line,
+/obj/structure/urbanismeffect{
+	icon_state = "fire";
+	pixel_x = 6;
+	pixel_y = -1
+	},
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
 "lei" = (
 /obj/effect/turf_decal/trimline/blue/filled/line{
@@ -14415,6 +14720,20 @@
 /obj/machinery/vending/sovietsoda/waterfuck,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/center)
+"lua" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 1
+	},
+/obj/structure/urbanismeffect{
+	icon_state = "fire";
+	pixel_x = 6;
+	pixel_y = -1
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "lug" = (
 /obj/effect/decal/cleanable/shreds,
 /turf/open/floor/plating/asteroid/snow{
@@ -14487,6 +14806,10 @@
 	icon_state = "platingdmg1"
 	},
 /area/awaymission/skihell)
+"lxC" = (
+/obj/structure/flora/rock/pile/icy,
+/turf/open/floor/plating/snowed/smoothed,
+/area/awaymission/skihell/rock)
 "lxO" = (
 /obj/structure/punji_sticks,
 /turf/open/floor/plating/asteroid/snow{
@@ -14834,6 +15157,19 @@
 	},
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
+"lNT" = (
+/obj/effect/turf_decal/siding/wideplating_new/corner{
+	dir = 1
+	},
+/turf/open/floor/plating/snowed/smoothed,
+/area/awaymission/skihell/rock)
+"lOe" = (
+/obj/structure/urbanismmachines{
+	icon_state = "boxcart";
+	name = "Boxes"
+	},
+/turf/open/floor/plating/snowed/smoothed,
+/area/awaymission/skihell/rock)
 "lPl" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 10
@@ -14995,6 +15331,12 @@
 	},
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell/entrance)
+"lVO" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "lVZ" = (
 /obj/structure/chair/comfy/shuttle{
 	dir = 4;
@@ -15118,6 +15460,15 @@
 /obj/structure/window/reinforced/fulltile/ice,
 /turf/open/floor/plating,
 /area/awaymission/skihell)
+"lZk" = (
+/obj/effect/turf_decal/siding/wideplating_new{
+	dir = 8
+	},
+/obj/structure/barricade/sandbags,
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "maF" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 2
@@ -15451,6 +15802,20 @@
 	slowdown = 0
 	},
 /area/awaymission/skihell/center)
+"mnq" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 8
+	},
+/obj/structure/urbanismeffect{
+	icon_state = "fire";
+	pixel_x = 6;
+	pixel_y = -1
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "mnB" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 10
@@ -15469,6 +15834,16 @@
 	},
 /turf/open/floor/plasteel/dark/textured/large,
 /area/awaymission/skihell)
+"mnF" = (
+/obj/structure/urbanismbigcrate/alt{
+	icon_state = "boxalt7";
+	pixel_x = -7;
+	pixel_y = -2
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "moh" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 1
@@ -15789,6 +16164,20 @@
 	},
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"mAN" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 10
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 10
+	},
+/obj/structure/urbanismmachines{
+	icon_state = "solarpanel";
+	pixel_x = 4;
+	pixel_y = -2
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "mBK" = (
 /obj/structure/barricade/wooden/snowed,
 /turf/open/floor/plating/asteroid/snow{
@@ -17735,6 +18124,17 @@
 /obj/structure/grille,
 /turf/open/floor/plating/snowed/smoothed,
 /area/awaymission/skihell/center)
+"oqy" = (
+/obj/structure/table,
+/obj/structure/urbanismmachines{
+	icon_state = "oldcomp";
+	icon = 'icons/obj/computer.dmi'
+	},
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "oqM" = (
 /obj/structure/barricade/sandbags,
 /turf/open/floor/plasteel/checker,
@@ -17768,6 +18168,20 @@
 	},
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"orS" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 4
+	},
+/obj/structure/urbanismeffect{
+	icon_state = "red_medium";
+	pixel_x = -6;
+	pixel_y = 2
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "osf" = (
 /obj/structure/urbanismmachines{
 	icon_state = "packedmachine";
@@ -18028,6 +18442,12 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/trainway)
+"oEX" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "oFn" = (
 /obj/structure/bed/double{
 	dir = 1
@@ -18070,6 +18490,12 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell)
+"oGP" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 6
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "oGQ" = (
 /obj/machinery/light/small{
 	brightness = 3;
@@ -18288,6 +18714,24 @@
 /obj/structure/closet/crate/large,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/trainway)
+"oQl" = (
+/obj/structure/urbanismmachines{
+	icon_state = "machine3";
+	pixel_x = -10;
+	pixel_y = 3
+	},
+/obj/effect/turf_decal/siding/wideplating_new{
+	dir = 9
+	},
+/obj/structure/urbanismmounted{
+	icon_state = "ventilation";
+	pixel_x = 0;
+	pixel_y = 22
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "oQs" = (
 /turf/open/floor/plating{
 	icon_state = "platingdmg1"
@@ -18958,6 +19402,8 @@
 /obj/structure/window/reinforced{
 	dir = 1
 	},
+/obj/structure/bedsheetbin/towel,
+/obj/structure/table/wood,
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
 "psd" = (
@@ -19294,6 +19740,18 @@
 	name = "concrete"
 	},
 /area/awaymission/skihell/train)
+"pFH" = (
+/obj/structure/table,
+/obj/structure/urbanismmounted{
+	icon_state = "ventilation";
+	pixel_x = 0;
+	pixel_y = 22
+	},
+/turf/open/floor/plating/layeniaredder{
+	icon_state = "concrete2";
+	name = "concrete"
+	},
+/area/awaymission/skihell/rock)
 "pGr" = (
 /obj/structure/flora/rock/pile/icy,
 /obj/structure/urbanismeffect{
@@ -20163,6 +20621,13 @@
 	slowdown = 0
 	},
 /area/awaymission/skihell/center)
+"qxD" = (
+/obj/structure/closet/secure_closet/freezer/fridge,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 5
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "qya" = (
 /obj/structure/urbanismmounted{
 	icon_state = "wallmount";
@@ -20307,6 +20772,12 @@
 	slowdown = 0
 	},
 /area/awaymission/skihell/trainway)
+"qEj" = (
+/obj/structure/tubes,
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "qEk" = (
 /obj/item/kirbyplants{
 	icon_state = "plant-05"
@@ -20340,6 +20811,13 @@
 /obj/structure/table/reinforced,
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"qFM" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 6
+	},
+/obj/structure/rack/shelf,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "qGb" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 1
@@ -20868,6 +21346,16 @@
 	slowdown = 0
 	},
 /area/awaymission/skihell)
+"qZD" = (
+/obj/structure/urbanismmounted{
+	icon_state = "panelmounted";
+	pixel_x = 26;
+	pixel_y = 1
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "qZK" = (
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 9
@@ -21100,6 +21588,15 @@
 /obj/structure/window/reinforced,
 /turf/open/floor/plating/asteroid/snow{
 	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
+"rlz" = (
+/obj/structure/urbanismbigcrate{
+	pixel_y = 10
+	},
+/turf/open/floor/plating/layeniaredder{
+	icon_state = "concrete2";
+	name = "concrete"
 	},
 /area/awaymission/skihell/rock)
 "rlS" = (
@@ -21539,6 +22036,10 @@
 	},
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
+"rGI" = (
+/obj/structure/table,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "rHn" = (
 /obj/structure/railing{
 	dir = 2;
@@ -21552,6 +22053,13 @@
 	slowdown = 0
 	},
 /area/awaymission/skihell/center)
+"rIp" = (
+/obj/structure/table,
+/turf/open/floor/plating/layeniaredder{
+	icon_state = "concrete2";
+	name = "concrete"
+	},
+/area/awaymission/skihell/rock)
 "rIP" = (
 /obj/structure/window/reinforced/fulltile/indestructable,
 /obj/structure/barricade/wooden,
@@ -21774,6 +22282,20 @@
 /obj/effect/turf_decal/trimline/dark/filled/line,
 /turf/open/floor/carpet/green,
 /area/awaymission/skihell/center)
+"rOV" = (
+/obj/structure/urbanismmounted{
+	pixel_x = -1;
+	pixel_y = 26
+	},
+/obj/structure/urbanismbigcrate/alt{
+	icon_state = "boxalt1";
+	pixel_x = 0;
+	pixel_y = 2
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "rPh" = (
 /obj/effect/turf_decal/weather/snow/corner{
 	dir = 6
@@ -21793,6 +22315,14 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/trainway)
+"rPn" = (
+/obj/effect/turf_decal/siding/wideplating_new{
+	dir = 8
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "rPv" = (
 /obj/structure/window/reinforced{
 	dir = 1;
@@ -23951,6 +24481,19 @@
 	slowdown = 1
 	},
 /area/awaymission/skihell/trainway)
+"tql" = (
+/obj/effect/turf_decal/siding/wideplating_new{
+	dir = 10
+	},
+/obj/structure/urbanismbigcrate/alt{
+	icon_state = "boxalt1";
+	pixel_x = 0;
+	pixel_y = 2
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "trw" = (
 /obj/structure/fluff/broken_flooring{
 	icon_state = "singular";
@@ -23990,6 +24533,14 @@
 	slowdown = 0
 	},
 /area/awaymission/skihell)
+"tsx" = (
+/obj/effect/turf_decal/siding/wideplating_new{
+	dir = 1
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "tsJ" = (
 /obj/effect/turf_decal/trimline/yellow/line,
 /obj/effect/turf_decal/siding/white{
@@ -24166,6 +24717,20 @@
 	},
 /turf/open/floor/carpet/green,
 /area/awaymission/skihell/center)
+"tAw" = (
+/obj/structure/urbanismmachines{
+	icon_state = "heater";
+	pixel_x = 0;
+	pixel_y = 2
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
+"tAB" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "tAI" = (
 /obj/structure/fluff/broken_flooring{
 	icon_state = "pile";
@@ -25325,6 +25890,12 @@
 	},
 /turf/open/floor/plating/cobblestone,
 /area/awaymission/skihell/center)
+"uxA" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/rock)
 "uyu" = (
 /obj/effect/turf_decal/weather/snow/corner,
 /turf/open/floor/plasteel/dark,
@@ -25513,6 +26084,19 @@
 	name = "concrete"
 	},
 /area/awaymission/skihell/rock)
+"uFl" = (
+/obj/structure/table/wood,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 4
+	},
+/obj/machinery/light/cold{
+	dir = 4
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "uFA" = (
 /obj/structure/rack/shelf,
 /obj/item/storage/toolbox/electrical,
@@ -26217,6 +26801,18 @@
 	},
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
+"vgr" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 4
+	},
+/obj/machinery/light/cold{
+	dir = 4
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "vgx" = (
 /obj/structure/urbanismeffect{
 	icon_state = "red_small"
@@ -26605,6 +27201,12 @@
 	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/trainway)
+"vtZ" = (
+/obj/structure/urbanismeffect,
+/turf/open/floor/plating{
+	icon_state = "platingdmg1"
+	},
+/area/awaymission/skihell/center)
 "vuo" = (
 /obj/effect/turf_decal/siding/wideplating_new,
 /obj/machinery/light/cold{
@@ -26766,6 +27368,19 @@
 	},
 /turf/open/floor/plating/cobblestone,
 /area/awaymission/skihell/center)
+"vGI" = (
+/obj/structure/urbanismbigcrate{
+	pixel_y = 10
+	},
+/obj/structure/urbanismmounted{
+	icon_state = "wallmount";
+	pixel_x = 24;
+	pixel_y = 2
+	},
+/turf/open/floor/plating/asteroid/snow{
+	slowdown = 0
+	},
+/area/awaymission/skihell/rock)
 "vHE" = (
 /obj/structure/rack,
 /obj/effect/turf_decal/siding/wideplating_new/dark{
@@ -26924,6 +27539,16 @@
 /turf/open/floor/plating{
 	icon_state = "platingdmg2"
 	},
+/area/awaymission/skihell/center)
+"vQt" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/trimline/dark/filled/line,
+/obj/structure/urbanismeffect{
+	icon_state = "red_medium";
+	pixel_x = -6;
+	pixel_y = 2
+	},
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
 "vQV" = (
 /obj/structure/reagent_dispensers/urbanismbarrel/red{
@@ -28750,6 +29375,14 @@
 /obj/machinery/vending/sovietsoda/waterfuck,
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
+"xqo" = (
+/obj/structure/urbanismeffect{
+	icon_state = "fire";
+	pixel_x = 6;
+	pixel_y = -1
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/skihell/center)
 "xqu" = (
 /obj/effect/turf_decal/siding/wideplating_new{
 	dir = 8
@@ -29835,6 +30468,11 @@
 	},
 /obj/effect/turf_decal/trimline/dark/filled/line{
 	dir = 8
+	},
+/obj/structure/urbanismeffect{
+	icon_state = "fire";
+	pixel_x = 6;
+	pixel_y = -1
 	},
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
@@ -37210,7 +37848,7 @@ fGN
 lkg
 lkg
 lkg
-lkg
+iyj
 lkg
 lkg
 lkg
@@ -37965,7 +38603,7 @@ lyA
 fGN
 lkg
 lkg
-lkg
+ioD
 lkg
 lkg
 lkg
@@ -39475,10 +40113,10 @@ lyA
 lyA
 lyA
 fGN
-lkg
-lkg
-lkg
-lkg
+fGN
+fGN
+fGN
+fGN
 lkg
 lkg
 lkg
@@ -39726,10 +40364,10 @@ lyA
 lyA
 lyA
 lyA
-fGN
-fGN
-fGN
-fGN
+lyA
+lyA
+lyA
+lyA
 fGN
 lkg
 lkg
@@ -42370,9 +43008,9 @@ fGN
 fGN
 fGN
 fGN
-lkg
-lkg
-lkg
+pUj
+pUj
+pUj
 lkg
 lkg
 lyA
@@ -42623,8 +43261,8 @@ mIT
 mIT
 mKI
 lkg
-lkg
-lkg
+pUj
+pUj
 fGN
 fGN
 fGN
@@ -42875,7 +43513,7 @@ mIT
 mIT
 mKI
 lkg
-lkg
+pUj
 lkg
 kCN
 mIT
@@ -43127,8 +43765,8 @@ mIT
 mIT
 fGN
 lkg
-lkg
-lkg
+pUj
+pUj
 fGN
 mIT
 mIT
@@ -43379,8 +44017,8 @@ mIT
 mIT
 fGN
 lkg
-lkg
-lkg
+pUj
+pUj
 kCN
 mIT
 mIT
@@ -43631,8 +44269,8 @@ mIT
 mIT
 mKI
 lkg
-lkg
-lkg
+pUj
+pUj
 fGN
 mIT
 mIT
@@ -43883,8 +44521,8 @@ mIT
 mIT
 mKI
 lkg
-lkg
-lkg
+pUj
+pUj
 mKI
 mIT
 mIT
@@ -43964,8 +44602,8 @@ hrW
 hrW
 lXP
 qAe
-oQs
-xfJ
+vtZ
+xqo
 hqb
 nJz
 owA
@@ -44135,8 +44773,8 @@ fGN
 fGN
 fGN
 lkg
-lkg
-lkg
+pUj
+pUj
 mKI
 mIT
 mIT
@@ -44386,9 +45024,9 @@ mIT
 fGN
 lkg
 lkg
-lkg
-lkg
-lkg
+pUj
+pUj
+pUj
 mKI
 mIT
 mIT
@@ -44638,8 +45276,8 @@ mIT
 fGN
 lkg
 lkg
-lkg
-lkg
+pUj
+pUj
 lkg
 mKI
 mIT
@@ -44890,8 +45528,8 @@ mIT
 fGN
 lkg
 lkg
-lkg
-lkg
+pUj
+pUj
 lkg
 fGN
 mIT
@@ -44973,7 +45611,7 @@ tRC
 fOn
 gjX
 hqb
-lZa
+ldT
 lXP
 opY
 opY
@@ -45143,7 +45781,7 @@ fGN
 lkg
 lkg
 lkg
-lkg
+pUj
 lkg
 fGN
 fGN
@@ -45395,7 +46033,7 @@ fGN
 kCN
 fGN
 lkg
-lkg
+pUj
 lkg
 lkg
 lkg
@@ -45440,7 +46078,7 @@ lkg
 lkg
 lkg
 lkg
-lkg
+eDo
 lkg
 lkg
 fGN
@@ -45477,7 +46115,7 @@ uew
 lXP
 aGP
 oQs
-lZa
+ldT
 lXP
 tRC
 rhn
@@ -45647,7 +46285,7 @@ mIT
 mIT
 mKI
 lkg
-lkg
+pUj
 lyA
 lyA
 lyA
@@ -45687,14 +46325,14 @@ lyA
 lyA
 lyA
 fGN
+lWr
+iPz
+lkg
+ceZ
 lkg
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+iPz
+ceZ
 fGN
 lyA
 lyA
@@ -45899,7 +46537,7 @@ mIT
 mIT
 mKI
 lkg
-lkg
+pUj
 lyA
 lyA
 lyA
@@ -45940,11 +46578,11 @@ lyA
 lyA
 fGN
 lkg
+ceZ
 lkg
 lkg
 lkg
-lkg
-lkg
+lWr
 lkg
 lkg
 fGN
@@ -46194,11 +46832,11 @@ fGN
 lkg
 lkg
 lkg
+eDo
 lkg
 lkg
 lkg
-lkg
-lkg
+iPz
 fGN
 lyA
 lyA
@@ -46442,15 +47080,15 @@ fGN
 fGN
 lkg
 lkg
+ppY
 lkg
 lkg
+lWr
 lkg
 lkg
+ceZ
 lkg
-lkg
-lkg
-lkg
-lkg
+eDo
 fGN
 lyA
 lyA
@@ -46691,15 +47329,15 @@ lyA
 lyA
 lyA
 fGN
+pEY
+lkg
+lkg
+ppY
+ppY
 lkg
 lkg
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+iPz
 lkg
 lkg
 lkg
@@ -46736,8 +47374,8 @@ daL
 uew
 lXP
 hLX
-xfJ
-lZa
+rJr
+eTj
 lXP
 uid
 xfJ
@@ -46745,7 +47383,7 @@ lNP
 lXP
 cUb
 xfJ
-lZa
+ldT
 lXP
 ozj
 iZG
@@ -46910,7 +47548,7 @@ lyA
 lyA
 lyA
 lkg
-lkg
+lWr
 fGN
 mIT
 mIT
@@ -46938,20 +47576,20 @@ lyA
 lyA
 lyA
 fGN
-lyA
-lyA
-lyA
-lyA
 fGN
+fGN
+fGN
+fGN
+fGN
+pEY
+lkg
+iPz
 lkg
 lkg
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+iPz
+ppY
+ppY
 fGN
 fGN
 fGN
@@ -46987,15 +47625,15 @@ hrW
 daL
 uew
 lXP
-gjX
-xfJ
-lZa
+uwR
+fnz
+vQt
 lXP
 lXP
 jZI
 lXP
 lXP
-gjX
+lua
 xfJ
 lZa
 lXP
@@ -47159,9 +47797,9 @@ lyA
 lyA
 lyA
 lyA
-lkg
-lkg
-lkg
+ikw
+pUj
+huX
 lkg
 fGN
 kCN
@@ -47191,15 +47829,15 @@ sgR
 sgR
 fGN
 fGN
+rlz
+lHZ
+lHZ
 fGN
-fGN
-fGN
-fGN
 lkg
+eDo
 lkg
-lkg
-lkg
-lkg
+pUj
+pUj
 lkg
 lkg
 lkg
@@ -47242,10 +47880,10 @@ iZG
 bLH
 xfJ
 fxS
-idX
+fjP
 iZG
-iZG
-wXM
+mnq
+mAN
 lXP
 gjX
 fnz
@@ -47411,13 +48049,13 @@ lyA
 lyA
 lyA
 lyA
+lWr
+pUj
+pUj
 lkg
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+cEz
+ikw
 lyA
 lyA
 fGN
@@ -47443,17 +48081,17 @@ sgR
 sgR
 sgR
 fGN
+pFH
+lHZ
+lHZ
+tsx
+iPz
 lkg
 lkg
+pUj
+pUj
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+ceZ
 lkg
 lkg
 fGN
@@ -47490,7 +48128,7 @@ hrW
 hrW
 hrW
 wxs
-xfJ
+fnz
 xfJ
 diH
 xfJ
@@ -47500,7 +48138,7 @@ xfJ
 lZa
 aHf
 fmB
-xfJ
+xqo
 lZa
 rLn
 gjX
@@ -47662,13 +48300,13 @@ lyA
 lyA
 lyA
 lyA
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+lWr
+ikw
+pUj
+pUj
+lxC
+pUj
+pUj
 lyA
 lyA
 lyA
@@ -47677,9 +48315,9 @@ fGN
 fGN
 fGN
 fGN
-lkg
-lkg
-lkg
+hUn
+kvN
+jbQ
 fGN
 fGN
 fGN
@@ -47695,18 +48333,18 @@ mKI
 mKI
 fGN
 fGN
+rIp
+lHZ
+lHZ
+tsx
+lkg
+ceZ
+pUj
+pUj
+pUj
 lkg
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+eDo
 lkg
 wPW
 sgR
@@ -47742,11 +48380,11 @@ hrW
 hrW
 hrW
 xpe
-opv
+orS
 opv
 mKf
 opv
-opv
+fNp
 opv
 opv
 drQ
@@ -47914,26 +48552,26 @@ lyA
 lyA
 lyA
 lyA
+kCY
 lkg
 lkg
+pUj
+pUj
 lkg
-lkg
-lkg
-lkg
-lkg
+ikw
 lyA
 lyA
 lyA
+ikw
+eDo
+lWr
 lkg
 lkg
+lWr
 lkg
+eDo
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+isl
 fGN
 fGN
 fGN
@@ -47941,23 +48579,23 @@ mKI
 mKI
 fGN
 fGN
+oQl
+kAz
+lZk
+rPn
+jMm
+tql
+rIp
+rIp
+rIp
+tsx
 lkg
+pUj
+pUj
+pUj
+eDo
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+iPz
 lkg
 lkg
 fGN
@@ -48170,45 +48808,45 @@ lyA
 lyA
 lkg
 lkg
+cEz
 lkg
-lkg
-lkg
+lWr
 lyA
 lyA
 lyA
+ikw
+lxC
+pUj
+pUj
+pUj
+pUj
+pUj
+pUj
+lWr
+eDo
+rPn
+rPn
+rPn
+rPn
+rPn
+rPn
+hav
+lNT
+atv
+obG
+pUj
+ceZ
+bCN
+fVM
+rPn
+rPn
+lNT
+pUj
+obG
+pUj
 lkg
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+pEY
 fGN
 wPW
 fGN
@@ -48432,35 +49070,35 @@ fGN
 kCN
 fGN
 fGN
+rOV
+iPz
+lkg
+pUj
+pUj
+lkg
+lxC
+cSW
+pUj
+pUj
+lxC
+pUj
+pUj
+pUj
+pUj
+pUj
+lxC
+pUj
+pUj
+pUj
+pUj
+pUj
+pUj
+pUj
+ppY
 lkg
 lkg
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+pEY
 fGN
 sgR
 sgR
@@ -48672,39 +49310,39 @@ lyA
 lyA
 lyA
 fGN
-mIT
-mIT
-mIT
-mIT
-mIT
+gqc
+uxA
+uxA
+uxA
+kJu
 fGN
-mIT
-mIT
-mIT
-mIT
-mIT
-fGN
-fGN
-fGN
-lkg
-lkg
-lkg
-lkg
-lkg
+gqc
+uxA
+uxA
+uxA
+kJu
 fGN
 fGN
 fGN
+mnF
+lWr
+pUj
+pUj
+lOe
 fGN
+fGN
+fGN
+fGN
+dDS
+lkg
+lWr
+qZD
 lkg
 lkg
 lkg
+iPz
 lkg
-lkg
-lkg
-lkg
-lkg
-lkg
-lkg
+ceZ
 lkg
 lkg
 fGN
@@ -48753,10 +49391,10 @@ hrW
 lXP
 rgt
 opv
-opv
+vgr
 iUo
 aTB
-aTB
+uFl
 fRN
 lXP
 opY
@@ -48924,17 +49562,17 @@ lyA
 lyA
 lyA
 fGN
+oEX
 mIT
 mIT
 mIT
-mIT
-mIT
+tAB
 fGN
+oEX
 mIT
 mIT
 mIT
-mIT
-mIT
+tAB
 fGN
 lkg
 fGN
@@ -48947,15 +49585,15 @@ fGN
 sgR
 sgR
 fGN
+vGI
 lkg
-lkg
-lkg
+tAw
 fGN
 mKI
 mKI
 fGN
-lkg
-lkg
+ceZ
+cEz
 lkg
 lkg
 lkg
@@ -49176,17 +49814,17 @@ lyA
 lyA
 lyA
 fGN
+oqy
+fIz
+rGI
+rGI
+tAB
+kCN
+oEX
 mIT
 mIT
 mIT
-mIT
-mIT
-mIT
-mIT
-mIT
-mIT
-mIT
-mIT
+emv
 fGN
 lkg
 lkg
@@ -49200,14 +49838,14 @@ sgR
 fGN
 fGN
 fGN
-fGN
+wPW
 fGN
 fGN
 sgR
 sgR
 fGN
-lkg
-lkg
+qEj
+pEY
 fGN
 wPW
 wPW
@@ -49428,17 +50066,17 @@ lyA
 lyA
 lyA
 fGN
+cnj
 mIT
 mIT
-mIT
-mIT
-mIT
+rGI
+tAB
 fGN
-mIT
-mIT
-mIT
-mIT
-mIT
+hrT
+lVO
+lVO
+lVO
+qFM
 fGN
 lkg
 lkg
@@ -49680,17 +50318,17 @@ lyA
 lyA
 lyA
 fGN
-mIT
-mIT
-mIT
-mIT
-mIT
+qxD
+lVO
+lVO
+lVO
+oGP
 fGN
-lyA
-lyA
-lyA
-lyA
-lyA
+fGN
+wPW
+fGN
+wPW
+fGN
 fGN
 lyA
 lyA
@@ -49765,7 +50403,7 @@ xfJ
 xfJ
 xfJ
 xfJ
-lZa
+aaY
 lXP
 kfL
 fTE
@@ -50012,7 +50650,7 @@ hrW
 wxs
 lZa
 gjX
-xfJ
+qpn
 xfJ
 nkZ
 xfJ
@@ -50264,7 +50902,7 @@ hrW
 xpe
 lZa
 gjX
-xfJ
+kWj
 xfJ
 xfJ
 xfJ
@@ -50521,7 +51159,7 @@ xfJ
 xfJ
 xfJ
 srE
-lZa
+evQ
 lXP
 dEI
 kte

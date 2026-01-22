@@ -1,12 +1,23 @@
+/mob/living/simple_animal/hostile/syndicate
+	var/use_health_icons = FALSE
+	var/icon_base = ""
+	var/list/ally_death_phrases = list("У НАС ПОТЕРИ!", "НЕСЁМ ПОТЕРИ!", "ТЕРЯЕМ БОЙЦОВ!", "МЫ ОТОМСТИМ ЗА ТЕБЯ!", "НАМ НУЖНО БОЛЬШЕ ОГНЕВОЙ МОЩИ!")
+	var/list/player_death_phrases = list("УБИТ!", "ОДНИМ МЕНЬШЕ!", "ХА! ПОЛУЧИЛ, УРОД?", "МИРУ СТАЛО ЧИЩЕ БЕЗ ТЕБЯ!", "СДОХНИ, МУСОР!")
+	var/list/aggro_shout_phrases = list("ВИЖУ ЦЕЛЬ!", "КОНТАКТ!", "ВОТ ТЫ ГДЕ, УРОД!", "ОГОНЬ ПО ГОТОВНОСТИ!", "ЗАМЕТИЛ ДВИЖЕНИЕ!", "УБЛЮДОК, ТЕБЕ КОНЕЦ!", "КОНТАКТ С ГРАЖДАНСКИМ!")
+	var/death_comment_cooldown = 0
+
 /obj/item/ammo_casing/c22lr/fortificator
 	name = ".22 Long rifle bullet casing (fortificator)"
 
 
 /mob/living/simple_animal/hostile/syndicate/ranged/orderfortificator
+	parent_type = /mob/living/simple_animal/hostile/syndicate/ranged/order_base
 	name = "Order Fortificator"
 	desc = "This guy in heavy armour looks at you..."
 	icon = 'modular_bluemoon/icons/mob/skihell.dmi'
 	icon_state = "fortificator0"
+	use_health_icons = TRUE
+	icon_base = "fortificator"
 	loot = list(/obj/effect/decal/cleanable/blood)
 	del_on_death = 0
 	health = 200
@@ -14,7 +25,7 @@
 	obj_damage = 0
 	environment_smash = ENVIRONMENT_SMASH_NONE
 	projectilesound = 'modular_bluemoon/sound/weapons/mesa/scar.ogg'
-	rapid = 18
+	rapid = 20
 	aggro_vision_range = 9
 	casingtype = /obj/item/ammo_casing/c22lr/fortificator/autodelete
 	death_sound = 'modular_bluemoon/sound/creatures/skihell/death.ogg'
@@ -24,6 +35,11 @@
 	minbodytemp = 0
 	sentience_type = SENTIENCE_BOSS
 	var/has_dropped_ammo = FALSE
+	magazine_size = 100
+	magazine_current = 100
+	reload_sound = 'modular_bluemoon/sound/weapons/mesa/scar.ogg'
+	reload_say_phrases = list("Касета ёбнула!", "МАГАЗИН МЕНЯЮ! ЖМИТЕ ГАДА!", "СКИДЫВАЮ КОРОБ!")
+	dropped_mag_type = /obj/item/ammo_box/magazine/mm712x82
 
 /mob/living/simple_animal/hostile/syndicate/ranged/orderfortificator/death(gibbed)
 	if(!gibbed && !has_dropped_ammo && prob(80))
@@ -36,26 +52,143 @@
 		. = ..()
 		QDEL_IN(src, 50)
 
+/mob/living/simple_animal/hostile/syndicate/ranged/order_base
+	var/alert_cooldown_time = 0
+	var/magazine_size = 30
+	var/magazine_current = 30
+	var/reload_time = 3 SECONDS
+	var/reloading = FALSE
+	var/reload_sound = 'modular_bluemoon/sound/creatures/skihell/cover.ogg'
+	var/list/reload_say_phrases = list("Reloading!", "Cover me!", "Out of ammo!")
+	var/dropped_mag_type = null
+
+/mob/living/simple_animal/hostile/syndicate/ranged/order_base/Initialize()
+	. = ..()
+	RegisterSignal(SSdcs, COMSIG_GLOB_MOB_DEATH, PROC_REF(handle_mob_death))
+
+/mob/living/simple_animal/hostile/syndicate/ranged/order_base/proc/handle_mob_death(datum/source, mob/living/L, gibbed)
+	SIGNAL_HANDLER
+	if(stat != CONSCIOUS || world.time < death_comment_cooldown || !L || L == src)
+		return
+	if(get_dist(src, L) > 7 || !can_see(src, L, 7))
+		return
+
+	if(faction_check_mob(L, TRUE))
+		say(pick(ally_death_phrases))
+		death_comment_cooldown = world.time + 10 SECONDS
+	else if(L.client)
+		say(pick(player_death_phrases))
+		death_comment_cooldown = world.time + 10 SECONDS
+
+/mob/living/simple_animal/hostile/syndicate/ranged/order_base/Aggro()
+	var/static/list/alert_sounds = list(
+		'modular_bluemoon/sound/creatures/skihell/mob1.ogg',
+		'modular_bluemoon/sound/creatures/skihell/mob2.ogg',
+		'modular_bluemoon/sound/creatures/skihell/mob6.ogg',
+		'modular_bluemoon/sound/creatures/skihell/mob17.ogg',
+	)
+	if(world.time > alert_cooldown_time)
+		playsound(src, pick(alert_sounds), 70)
+		if(prob(80))
+			say(pick(aggro_shout_phrases))
+		alert_cooldown_time = world.time + 10 SECONDS
+	..()
+
+/mob/living/simple_animal/hostile/syndicate/ranged/order_base/OpenFire(atom/A)
+	if(reloading)
+		return
+	if(magazine_current <= 0)
+		reload()
+		return
+	..()
+
+/mob/living/simple_animal/hostile/syndicate/ranged/order_base/proc/reload()
+	if(reloading || magazine_current == magazine_size)
+		return
+	reloading = TRUE
+	visible_message("<span class='warning'><b>[src]</b> begins reloading!</span>")
+	say(pick(reload_say_phrases))
+	playsound(src, reload_sound, 70)
+	addtimer(CALLBACK(src, PROC_REF(finish_reload)), reload_time)
+
+/mob/living/simple_animal/hostile/syndicate/ranged/order_base/proc/finish_reload()
+	magazine_current = magazine_size
+	reloading = FALSE
+	visible_message("<span class='notice'><b>[src]</b> finished reloading.</span>")
+
+/mob/living/simple_animal/hostile/syndicate/ranged/order_base/Shoot(atom/targeted_atom)
+	if(magazine_current <= 0)
+		if(!reloading)
+			reload()
+		return
+	. = ..()
+	magazine_current--
+
+/mob/living/simple_animal/hostile/syndicate/melee/order_base
+	var/alert_cooldown_time = 0
+
+/mob/living/simple_animal/hostile/syndicate/proc/order_injury_logic(amount)
+	if(amount > 0 && prob(25))
+		var/static/list/agony_sounds = list(
+			'modular_bluemoon/smiley/sounds/emotes/agony_male_5.ogg',
+			'modular_bluemoon/smiley/sounds/emotes/agony_male_6.ogg',
+			'modular_bluemoon/smiley/sounds/emotes/agony_male_8.ogg'
+		)
+		playsound(src, pick(agony_sounds), 50, 0)
+
+/mob/living/simple_animal/hostile/syndicate/proc/update_order_icon()
+	if(stat != CONSCIOUS || !use_health_icons || !icon_base)
+		return
+	if(health / maxHealth > 0.7)
+		icon_state = "[icon_base]3"
+	else if(health / maxHealth > 0.5)
+		icon_state = "[icon_base]2"
+	else if(health / maxHealth > 0.3)
+		icon_state = "[icon_base]1"
+
+/mob/living/simple_animal/hostile/syndicate/melee/order_base/Initialize()
+	. = ..()
+	RegisterSignal(SSdcs, COMSIG_GLOB_MOB_DEATH, PROC_REF(handle_mob_death))
+
+/mob/living/simple_animal/hostile/syndicate/melee/order_base/proc/handle_mob_death(datum/source, mob/living/L, gibbed)
+	SIGNAL_HANDLER
+	if(stat != CONSCIOUS || world.time < death_comment_cooldown || !L || L == src)
+		return
+	if(get_dist(src, L) > 7 || !can_see(src, L, 7))
+		return
+
+	if(faction_check_mob(L, TRUE))
+		say(pick(ally_death_phrases))
+		death_comment_cooldown = world.time + 10 SECONDS
+	else if(L.client)
+		say(pick(player_death_phrases))
+		death_comment_cooldown = world.time + 10 SECONDS
+
+/mob/living/simple_animal/hostile/syndicate/melee/order_base/Aggro()
+	var/static/list/alert_sounds = list(
+		'modular_bluemoon/sound/creatures/mesa/hecu/hg_alert01.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecu/hg_alert03.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecu/hg_alert04.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecu/hg_alert05.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecu/hg_alert06.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecu/hg_alert07.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecu/hg_alert08.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecu/hg_alert10.ogg'
+	)
+	if(world.time > alert_cooldown_time)
+		playsound(src, pick(alert_sounds), 70)
+		if(prob(80))
+			say(pick(aggro_shout_phrases))
+		alert_cooldown_time = world.time + 10 SECONDS
+	..()
+
 
 /mob/living/simple_animal/hostile/syndicate/ranged/orderfortificator/adjustHealth(amount, updating_health = TRUE, ...)
 	if(stat == DEAD)
 		return
 	. = ..()
-	update_icons()
-	if(health / maxHealth > 0.7)
-		icon_state = "fortificator3"
-	else if(health / maxHealth > 0.5)
-		icon_state = "fortificator2"
-	else if(health / maxHealth > 0.3)
-		icon_state = "fortificator1"
-	if(amount > 0)
-		if(prob(25))
-			var/static/list/sounds = list(
-				'modular_bluemoon/smiley/sounds/emotes/agony_male_5.ogg',
-				'modular_bluemoon/smiley/sounds/emotes/agony_male_6.ogg',
-				'modular_bluemoon/smiley/sounds/emotes/agony_male_8.ogg'
-			)
-			playsound(src, pick(sounds), 50, 0)
+	update_order_icon()
+	order_injury_logic(amount)
 
 /mob/living/simple_animal/hostile/syndicate/ranged/orderfortificator/Move(atom/newloc)
 	return FALSE
@@ -68,6 +201,7 @@
 
 
 /mob/living/simple_animal/hostile/syndicate/melee/orderreinforcer
+	parent_type = /mob/living/simple_animal/hostile/syndicate/melee/order_base
 	name = "Order Reinforcer"
 	desc = "How i supposed to destroy this goddamn shield?"
 	icon = 'modular_bluemoon/icons/mob/skihell.dmi'
@@ -75,6 +209,8 @@
 	melee_damage_upper = 20
 	armour_penetration = 35
 	icon_state = "reinforcer0"
+	use_health_icons = TRUE
+	icon_base = "reinforcer"
 	loot = list(/obj/effect/decal/cleanable/blood)
 	del_on_death = 0
 	health = 150
@@ -108,13 +244,7 @@
 
 /mob/living/simple_animal/hostile/syndicate/melee/orderreinforcer/adjustHealth(amount, updating_health = TRUE, ...)
 	. = ..()
-	if(health / maxHealth > 0.7)
-		icon_state = "reinforcer3"
-	else if(health / maxHealth > 0.5)
-		icon_state = "reinforcer2"
-	else if(health / maxHealth > 0.3)
-		icon_state = "reinforcer1"
-	update_icons()
+	update_order_icon()
 	if(amount > 0)
 		if(prob(25))
 			var/static/list/sounds = list(
@@ -139,10 +269,18 @@
 //combatant
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant
+	parent_type = /mob/living/simple_animal/hostile/syndicate/ranged/order_base
 	name = "Order combatant"
+	magazine_size = 45
+	magazine_current = 45
+	dropped_mag_type = /obj/item/ammo_box/magazine/wt550m9
+	reload_sound = 'modular_bluemoon/sound/creatures/skihell/cover.ogg'
+	reload_say_phrases = list("Перезаряжаюсь!", "Прикрой меня!", "Я ПУСТОЙ!", "ПЕРЕЗАРЯЖАЮСЬ!")
 	desc = "REACTUS GRANATUS!!!"
 	icon = 'modular_bluemoon/icons/mob/skihell.dmi'
 	icon_state = "combatant0"
+	use_health_icons = TRUE
+	icon_base = "combatant"
 	loot = list(/obj/effect/decal/cleanable/blood)
 	del_on_death = 0
 	health = 100
@@ -159,6 +297,7 @@
 	sentience_type = SENTIENCE_BOSS
 	var/grenade_cooldown = 10 SECONDS
 	var/last_grenade_throw = 0
+	var/hiding_behind_sandbag = FALSE
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/Initialize(mapload)
 	. = ..()
@@ -166,7 +305,35 @@
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/Life()
 	. = ..()
-	if(stat != CONSCIOUS || stop_automated_movement)
+	if(stat != CONSCIOUS)
+		return
+
+	if(target)
+		if(!hiding_behind_sandbag)
+			var/obj/structure/barricade/sandbags/closest_sandbag
+			var/min_dist = 6
+			for(var/obj/structure/barricade/sandbags/S in view(5, src))
+				var/dist = get_dist(src, S)
+				if(dist < min_dist)
+					var/turf/T = get_turf(S)
+					if(T && !T.density)
+						min_dist = dist
+						closest_sandbag = S
+
+			if(closest_sandbag)
+				var/turf/T = get_turf(closest_sandbag)
+				if(get_dist(src, T) > 0)
+					walk_to(src, T, 0, move_to_delay)
+				else
+					walk(src, 0) // Stop walking if reached
+				hiding_behind_sandbag = TRUE
+				stop_automated_movement = TRUE
+	else if(hiding_behind_sandbag)
+		hiding_behind_sandbag = FALSE
+		stop_automated_movement = FALSE
+		walk(src, 0)
+
+	if(stop_automated_movement && !hiding_behind_sandbag) // If we aren't hiding or throwing grenade
 		return
 
 	// Check for incoming grenades and dodge
@@ -233,23 +400,8 @@
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordercombatant/adjustHealth(amount, updating_health = TRUE, ...)
 	. = ..()
-	update_icons()
-
-	if(health / maxHealth > 0.7)
-		icon_state = "combatant3"
-	else if(health / maxHealth > 0.5)
-		icon_state = "combatant2"
-	else if(health / maxHealth > 0.3)
-		icon_state = "combatant1"
-
-	if(amount > 0)
-		if(prob(25))
-			var/static/list/sounds = list(
-				'modular_bluemoon/smiley/sounds/emotes/agony_male_5.ogg',
-				'modular_bluemoon/smiley/sounds/emotes/agony_male_6.ogg',
-				'modular_bluemoon/smiley/sounds/emotes/agony_male_8.ogg'
-			)
-			playsound(src, pick(sounds), 50, 0)
+	update_order_icon()
+	order_injury_logic(amount)
 
 /obj/item/grenade/syndieminibomb/concussion/combatant
 	icon_state = "concussion_active"
@@ -261,7 +413,12 @@
 
 
 /mob/living/simple_animal/hostile/syndicate/ranged/orderprometheus
+	parent_type = /mob/living/simple_animal/hostile/syndicate/ranged/order_base
 	name = "Order Prometheus"
+	magazine_size = 60
+	magazine_current = 60
+	reload_sound = 'modular_bluemoon/sound/weapons/mesa/sweetvoice.ogg'
+	reload_say_phrases = list("Кончилось топливо!", "Меняю топливный бак!", "СЕЙЧАС ВЫ СГОРИТЕ, ЕРЕТИКИ!")
 	desc = "I love see this world... in fire"
 	icon = 'modular_bluemoon/icons/mob/skihell.dmi'
 	icon_state = "prometheus"
@@ -280,6 +437,10 @@
 	minbodytemp = 0
 	sentience_type = SENTIENCE_BOSS
 
+/mob/living/simple_animal/hostile/syndicate/ranged/orderprometheus/adjustHealth(amount)
+	. = ..()
+	order_injury_logic(amount)
+
 /mob/living/simple_animal/hostile/syndicate/ranged/orderprometheus/death(gibbed)
 	if(prob(30))
 		explosion(src, devastation_range = -1, heavy_impact_range = 1, light_impact_range = 2, flash_range = 3, flame_range = 3)
@@ -290,7 +451,13 @@
 //saggitarius
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersaggitarius
+	parent_type = /mob/living/simple_animal/hostile/syndicate/ranged/order_base
 	name = "Order Saggitarius"
+	magazine_size = 20
+	magazine_current = 20
+	dropped_mag_type = /obj/item/ammo_box/magazine/m556
+	reload_sound = 'modular_bluemoon/sound/weapons/mesa/sniper_bolt1.ogg'
+	reload_say_phrases = list("Я пуст...", "Они же не видели меня?...", "Меняю позицию... Я пуст...")
 	desc = "Sometimes I feel like I am being watched..."
 	icon = 'modular_bluemoon/icons/mob/skihellbosses.dmi'
 	icon_state = "saggitarius"
@@ -315,6 +482,11 @@
 	var/roll_cooldown = 10
 	var/stealth_recover_chance = 30
 	var/stealth_recover_delay = 3 SECONDS
+
+/mob/living/simple_animal/hostile/syndicate/ranged/ordersaggitarius/Initialize()
+	. = ..()
+	ally_death_phrases = list("Ты был хорошим инструментом...", "Глупая смерть.", "Покойся в тенях.")
+	player_death_phrases = list("Одна пуля - один свидетель.", "Ты даже не видел меня.", "Тьма забирает тебя.")
 
 //навал кода
 
@@ -343,6 +515,7 @@
 		exit_stealth()
 		addtimer(CALLBACK(src, /mob/living/simple_animal/hostile/syndicate/ranged/ordersaggitarius/proc/try_reenter_stealth), stealth_recover_delay)
 	. = ..(amount, updating_health, forced)
+	order_injury_logic(amount)
 
 //додж
 
@@ -369,20 +542,21 @@
 
 	var/dir = pick(perp_dirs)
 
-	var/turf/target_turf = get_step(src, dir)
-	for(var/i = 2, i <= roll_distance, i++)
-		var/turf/next = get_step(target_turf, dir)
-		if(!next)
+	var/turf/current_turf = src.loc
+	var/turf/destination = current_turf
+	for(var/i = 1, i <= roll_distance, i++)
+		var/turf/next = get_step(destination, dir)
+		if(!next || next.density || isgroundlessturf(next) || istype(next, /turf/open/chasm))
 			break
-		target_turf = next
+		destination = next
 
-	if(!target_turf)
+	if(destination == current_turf)
 		return
 
 	visible_message("<span class='notice'><b>[src]</b> quickly rolls to the side!</span>")
 	playsound(get_turf(src), 'sound/mecha/neostep1.ogg', 200, 1)
 
-	throw_at(target_turf, roll_distance, roll_speed, spin = FALSE, diagonals_first = TRUE)
+	throw_at(destination, roll_distance, roll_speed, spin = FALSE, diagonals_first = TRUE)
 
 
 //лайфовое
@@ -405,7 +579,13 @@
 //dux
 
 /mob/living/simple_animal/hostile/syndicate/ranged/dux
+	parent_type = /mob/living/simple_animal/hostile/syndicate/ranged/order_base
 	name = "Dux"
+	magazine_size = 15
+	magazine_current = 15
+	dropped_mag_type = /obj/item/ammo_box/magazine/m50
+	reload_sound = 'modular_bluemoon/sound/creatures/skihell/shit.ogg'
+	reload_say_phrases = list("БЛЯДЬ! ПЕРЕЗАРЯЖАЮ!", "СУКА! МНЕ МАГАЗИНЫ НУЖНЫ!", "СДОХНИ! ПРОСТО... УМРИ!", "СЛЕДУЮЩИЙ МАГАЗИН БУДЕТ ПОСЛЕДНИЙ ДЛЯ ТЕБЯ!")
 	desc = "Dangerous and extremely blood cold order unit. dux is known for causing intense fear and hallucinations in its victims."
 	icon = 'modular_bluemoon/icons/mob/skihell.dmi'
 	icon_state = "dux"
@@ -506,7 +686,12 @@
 //holy hands
 
 /mob/living/simple_animal/hostile/syndicate/ranged/medic
+	parent_type = /mob/living/simple_animal/hostile/syndicate/ranged/order_base
 	name = "Order holy hands medic"
+	magazine_size = 10
+	magazine_current = 10
+	reload_sound = 'sound/rig/longbeep.ogg'
+	reload_say_phrases = list("Рукавицы разрядились!", "Не могу прикрывать! Я разряжен!", "Я на нуле!")
 	desc = "Strange order unit with big gas ballons on his back and strange gloves that emit soft cyan light."
 	icon = 'modular_bluemoon/icons/mob/skihell.dmi'
 	icon_state = "holyhands"
@@ -567,7 +752,7 @@
 			beam_healing()
 
 	proc/beam_healing()
-		if(!healing_target || !isliving(healing_target) || healing_target.stat == DEAD || !current_beam || QDELETED(current_beam))
+		if(stat != CONSCIOUS || !healing_target || !isliving(healing_target) || healing_target.stat == DEAD || !current_beam || QDELETED(current_beam))
 			stop_healing()
 			return
 
@@ -575,6 +760,7 @@
 			stop_healing(healing_target.health >= healing_target.maxHealth)
 			return
 
+		target = null // Don't attack while healing
 		var/mob/living/L = healing_target
 		L.adjustBruteLoss(-5)
 		L.adjustFireLoss(-5)
@@ -630,7 +816,10 @@
 //sniper
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersniper
+	parent_type = /mob/living/simple_animal/hostile/syndicate/ranged/order_base
 	name = "Order Sniper"
+	magazine_size = 5
+	magazine_current = 5
 	desc = "A stationary sniper with precise ranged attacks."
 	icon = 'modular_bluemoon/icons/mob/skihellbosses.dmi'
 	icon_state = "phantasma"
@@ -652,6 +841,7 @@
 	atmos_requirements = list("min_oxy" = 0, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 0, "min_co2" = 0, "max_co2" = 0, "min_n2" = 0, "max_n2" = 0)
 	minbodytemp = 0
 	sentience_type = SENTIENCE_BOSS
+	reload_say_phrases = list("Перезяражаюсь! Прикрой!", "Одна пуля - один труп...", "Дозаряжаю!")
 	var/aiming = FALSE
 	var/aim_time = 1.5 SECONDS
 	var/last_aim = 0
@@ -684,6 +874,11 @@
 	return FALSE
 
 /mob/living/simple_animal/hostile/syndicate/ranged/ordersniper/OpenFire(atom/A)
+	if(reloading)
+		return
+	if(magazine_current <= 0)
+		reload()
+		return
 	if(aiming || world.time < last_aim + aim_time)
 		return
 	start_aiming(A)
