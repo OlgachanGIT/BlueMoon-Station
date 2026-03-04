@@ -76,6 +76,8 @@
 		wiping the intelligence's memory before resale or transport."
 	/// A cooldown for when the weapon has last spoken, prevents messages from getting turbo spammed
 	COOLDOWN_DECLARE(last_speech)
+	/// Whether the battery compartment panel is open (screwdriver to toggle)
+	var/panel_open = FALSE
 
 /obj/item/gun/energy/modular_laser_rifle/Initialize(mapload)
 	. = ..()
@@ -86,6 +88,17 @@
 
 /obj/item/gun/energy/modular_laser_rifle/examine(mob/user)
 	. = ..()
+	if(in_range(user, src) || isobserver(user))
+		if(cell)
+			. += span_notice("Power cell: [round(cell.percent(), 1)]% ([DisplayEnergy(cell.charge)] / [DisplayEnergy(cell.maxcharge)]).")
+		else
+			. += span_warning("No power cell installed.")
+		. += span_notice("The battery compartment is [panel_open ? "open" : "closed"].")
+		if(panel_open)
+			if(cell)
+				. += span_notice("There is a power cell inside.")
+			else
+				. += span_notice("The battery compartment is empty.")
 	. += span_notice("You can <b>examine closer</b> to learn a little more about this weapon.")
 
 /obj/item/gun/energy/modular_laser_rifle/examine_more(mob/user)
@@ -95,6 +108,47 @@
 /obj/item/gun/energy/modular_laser_rifle/Destroy()
 	return ..()
 
+/obj/item/gun/energy/modular_laser_rifle/attackby(obj/item/used_item, mob/living/user, params)
+	if(used_item.tool_behaviour == TOOL_SCREWDRIVER)
+		panel_open = !panel_open
+		playsound(src, used_item.usesound, 50, TRUE)
+		to_chat(user, span_notice("You [panel_open ? "open" : "close"] the battery compartment of [src]."))
+		update_appearance()
+		return TRUE
+	if(panel_open && istype(used_item, /obj/item/stock_parts/cell))
+		var/obj/item/stock_parts/cell/new_cell = used_item
+		if(!user.transferItemToLoc(new_cell, src))
+			return
+		if(cell)
+			cell.forceMove(drop_location())
+			user.put_in_hands(cell)
+			to_chat(user, span_notice("You replace the power cell in [src] with [new_cell]."))
+		else
+			to_chat(user, span_notice("You insert [new_cell] into [src]."))
+		cell = new_cell
+		last_charge = cell.charge
+		recharge_newshot(TRUE)
+		update_appearance()
+		return TRUE
+	return ..()
+
+/obj/item/gun/energy/modular_laser_rifle/attack_self(mob/living/user)
+	if(panel_open)
+		if(cell)
+			var/obj/item/stock_parts/cell/old_cell = cell
+			cell = null
+			chambered = null
+			if(!user.put_in_hands(old_cell))
+				old_cell.forceMove(drop_location())
+			to_chat(user, span_notice("You remove the power cell from [src]."))
+			recharge_newshot(TRUE)
+			update_appearance()
+		else
+			to_chat(user, span_warning("The battery compartment is empty!"))
+		return
+	if(!currently_switching_types)
+		change_to_switch_mode(user)
+	return ..()
 
 /// Handles filling out all of the lists regarding weapon modes and radials around that
 /obj/item/gun/energy/modular_laser_rifle/proc/create_weapon_mode_stuff()
@@ -106,11 +160,6 @@
 		radial_menu_data["[initial(laser_mode.name)]"] = image(icon = mode_projectile.icon, icon_state = mode_projectile.icon_state)
 	currently_selected_mode = weapon_mode_name_to_path["[default_selected_mode]"]
 	transform_gun(currently_selected_mode, FALSE, TRUE)
-
-/obj/item/gun/energy/modular_laser_rifle/attack_self(mob/living/user)
-	if(!currently_switching_types)
-		change_to_switch_mode(user)
-	return ..()
 
 /// Makes the gun inoperable, playing an animation and giving a prompt to switch gun modes after the transition_duration passes
 /obj/item/gun/energy/modular_laser_rifle/proc/change_to_switch_mode(mob/living/user)
@@ -206,6 +255,8 @@
 
 /obj/item/gun/energy/modular_laser_rifle/process(seconds_per_tick)
 	. = ..()
+	if(!cell)
+		return
 	var/cell_charge_quarter = cell.maxcharge / 4
 	if((cell_charge_quarter > cell.charge) && !(last_charge < cell_charge_quarter))
 		speak_up("lowcharge")
