@@ -149,7 +149,7 @@
 /obj/item/ammo_casing/energy/laser/squall
 	projectile_type = /obj/item/projectile/bullet/a556
 	e_cost = 400
-	fire_sound = 'modular_zzz/sound/ak17_fire.ogg'
+	fire_sound = 'modular_bluemoon/code/modules/modular_laser_rifle/sounds/ak17_fire.ogg'
 
 /datum/laser_weapon_mode/squall
 	name = "Squall"
