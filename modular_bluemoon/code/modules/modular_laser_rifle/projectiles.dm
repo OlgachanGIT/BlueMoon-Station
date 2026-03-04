@@ -2,7 +2,7 @@
 
 /obj/item/ammo_casing/energy/cybersun_big_kill
 	projectile_type = /obj/item/projectile/beam/cybersun_laser
-	e_cost = LASER_SHOTS(20, STANDARD_CELL_CHARGE * 2)
+	e_cost = 1000
 	select_name = "Kill"
 	fire_sound = 'modular_bluemoon/code/modules/modular_laser_rifle/sounds/laser.ogg'
 
@@ -18,14 +18,14 @@
 
 /obj/item/ammo_casing/energy/cybersun_big_sniper
 	projectile_type = /obj/item/projectile/beam/cybersun_laser/marksman
-	e_cost = LASER_SHOTS(10, STANDARD_CELL_CHARGE * 2)
+	e_cost = 2000
 	select_name = "Marksman"
 	fire_sound = 'modular_bluemoon/code/modules/modular_laser_rifle/sounds/vaporize.ogg'
 
 /obj/item/projectile/beam/cybersun_laser/marksman
 	icon_state = "sniper"
 	damage = 40
-	impact_effect_type = /obj/effect/temp_visual/impact_effect/yellow_laser
+	impact_effect_type = /obj/effect/temp_visual/impact_effect/green_laser
 	pixels_per_second = TILES_TO_PIXELS(30)
 	light_range = 2
 	light_color = COLOR_VERY_SOFT_YELLOW
@@ -36,7 +36,7 @@
 
 /obj/item/ammo_casing/energy/cybersun_big_disabler
 	projectile_type = /obj/item/projectile/beam/cybersun_laser/disable
-	e_cost = LASER_SHOTS(20, STANDARD_CELL_CHARGE * 2)
+	e_cost = 1000
 	select_name = "Disable"
 	harmful = FALSE
 
@@ -51,7 +51,7 @@
 
 /obj/item/ammo_casing/energy/cybersun_big_launcher
 	projectile_type = /obj/item/projectile/beam/cybersun_laser/granata
-	e_cost = LASER_SHOTS(5, STANDARD_CELL_CHARGE * 2)
+	e_cost = 4000
 	select_name = "Launcher"
 
 /obj/item/projectile/beam/cybersun_laser/granata
@@ -61,7 +61,7 @@
 	pixels_per_second = TILES_TO_PIXELS(10)
 	range = 6
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/green_laser
-	light_color = COLOR_PALE_GREEN
+	light_color = COLOR_PALE_GREEN_GRAY
 	pass_flags = PASSTABLE | PASSGRILLE // His ass does NOT pass through glass!
 	/// What type of casing should we put inside the bullet to act as shrapnel later
 	var/casing_to_spawn = /obj/item/grenade/c980payload/plasma_grenade
@@ -78,7 +78,7 @@
 /// Called when the projectile reaches its max range, or hits something
 /obj/item/projectile/beam/cybersun_laser/granata/proc/fuse_activation(atom/target)
 	var/obj/item/grenade/shrapnel_maker = new casing_to_spawn(get_turf(target))
-	shrapnel_maker.detonate()
+	shrapnel_maker.prime()
 	playsound(src, 'modular_bluemoon/code/modules/modular_laser_rifle/sounds/grenade_burst.ogg', 50, TRUE, -3)
 	qdel(shrapnel_maker)
 
@@ -87,14 +87,13 @@
 	icon_state = "flare"
 	damage = 10
 	pixels_per_second = TILES_TO_PIXELS(10)
-	exposed_wound_bonus = 55 // Lasers have a wound bonus of 40, this is a bit higher
-	wound_bonus = -50 // However we do not very much against armor
+	wound_bonus = -50
+	bare_wound_bonus = 55
 	range = 2
-	pass_flags = PASSTABLE | PASSGRILLE // His ass does NOT pass through glass!
-	weak_against_armour = TRUE
+	pass_flags = PASSTABLE | PASSGRILLE
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/green_laser
-	light_color = COLOR_PALE_GREEN
-	damage_falloff_tile = -3
+	light_color = COLOR_PALE_GREEN_GRAY
+	wound_falloff_tile = -3
 
 /obj/item/grenade/c980payload/plasma_grenade
 	shrapnel_type = /obj/item/projectile/beam/cybersun_laser/granata_shrapnel
@@ -104,28 +103,27 @@
 
 /obj/item/ammo_casing/energy/cybersun_big_shotgun
 	projectile_type = /obj/item/projectile/beam/cybersun_laser/granata_shrapnel/shotgun_pellet
-	e_cost = LASER_SHOTS(10, STANDARD_CELL_CHARGE * 2)
+	e_cost = 2000
 	pellets = 4
 	variance = 30
 	select_name = "Shotgun"
-	fire_sound = 'modular_zubbers/sound/weapons/melt.ogg'
+	fire_sound = 'modular_bluemoon/code/modules/modular_laser_rifle/sounds/melt.ogg'
 
 /obj/item/projectile/beam/cybersun_laser/granata_shrapnel/shotgun_pellet
 	icon_state = "because_it_doesnt_miss"
 	damage = 15
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/purple_laser
 	pixels_per_second = TILES_TO_PIXELS(15)
-	light_color = COLOR_SCIENCE_PINK
+	light_color = COLOR_PINK
 	range = 9
-	damage_falloff_tile = -3
-	weak_against_armour = FALSE
+	wound_falloff_tile = -3
 // Hellfire lasers for the little guy
 
 /obj/item/ammo_casing/energy/cybersun_small_hellfire
 	projectile_type = /obj/item/projectile/beam/cybersun_laser/hellfire
-	e_cost = LASER_SHOTS(10, STANDARD_CELL_CHARGE)
+	e_cost = 1000
 	select_name = "Incinerate"
-	fire_sound = 'modular_zubbers/sound/weapons/incinerate.ogg'
+	fire_sound = 'modular_bluemoon/code/modules/modular_laser_rifle/sounds/melt.ogg'
 
 /obj/item/projectile/beam/cybersun_laser/hellfire
 	icon_state = "hellfire"
@@ -139,7 +137,7 @@
 
 /obj/item/ammo_casing/energy/cybersun_small_disabler
 	projectile_type = /obj/item/projectile/beam/cybersun_laser/disable_bounce
-	e_cost = LASER_SHOTS(10, STANDARD_CELL_CHARGE)
+	e_cost = 1000
 	select_name = "Disable"
 	harmful = FALSE
 
@@ -165,7 +163,7 @@
 
 /obj/item/ammo_casing/energy/cybersun_small_launcher
 	projectile_type = /obj/item/projectile/beam/cybersun_laser/flare
-	e_cost = LASER_SHOTS(5, STANDARD_CELL_CHARGE)
+	e_cost = 2000
 	select_name = "Flare"
 
 /obj/item/projectile/beam/cybersun_laser/flare
@@ -175,7 +173,7 @@
 	pixels_per_second = TILES_TO_PIXELS(10)
 	range = 6
 	impact_effect_type = /obj/effect/temp_visual/impact_effect/green_laser
-	light_color = COLOR_PALE_GREEN
+	light_color = COLOR_PALE_GREEN_GRAY
 	pass_flags = PASSTABLE | PASSGRILLE // His ass does NOT pass through glass!
 	/// How many firestacks the bullet should impart upon a target when impacting
 	var/firestacks_to_give = 2
@@ -187,7 +185,7 @@
 	if(iscarbon(target))
 		var/mob/living/carbon/gaslighter = target
 		gaslighter.adjust_fire_stacks(firestacks_to_give)
-		gaslighter.ignite_mob()
+		gaslighter.IgniteMob()
 	else
 		new illumination_flare(get_turf(target))
 
@@ -202,14 +200,17 @@
 	anchored = TRUE
 	icon = 'modular_bluemoon/code/modules/modular_laser_rifle/icons/projectiles.dmi'
 	icon_state = "flare_burn"
-	light_color = COLOR_PALE_GREEN
+	light_color = COLOR_PALE_GREEN_GRAY
 	light_power = 2
 
 /obj/item/flashlight/flare/plasma_projectile/Initialize(mapload)
 	. = ..()
-	if(randomize_fuel)
-		fuel = rand(3 MINUTES, 5 MINUTES)
-	ignition()
+	fuel = rand(3 MINUTES, 5 MINUTES)
+	on = TRUE
+	force = on_damage
+	damtype = "fire"
+	START_PROCESSING(SSobj, src)
+	update_brightness(null)
 
 /obj/item/flashlight/flare/plasma_projectile/turn_off()
 	. = ..()
@@ -219,7 +220,7 @@
 
 /obj/item/ammo_casing/energy/cybersun_small_shotgun
 	projectile_type = /obj/item/projectile/beam/cybersun_laser/granata_shrapnel/shotgun_pellet
-	e_cost = LASER_SHOTS(10, STANDARD_CELL_CHARGE)
+	e_cost = 1000
 	pellets = 3
 	variance = 20
 	select_name = "Shotgun"

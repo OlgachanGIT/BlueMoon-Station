@@ -19,19 +19,16 @@
 
 /// Applies some of the universal stats from the variables above
 /datum/laser_weapon_mode/proc/apply_stats(obj/item/gun/energy/applied_gun)
-	var/list/old_casings = applied_gun.ammo_type.Copy()
 	applied_gun.ammo_type = list(casing)
-	QDEL_LIST(old_casings)
 	applied_gun.update_ammo_types()
 	applied_gun.charge_sections = charge_sections
 	applied_gun.fire_delay = shot_delay
 	var/new_icon_state = "[applied_gun.base_icon_state]_[weapon_icon_state]"
 	applied_gun.icon_state = new_icon_state
 	applied_gun.item_state = new_icon_state
-	applied_gun.icon_state = new_icon_state
 	applied_gun.update_appearance()
 	applied_gun.chat_color = gun_runetext_color
-	applied_gun.chat_color_darkened = process_chat_color(gun_runetext_color, sat_shift = 0.85, lum_shift = 0.85)
+	applied_gun.chat_color_darkened = gun_runetext_color
 
 /// Stuff applied to the passed gun when the weapon mode is given to the gun
 /datum/laser_weapon_mode/proc/apply_to_weapon(obj/item/gun/energy/applied_gun)
@@ -128,22 +125,20 @@
 	gun_runetext_color = "#f8d860"
 
 /datum/laser_weapon_mode/sword/apply_to_weapon(obj/item/gun/energy/modular_laser_rifle/applied_gun)
-	playsound(src, 'sound/items/unsheath.ogg', 25, TRUE)
+	playsound(applied_gun, 'sound/items/unsheath.ogg', 25, TRUE)
 	applied_gun.force = 20
 	applied_gun.sharpness = SHARP_EDGED
-	applied_gun.exposed_wound_bonus = 15
 	applied_gun.wound_bonus = 5
 	applied_gun.disabled_for_other_reasons = TRUE
 	applied_gun.attack_verb_continuous = list("slashes", "cuts")
 	applied_gun.attack_verb_simple = list("slash", "cut")
-	applied_gun.hitsound = 'sound/items/weapons/rapierhit.ogg'
+	applied_gun.hitsound = 'sound/weapons/bladeslice.ogg'
 
 /datum/laser_weapon_mode/sword/remove_from_weapon(obj/item/gun/energy/modular_laser_rifle/applied_gun)
-	playsound(src, 'sound/items/sheath.ogg', 25, TRUE)
+	playsound(applied_gun, 'sound/items/sheath.ogg', 25, TRUE)
 	applied_gun.force = initial(applied_gun.force)
 	applied_gun.sharpness = initial(applied_gun.sharpness)
 	applied_gun.wound_bonus = initial(applied_gun.wound_bonus)
-	applied_gun.exposed_wound_bonus = initial(applied_gun.exposed_wound_bonus)
 	applied_gun.disabled_for_other_reasons = FALSE
 	applied_gun.attack_verb_continuous = initial(applied_gun.attack_verb_continuous)
 	applied_gun.attack_verb_simple = initial(applied_gun.attack_verb_simple)

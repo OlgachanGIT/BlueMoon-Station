@@ -12,7 +12,6 @@
 	mob_overlay_icon = 'modular_bluemoon/code/modules/modular_laser_rifle/zealstar/icons/zealstar_mob.dmi'
 	icon_state = "zealstar_spear"
 	base_icon_state = "zealstar"
-	icon_state = "zealstar_spear"
 	charge_sections = 3
 	charge_delay = 10
 	cell_type = /obj/item/stock_parts/cell/pulse/pistol
@@ -34,10 +33,8 @@
 	тактику пользователя, хотя операторы отмечают его «избыточную инициативу». При попадании в руки противника \
 	система инициирует коллапс ядра (радиус поражения - 100 метров)."
 
-/obj/item/gun/energy/modular_laser_rifle/zealstar/New(loc, ...)
+/obj/item/gun/energy/modular_laser_rifle/zealstar/Initialize(mapload)
 	. = ..()
-	RemoveElement(/datum/element/manufacturer_examine, COMPANY_CYBERSUN)
-	AddElement(/datum/element/manufacturer_examine, COMPANY_NANOTRASEN)
 
 /// SPEAR - ПАРАЛИЗАТОР ///
 
@@ -63,9 +60,9 @@
 /// THUNDER - РАКЕТНИЦА ///
 
 /obj/item/ammo_casing/energy/laser/thunder
-	projectile_type = /obj/item/projectile/bullet/rocket/heap
-	e_cost = LASER_SHOTS(2, STANDARD_CELL_CHARGE * 2)
-	fire_sound = 'sound/weapons/rocket_launch.ogg'
+	projectile_type = /obj/item/projectile/bullet/a84mm
+	e_cost = 10000
+	fire_sound = 'sound/weapons/rocketlaunch.ogg'
 
 /datum/laser_weapon_mode/thunder
 	name = "Thunder"
@@ -87,10 +84,10 @@
 /// HAMMER - ДРОБОВИК ///
 
 /obj/item/ammo_casing/energy/laser/hammer
-	projectile_type = /obj/item/projectile/bullet/pellet/shotgun_buckshot/milspec
+	projectile_type = /obj/item/projectile/bullet/pellet/shotgun_buckshot
 	pellets = 8
 	variance = 10
-	e_cost = LASER_SHOTS(25, STANDARD_CELL_CHARGE * 2)
+	e_cost = 800
 	fire_sound = 'modular_bluemoon/code/modules/modular_laser_rifle/sounds/shotgun_heavy.ogg'
 
 /datum/laser_weapon_mode/hammer
@@ -116,9 +113,9 @@
 	projectile_type = /obj/item/projectile/bullet/incendiary/flamethrower
 	pellets = 6
 	variance = 35
-	e_cost = LASER_SHOTS(100, STANDARD_CELL_CHARGE * 2)
+	e_cost = 200
 	select_name = "Fire"
-	fire_sound = 'modular_bluemoon/code/modules/sound/flamethrower.ogg'
+	fire_sound = 'modular_bluemoon/code/modules/modular_laser_rifle/sounds/flamethrower.ogg'
 
 /obj/item/projectile/bullet/incendiary/flamethrower
 	name = "Fire"
@@ -151,8 +148,8 @@
 
 /obj/item/ammo_casing/energy/laser/squall
 	projectile_type = /obj/item/projectile/bullet/a556
-	e_cost = LASER_SHOTS(50, STANDARD_CELL_CHARGE * 2)
-	fire_sound = 'modular_zzz/sound/ak12_fire.ogg'
+	e_cost = 400
+	fire_sound = 'sound/weapons/laser.ogg'
 
 /datum/laser_weapon_mode/squall
 	name = "Squall"

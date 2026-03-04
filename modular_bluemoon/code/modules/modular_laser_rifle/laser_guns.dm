@@ -21,11 +21,9 @@
 	righthand_file = 'modular_bluemoon/code/modules/modular_laser_rifle/icons/guns_righthand.dmi'
 	item_state = "hyeseong_kill"
 	mob_overlay_icon = 'modular_bluemoon/code/modules/modular_laser_rifle/icons/guns_worn.dmi'
-	icon_state = "hyeseong_kill"
 	cell_type = /obj/item/stock_parts/cell/hyeseong_internal_cell
 	modifystate = FALSE
 	ammo_type = list(/obj/item/ammo_casing/energy/cybersun_big_kill)
-	can_select = FALSE
 	ammo_x_offset = 0
 	selfcharge = 1
 	charge_delay = 15
@@ -68,9 +66,7 @@
 	var/last_charge = 0
 	/// If the gun's personality speech thing is on, defaults to on because just listen to her
 	var/personality_mode = TRUE
-	/// Keeps track of our soulcatcher component
-	var/datum/component/carrier/soulcatcher/tracked_soulcatcher
-	/// What is this gun's extended examine, we only have to do this because the carbine is a subtype
+	/// Extended examine text for examine_more
 	var/expanded_examine_text = "The Hyeseong rifle is the first line of man-portable Marsian weapons platforms \
 		from Cybersun Industries. Like her younger sister weapon, the Hoshi carbine, CI used funding aid provided \
 		by TerraGov to develop a portable weapon fueled by a proprietary generator rumored to be fueled by superstable plasma. \
@@ -83,31 +79,22 @@
 
 /obj/item/gun/energy/modular_laser_rifle/Initialize(mapload)
 	. = ..()
-	AddElement(/datum/element/manufacturer_examine, COMPANY_CYBERSUN)
 	chat_color = DEFAULT_RUNECHAT_GUN_COLOR
-	chat_color_darkened = process_chat_color(DEFAULT_RUNECHAT_GUN_COLOR, sat_shift = 0.85, lum_shift = 0.85)
+	chat_color_darkened = DEFAULT_RUNECHAT_GUN_COLOR
 	last_charge = cell.charge
-	tracked_soulcatcher = AddComponent(/datum/component/carrier/soulcatcher/modular_laser)
 	create_weapon_mode_stuff()
-	voice = null
 
 /obj/item/gun/energy/modular_laser_rifle/examine(mob/user)
 	. = ..()
 	. += span_notice("You can <b>examine closer</b> to learn a little more about this weapon.")
-	. += span_notice("You can <b>Alt-Click</b> this gun to access the <b>internal soulcatcher</b>.")
 
 /obj/item/gun/energy/modular_laser_rifle/examine_more(mob/user)
 	. = ..()
 	. += expanded_examine_text
-	return .
 
 /obj/item/gun/energy/modular_laser_rifle/Destroy()
-	QDEL_NULL(tracked_soulcatcher)
 	return ..()
 
-/obj/item/gun/energy/modular_laser_rifle/click_alt(mob/user)
-	. = ..()
-	tracked_soulcatcher?.ui_interact(user)
 
 /// Handles filling out all of the lists regarding weapon modes and radials around that
 /obj/item/gun/energy/modular_laser_rifle/proc/create_weapon_mode_stuff()
@@ -134,7 +121,6 @@
 	var/new_icon_state = "[base_icon_state]_switch"
 	icon_state = new_icon_state
 	item_state = new_icon_state
-	icon_state = new_icon_state
 	addtimer(CALLBACK(src, PROC_REF(show_radial_choice_menu), user), transition_duration)
 
 /// Shows the radial choice menu to the user, if the user doesnt exist or isnt holding the gun anymore, it reverts back to its last form
@@ -167,7 +153,7 @@
 	if(!new_weapon_mode)
 		stack_trace("transform_gun was called but didn't get a new weapon mode, meaning it couldn't work.")
 		return
-	if(replacing)
+	if(replacing && currently_selected_mode)
 		currently_selected_mode.remove_from_weapon(src)
 	currently_selected_mode = new_weapon_mode
 	flick("[base_icon_state]_switch_off", src)
@@ -206,16 +192,16 @@
 	if(slot & (ITEM_SLOT_BELT|ITEM_SLOT_BACK|ITEM_SLOT_SUITSTORE))
 		speak_up("worn")
 	else if(slot & ITEM_SLOT_HANDS)
-		RegisterSignal(user, COMSIG_MOB_CI_TOGGLED, PROC_REF(user_ci_toggled))
+		RegisterSignal(user, COMSIG_LIVING_COMBAT_ENABLED, PROC_REF(on_combat_enabled))
 		speak_up("pickup")
 		return
-	UnregisterSignal(user, COMSIG_MOB_CI_TOGGLED)
+	UnregisterSignal(user, COMSIG_LIVING_COMBAT_ENABLED)
 
 /obj/item/gun/energy/modular_laser_rifle/dropped(mob/user, silent)
 	. = ..()
 	if(src in user.contents)
 		return // If they're still holding us or have us on them, dw about it
-	UnregisterSignal(user, COMSIG_MOB_CI_TOGGLED)
+	UnregisterSignal(user, COMSIG_LIVING_COMBAT_ENABLED)
 	speak_up("putdown")
 
 /obj/item/gun/energy/modular_laser_rifle/process(seconds_per_tick)
@@ -227,10 +213,10 @@
 		speak_up("fullcharge")
 	last_charge = cell.charge
 
-/// Triggers when a mob user toggles CI
-/obj/item/gun/energy/modular_laser_rifle/proc/user_ci_toggled(mob/living/source)
-	if(source.combat_indicator)
-		speak_up("combatmode")
+/// Called when the holder enables combat mode (combat indicator).
+/obj/item/gun/energy/modular_laser_rifle/proc/on_combat_enabled(mob/living/source)
+	SIGNAL_HANDLER
+	speak_up("combatmode")
 
 /obj/item/gun/energy/modular_laser_rifle/ui_action_click(mob/user, actiontype)
 	if(!istype(actiontype, /datum/action/item_action/toggle_personality))
@@ -251,17 +237,12 @@
 	desc = "Toggles the weapon's personality core. Studies find that turning them off makes them quite sad, however."
 	background_icon_state = "bg_mod"
 
-/datum/component/carrier/soulcatcher/modular_laser
-	max_mobs = 1
-	communicate_as_parent = TRUE
-
 //Short version of the above modular rifle, has less charge and different modes
 /obj/item/gun/energy/modular_laser_rifle/carbine
 	name = "\improper Hoshi modular laser carbine"
-	icon = 'modular_skyrat/modules/modular_weapons/icons/obj/company_and_or_faction_based/saibasan/guns32x.dmi'
+	icon = 'modular_bluemoon/code/modules/modular_laser_rifle/icons/guns32x.dmi'
 	icon_state = "hoshi_kill"
 	item_state = "hoshi_kill"
-	icon_state = "hoshi_kill"
 	base_icon_state = "hoshi"
 	charge_sections = 3
 	cell_type = /obj/item/stock_parts/cell
