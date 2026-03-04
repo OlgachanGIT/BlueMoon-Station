@@ -84,7 +84,7 @@
 /// HAMMER - ДРОБОВИК ///
 
 /obj/item/ammo_casing/energy/laser/hammer
-	projectile_type = /obj/item/projectile/bullet/pellet/shotgun_buckshot
+	projectile_type = /obj/item/projectile/bullet/pellet/buckshot23
 	pellets = 8
 	variance = 10
 	e_cost = 800
@@ -149,7 +149,7 @@
 /obj/item/ammo_casing/energy/laser/squall
 	projectile_type = /obj/item/projectile/bullet/a556
 	e_cost = 400
-	fire_sound = 'sound/weapons/laser.ogg'
+	fire_sound = 'modular_zzz/sound/ak17_fire.ogg'
 
 /datum/laser_weapon_mode/squall
 	name = "Squall"
