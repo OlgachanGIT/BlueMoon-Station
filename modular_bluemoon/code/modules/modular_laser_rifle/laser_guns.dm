@@ -193,8 +193,7 @@
 	item_state = new_icon_state
 	if(mode_switch_timer_id)
 		deltimer(mode_switch_timer_id)
-	mode_switch_timer_id = addtimer(CALLBACK(src, PROC_REF(show_radial_choice_menu), user), transition_duration)
-
+	mode_switch_timer_id = addtimer(CALLBACK(src, PROC_REF(show_radial_choice_menu), user), transition_duration, TIMER_STOPPABLE)
 /// Shows the radial choice menu to the user, if the user doesnt exist or isnt holding the gun anymore, it reverts back to its last form
 /obj/item/gun/energy/modular_laser_rifle/proc/show_radial_choice_menu(mob/living/user)
 	if(!user?.is_holding(src))
