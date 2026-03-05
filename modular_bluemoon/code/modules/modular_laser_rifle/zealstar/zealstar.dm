@@ -160,7 +160,7 @@
 	casing = /obj/item/ammo_casing/energy/laser/squall
 	weapon_icon_state = "squall"
 	radial_menu_icon = 'icons/obj/ammo.dmi'
-	radial_menu_icon_state = "50-live"
+	radial_menu_icon_state = "762-casing-live"
 	charge_sections = 3
 	shot_delay = 0.25 SECONDS
 	json_speech_string = "squall"
