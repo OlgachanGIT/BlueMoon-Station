@@ -8,6 +8,10 @@
 	var/obj/item/ammo_casing/casing = /obj/item/ammo_casing/energy/cybersun_big_kill
 	/// What icon_state does this weapon mode use?
 	var/weapon_icon_state = "kill"
+	/// Optional: icon for radial menu (overrides projectile icon)
+	var/radial_menu_icon
+	/// Optional: icon_state for radial menu (overrides projectile icon_state)
+	var/radial_menu_icon_state
 	/// How many charge sections does this variant of weapon have?
 	var/charge_sections = 5
 	/// What is the shot cooldown this variant applies to the weapon?

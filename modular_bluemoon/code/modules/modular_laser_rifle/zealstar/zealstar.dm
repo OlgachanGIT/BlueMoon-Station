@@ -94,6 +94,8 @@
 	name = "Hammer"
 	casing = /obj/item/ammo_casing/energy/laser/hammer
 	weapon_icon_state = "hammer"
+	radial_menu_icon = 'icons/obj/ammo.dmi'
+	radial_menu_icon_state = "gshell"
 	charge_sections = 3
 	shot_delay = 0.75 SECONDS
 	json_speech_string = "hammer"
@@ -131,6 +133,8 @@
 	name = "Phoenix"
 	casing = /obj/item/ammo_casing/energy/laser/flamethrower
 	weapon_icon_state = "phoenix"
+	radial_menu_icon = 'icons/effects/turf_fire.dmi'
+	radial_menu_icon_state = "red_big"
 	charge_sections = 3
 	shot_delay = 0.4 SECONDS
 	json_speech_string = "phoenix"
@@ -155,6 +159,8 @@
 	name = "Squall"
 	casing = /obj/item/ammo_casing/energy/laser/squall
 	weapon_icon_state = "squall"
+	radial_menu_icon = 'icons/obj/ammo.dmi'
+	radial_menu_icon_state = "50-live"
 	charge_sections = 3
 	shot_delay = 0.25 SECONDS
 	json_speech_string = "squall"

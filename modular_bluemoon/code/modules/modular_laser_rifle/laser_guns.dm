@@ -156,8 +156,17 @@
 		return // We don't need to worry about it if there's already stuff here
 	for(var/datum/laser_weapon_mode/laser_mode as anything in weapon_mode_options)
 		weapon_mode_name_to_path["[initial(laser_mode.name)]"] = new laser_mode()
-		var/obj/item/projectile/mode_projectile = initial(laser_mode.casing.projectile_type)
-		radial_menu_data["[initial(laser_mode.name)]"] = image(icon = mode_projectile.icon, icon_state = mode_projectile.icon_state)
+		var/datum/laser_weapon_mode/mode_instance = weapon_mode_name_to_path["[initial(laser_mode.name)]"]
+		var/radial_icon
+		var/radial_state
+		if(mode_instance.radial_menu_icon && mode_instance.radial_menu_icon_state)
+			radial_icon = mode_instance.radial_menu_icon
+			radial_state = mode_instance.radial_menu_icon_state
+		else
+			var/obj/item/projectile/mode_projectile = initial(laser_mode.casing.projectile_type)
+			radial_icon = mode_projectile.icon
+			radial_state = mode_projectile.icon_state
+		radial_menu_data["[initial(laser_mode.name)]"] = image(icon = radial_icon, icon_state = radial_state)
 	currently_selected_mode = weapon_mode_name_to_path["[default_selected_mode]"]
 	transform_gun(currently_selected_mode, FALSE, TRUE)
 
