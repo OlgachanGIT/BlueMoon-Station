@@ -78,6 +78,8 @@
 	COOLDOWN_DECLARE(last_speech)
 	/// Whether the battery compartment panel is open (screwdriver to toggle)
 	var/panel_open = FALSE
+	/// Timer id for the delayed radial menu (so we can cancel it in Destroy)
+	var/mode_switch_timer_id
 
 /obj/item/gun/energy/modular_laser_rifle/Initialize(mapload)
 	. = ..()
@@ -106,6 +108,16 @@
 	. += expanded_examine_text
 
 /obj/item/gun/energy/modular_laser_rifle/Destroy()
+	if(ismob(loc))
+		UnregisterSignal(loc, COMSIG_LIVING_COMBAT_ENABLED)
+	if(mode_switch_timer_id)
+		deltimer(mode_switch_timer_id)
+		mode_switch_timer_id = null
+	if(currently_selected_mode)
+		currently_selected_mode.remove_from_weapon(src)
+		currently_selected_mode = null
+	weapon_mode_name_to_path = null
+	radial_menu_data = null
 	return ..()
 
 /obj/item/gun/energy/modular_laser_rifle/attackby(obj/item/used_item, mob/living/user, params)
@@ -179,7 +191,9 @@
 	var/new_icon_state = "[base_icon_state]_switch"
 	icon_state = new_icon_state
 	item_state = new_icon_state
-	addtimer(CALLBACK(src, PROC_REF(show_radial_choice_menu), user), transition_duration)
+	if(mode_switch_timer_id)
+		deltimer(mode_switch_timer_id)
+	mode_switch_timer_id = addtimer(CALLBACK(src, PROC_REF(show_radial_choice_menu), user), transition_duration)
 
 /// Shows the radial choice menu to the user, if the user doesnt exist or isnt holding the gun anymore, it reverts back to its last form
 /obj/item/gun/energy/modular_laser_rifle/proc/show_radial_choice_menu(mob/living/user)
