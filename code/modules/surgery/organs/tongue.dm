@@ -98,6 +98,8 @@
 	return ..()
 
 /obj/item/organ/tongue/could_speak_language(language)
+	if(!languages_possible)
+		return initial(language.flags) & TONGUELESS_SPEECH
 	return is_type_in_typecache(language, languages_possible)
 
 /obj/item/organ/tongue/lizard
