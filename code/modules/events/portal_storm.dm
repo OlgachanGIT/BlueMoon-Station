@@ -191,7 +191,7 @@
 	set waitfor = FALSE
 	sound_to_playing_players('sound/magic/lightning_chargeup.ogg')
 	sleep(80)
-	priority_announce("На [station_name()] зафиксирована крупная блюспейс-аномалия. Приготовьтесь к столкновению с угрозами прошлого и будущего.", "Центральное Командование, Отдел Работы с Реальностью", triggersound)
+	priority_announce("На [station_name()] зафиксирована крупная блюспейс-аномалия. Приготовьтесь к столкновению с угрозами.", "Центральное Командование, Отдел Работы с Реальностью", triggersound)
 	sleep(20)
 	sound_to_playing_players('sound/magic/lightningbolt.ogg')
 

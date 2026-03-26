@@ -29,11 +29,6 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 // Сигнал при установке ядра
 #define CORE_INSERT_REG_SIGNAL RegisterSignal(bs_core, COMSIG_PARENT_QDELETING, PROC_REF(on_core_remove))
 
-// Веса различных типов ивентов при нестабильности
-#define INSTABILITY_EVENT_ANOMALY_WEIGHT 50
-#define INSTABILITY_EVENT_PORTAL_WEIGHT 20
-#define INSTABILITY_EVENT_TEAR_WEIGHT 1
-
 // Названия для instability_settings
 /// Процент распада ядра, для уровня нестабильности
 #define INSTABILITY_SETTINGS_PERCENT "percent"
@@ -142,13 +137,24 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 
 		var/instability_onzlevel = get_instability_onzlevel()
 		var/instability_onzlevel_text = "[instability_onzlevel]%"
-		var/sector_stable = instability_onzlevel < INSTABILITY_ON_ZLEVEL_TO_EVENT
-		instability_onzlevel_text = !sector_stable ? span_danger(instability_onzlevel_text) : span_green(instability_onzlevel_text)
-		display_list += "Нестабильность пространства в регионе: [span_bold(instability_onzlevel_text)]"
-		if(!sector_stable)
-			display_list += span_boldwarning("ВНИМАНИЕ! Слишком высокая нестабильность, возможны аномалии!")
+		if(instability_onzlevel >= BSM_INSTABILITY_TIER_HIGH)
+			instability_onzlevel_text = span_danger(instability_onzlevel_text)
+		else if(instability_onzlevel >= BSM_INSTABILITY_TIER_MEDIUM)
+			instability_onzlevel_text = span_warning(instability_onzlevel_text)
 		else
-			display_list += "В секторе начнуться аномалии при нестабильности <b>[INSTABILITY_ON_ZLEVEL_TO_EVENT]%</b>"
+			instability_onzlevel_text = span_green(instability_onzlevel_text)
+		display_list += "Нестабильность пространства в регионе: [span_bold(instability_onzlevel_text)]"
+		if(instability_onzlevel < BSM_INSTABILITY_ROLL_MIN)
+			display_list += "Случайные блюспейс-эффекты маловероятны при нестабильности ниже <b>[BSM_INSTABILITY_ROLL_MIN]%</b>."
+		else if(instability_onzlevel < BSM_INSTABILITY_TIER_MEDIUM)
+			display_list += span_notice("Ожидаются в основном безвредные проявления (игрушки, свет, звук).")
+		else if(instability_onzlevel < BSM_INSTABILITY_TIER_HIGH)
+			display_list += span_warning("Возможны малые угрозы: газы, давление и т.п.")
+		else
+			display_list += span_boldwarning("Критический уровень: возможны аномалии, порталы, спавнеры и метеоритные удары!")
+		var/sector_stable = instability_onzlevel < INSTABILITY_ON_ZLEVEL_TO_EVENT
+		if(!sector_stable)
+			display_list += span_boldwarning("Нестабильность достигла <b>[INSTABILITY_ON_ZLEVEL_TO_EVENT]%</b> — визуальная индикация на максимуме.")
 
 		. += span_notice(jointext(display_list, "\n- "))
 	else
@@ -341,7 +347,7 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 		return
 
 	var/event_chanse = get_instability_onzlevel() // Пока, это проценты, что бы не плодить перменные лишние
-	if(event_chanse<INSTABILITY_ON_ZLEVEL_TO_EVENT)
+	if(event_chanse < BSM_INSTABILITY_ROLL_MIN)
 		return
 	event_chanse = event_chanse*INSTABILITY_CHANSE_FOR_PERCENT // А это уже шанс для probe
 
@@ -358,29 +364,25 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 		qdel(src)
 		return
 
-	var/static/list/possible_events_types
-	if(!LAZYLEN(possible_events_types))
-		possible_events_types = list()
-		for(var/anom_type in subtypesof(/datum/round_event_control/anomaly))
-			possible_events_types[anom_type] = INSTABILITY_EVENT_ANOMALY_WEIGHT
-		var/static/list/events_tears = list(
-			/datum/round_event_control/portal_storm_inteq,
-			/datum/round_event_control/portal_storm_narsie,
-			/datum/round_event_control/portal_storm_clown,
-			/datum/round_event_control/portal_storm_necros,
-			/datum/round_event_control/portal_storm_funclaws,
-			/datum/round_event_control/portal_storm_clock,
-		)
-		for(var/path in events_tears)
-			possible_events_types[path] = INSTABILITY_EVENT_TEAR_WEIGHT
-		for(var/path in subtypesof(/datum/round_event_control/spawners))
-			possible_events_types[path] = INSTABILITY_EVENT_PORTAL_WEIGHT
-
-	var/datum/round_event_control/event = pickweight(possible_events_types) // istype
-	if(!event)
-		return
-	event = new event
-	event.runEvent(FALSE, increase_occurrences = FALSE)
+	var/inst = get_instability_onzlevel()
+	var/picked
+	if(inst < BSM_INSTABILITY_TIER_MEDIUM)
+		picked = pickweight(GLOB.bsm_low_threat_pool)
+		if(!picked)
+			return
+		var/datum/bsm_instability_effect/fx = new picked()
+		fx.trigger(src)
+	else if(inst < BSM_INSTABILITY_TIER_HIGH)
+		picked = pickweight(GLOB.bsm_medium_threat_pool)
+		if(!picked)
+			return
+		var/datum/bsm_instability_effect/fx = new picked()
+		fx.trigger(src)
+	else
+		picked = pickweight(bsm_get_high_threat_pool())
+		if(!picked)
+			return
+		bsm_fire_high_threat_pick(src, picked)
 
 /obj/machinery/mineral/bluespace_miner/proc/on_core_remove()
 	SIGNAL_HANDLER
@@ -500,10 +502,6 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 #undef BLUESPACE_MINER_SOUND_CHANCE
 
 #undef CORE_INSERT_REG_SIGNAL
-
-#undef INSTABILITY_EVENT_ANOMALY_WEIGHT
-#undef INSTABILITY_EVENT_PORTAL_WEIGHT
-#undef INSTABILITY_EVENT_TEAR_WEIGHT
 
 #undef INSTABILITY_SETTINGS_PERCENT
 #undef INSTABILITY_SETTINGS_VALUE
