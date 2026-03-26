@@ -17,11 +17,8 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 // Сколько дает нестабильности БС майнер при работе
 #define BLUESPACE_MINER_INSTABILITY 10
 
-// Сколько нужно нестабильности на уровне, что бы майнеры стали производить аномалии
+// Сколько нужно нестабильности на уровне, что бы майнеры стали производить аномалии (UI / шкала)
 #define INSTABILITY_ON_ZLEVEL_TO_EVENT 100
-
-// Какой шанс (в секунду) вызвать аномалию, если порог в INSTABILITY_ON_ZLEVEL_TO_EVENT превышен, за 1 процент
-#define INSTABILITY_CHANSE_FOR_PERCENT 0.1
 
 // Шанс (в секунду) на playsound при работе
 #define BLUESPACE_MINER_SOUND_CHANCE 1
@@ -342,16 +339,13 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 
 	return last_z_check
 
+/// Срабатывание не чаще чем раз в `bluespaceminer_instability_cooldown` (дефолт 5 мин); без случайного броска — при пороге нестабильности сразу после ожидания.
 /obj/machinery/mineral/bluespace_miner/proc/instability_check(delta_time = 1)
 	if(!COOLDOWN_FINISHED(src, instability_cooldown))
 		return
 
-	var/event_chanse = get_instability_onzlevel() // Пока, это проценты, что бы не плодить перменные лишние
-	if(event_chanse < BSM_INSTABILITY_ROLL_MIN)
-		return
-	event_chanse = event_chanse*INSTABILITY_CHANSE_FOR_PERCENT // А это уже шанс для probe
-
-	if(!DT_PROB(event_chanse, delta_time))
+	var/sector_instability = get_instability_onzlevel()
+	if(sector_instability < BSM_INSTABILITY_ROLL_MIN)
 		return
 	COOLDOWN_START(src, instability_cooldown, INSTABILITY_COOLDOWN_TIME)
 	instability_event_start()
@@ -498,7 +492,6 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 
 #undef BLUESPACE_MINER_INSTABILITY
 #undef INSTABILITY_ON_ZLEVEL_TO_EVENT
-#undef INSTABILITY_CHANSE_FOR_PERCENT
 #undef BLUESPACE_MINER_SOUND_CHANCE
 
 #undef CORE_INSERT_REG_SIGNAL
