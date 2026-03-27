@@ -16,6 +16,8 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 #define INSTABILITY_ON_ZLEVEL_TO_EVENT 100
 
 #define BLUESPACE_MINER_SOUND_CHANCE 1
+/// Шанс в секунду"«дёрнуть" температуру воздуха вокруг блюспейс-майнера
+#define BSM_AMBIENT_TEMP_CHAOS_PROB 2
 
 #define BSM_CORE_TEMP_OPTIMAL_LOW (T0C - 10)
 #define BSM_CORE_TEMP_OPTIMAL_HIGH (T0C + 10)
@@ -79,6 +81,7 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 	var/const/core_damage_updt_cooldown_time = 1 MINUTES
 
 	COOLDOWN_DECLARE(instability_cooldown)
+	var/bsm_rainbow_until = 0
 	var/static/list/instability_settings = list(
 		INSTABILITY_LIST_ADD(100, 10, "inst1", "#c5641e"),
 		INSTABILITY_LIST_ADD(50, 20, "inst2", "#c51e1e"),
@@ -208,6 +211,15 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 			MA.pixel_y += 2*(i-1)
 			. += MA
 
+	if(world.time < bsm_rainbow_until)
+		var/static/list/rainbow_prism_colors = list("#e40303", "#ff8c00", "#ffed00", "#008026", "#24408e", "#732982")
+		for(var/prism_color in rainbow_prism_colors)
+			var/mutable_appearance/prism = mutable_appearance(icon, "overlay-instability[suffix]")
+			prism.color = prism_color
+			prism.alpha = 130
+			prism.blend_mode = BLEND_ADD
+			. += prism
+
 	if(!(panel_open || bs_core))
 		return
 
@@ -249,8 +261,16 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 
 	if(instability_check(delta_time) && QDELETED(src))
 		return PROCESS_KILL
+	bsm_ambient_temperature_chaos(delta_time)
 	if(DT_PROB(BLUESPACE_MINER_SOUND_CHANCE, delta_time))
 		playsound(src, pick(GLOB.otherworld_sounds), 100, TRUE)
+		balloon_alert_to_viewers(pick(
+			"из машины исходят странные звуки...",
+			"блюспейс шепчет...",
+			"что-то дребезжит внутри...",
+			"слышен чужой гул...",
+			"искажение в голове от шума...",
+		))
 
 	var/datum/material/ore = pick(ore_rates)
 	var/datum/component/material_container/mat_container = materials.mat_container
@@ -272,6 +292,30 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 	var/env_temp = env.return_temperature()
 	if(env_temp < BSM_CORE_TEMP_OPTIMAL_LOW || env_temp > BSM_CORE_TEMP_OPTIMAL_HIGH)
 		return 2
+
+/// Случайно нагревает или охлаждает газ на 1–3 открытых тайлах рядом.
+/obj/machinery/mineral/bluespace_miner/proc/bsm_ambient_temperature_chaos(delta_time)
+	if(!DT_PROB(BSM_AMBIENT_TEMP_CHAOS_PROB, delta_time))
+		return
+	var/turf/center = get_turf(src)
+	if(!center)
+		return
+	var/list/open_turfs = list()
+	for(var/turf/open/O in range(2, center))
+		if(O.air)
+			open_turfs += O
+	if(!length(open_turfs))
+		return
+	var/touches = min(rand(1, 3), length(open_turfs))
+	for(var/i in 1 to touches)
+		var/turf/open/target = pick(open_turfs)
+		var/datum/gas_mixture/air = target.air
+		var/cur = air.return_temperature()
+		if(prob(50))
+			air.set_temperature(min(cur + rand(25, 180), 450 + T0C))
+		else
+			air.set_temperature(max(TCMB + 15, cur - rand(25, 140)))
+		target.air_update_turf()
 
 /obj/machinery/mineral/bluespace_miner/proc/zlevel_reg(unreg = FALSE)
 	if(unreg && registered_z && COOLDOWN_FINISHED(src, z_reg_cooldown))
@@ -302,6 +346,13 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 
 	return last_z_check
 
+/// Запись в `game.log` (`log_game`) и `message_admins` при срабатывании нестабильности блюспейс-майнера.
+/proc/bsm_log_instability(obj/machinery/mineral/bluespace_miner/machine, tier_description, event_description)
+	if(QDELETED(machine))
+		return
+	log_game("Bluespace miner instability ([tier_description]): [event_description] at [get_area_name(machine)] [COORD(machine)].")
+	message_admins(span_adminnotice("Bluespace miner instability ([tier_description]): [event_description] at [ADMIN_VERBOSEJMP(machine)]"))
+
 /obj/machinery/mineral/bluespace_miner/proc/instability_check(delta_time = 1)
 	if(!COOLDOWN_FINISHED(src, instability_cooldown))
 		return
@@ -322,12 +373,14 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 				return
 			var/datum/bsm_instability_effect/fx = new picked()
 			fx.trigger(src)
+			bsm_log_instability(src, "low", "[fx.type]")
 		if(2)
 			picked = pickweight(GLOB.bsm_medium_threat_pool)
 			if(!picked)
 				return
 			var/datum/bsm_instability_effect/fx = new picked()
 			fx.trigger(src)
+			bsm_log_instability(src, "medium", "[fx.type]")
 		if(3)
 			picked = pickweight(bsm_get_high_threat_pool())
 			if(!picked)
@@ -461,6 +514,7 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 #undef BLUESPACE_INSTABILITY_EVENT_RADIUS
 #undef INSTABILITY_ON_ZLEVEL_TO_EVENT
 #undef BLUESPACE_MINER_SOUND_CHANCE
+#undef BSM_AMBIENT_TEMP_CHAOS_PROB
 #undef BSM_CORE_TEMP_OPTIMAL_LOW
 #undef BSM_CORE_TEMP_OPTIMAL_HIGH
 

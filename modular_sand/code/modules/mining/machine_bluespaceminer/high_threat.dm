@@ -122,15 +122,19 @@
 /proc/bsm_fire_high_threat_pick(obj/machinery/mineral/bluespace_miner/machine, picked)
 	if(picked == BSM_HIGH_THREAT_METEOR)
 		bsm_spawn_meteor_at_miner(machine)
+		bsm_log_instability(machine, "high", "aimed meteor at miner")
 		return
 	if(picked == BSM_HIGH_THREAT_CORE_EXPLOSION)
 		bsm_catastrophic_miner_explosion(machine)
+		bsm_log_instability(machine, "high", "catastrophic miner explosion")
 		return
 	if(picked == BSM_HIGH_THREAT_SUPERMATTER_SWORD)
 		bsm_spawn_rare_weapon_from_instability(machine, /obj/item/melee/supermatter_sword)
+		bsm_log_instability(machine, "high", "spawned supermatter sword")
 		return
 	if(picked == BSM_HIGH_THREAT_PLASMA_RIFLE)
 		bsm_spawn_rare_weapon_from_instability(machine, /obj/item/gun/energy/pulse/destroyer)
+		bsm_log_instability(machine, "high", "spawned pulse destroyer")
 		return
 	if(picked == BSM_HIGH_THREAT_TEAR)
 		var/datum/round_event_control/anomaly/tear/tear_control = new()
@@ -140,10 +144,7 @@
 		var/turf/near_turf = get_safe_random_turf_near(machine)
 		tear_ev.spawn_location = near_turf
 		bsm_balloon_anomaly_from_miner(machine)
-		return
-	if(ispath(picked, /datum/bsm_instability_effect))
-		var/datum/bsm_instability_effect/effect = new picked()
-		effect.trigger(machine)
+		bsm_log_instability(machine, "high", "dimensional tear /datum/round_event/anomaly/tear")
 		return
 	var/datum/round_event_control/event_control = new picked()
 	var/datum/round_event/running_event = event_control.runEvent(FALSE, increase_occurrences = FALSE)
@@ -154,9 +155,14 @@
 		var/datum/round_event/anomaly/anomaly_ev = running_event
 		anomaly_ev.spawn_location = near_turf
 		bsm_balloon_anomaly_from_miner(machine)
+		bsm_log_instability(machine, "high", "anomaly event [event_control.type] (running [running_event.type])")
 	else if(istype(running_event, /datum/round_event/spawners))
 		var/datum/round_event/spawners/spawner_ev = running_event
 		spawner_ev.spawn_location = near_turf
+		bsm_log_instability(machine, "high", "spawners event [event_control.type] (running [running_event.type])")
 	else if(istype(running_event, /datum/round_event/portal_storm))
 		var/datum/round_event/portal_storm/ps_ev = running_event
 		ps_ev.anchor_turf = near_turf
+		bsm_log_instability(machine, "high", "portal storm [event_control.type] (running [running_event.type])")
+	else
+		bsm_log_instability(machine, "high", "round event [event_control.type] (running [running_event.type], unhandled branch)")

@@ -7,6 +7,8 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	/datum/bsm_instability_effect/low/xen_snark_chitter = 10,
 	/datum/bsm_instability_effect/low/portal_cake_rift = 10,
 	/datum/bsm_instability_effect/low/combine_scan_chirp = 10,
+	/datum/bsm_instability_effect/low/prism_rainbow = 5,
+	/datum/bsm_instability_effect/low/voids_embrace = 5,
 ))
 
 /datum/bsm_instability_effect/low
@@ -109,3 +111,31 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	play_bluespace_sparks(machine)
 	machine.balloon_alert_to_viewers("далёкий выстрел!")
 	machine.visible_message(span_notice("Сквозь шум блюспейса проступает выстрел."))
+
+/datum/bsm_instability_effect/low/prism_rainbow
+
+/datum/bsm_instability_effect/low/prism_rainbow/trigger(obj/machinery/mineral/bluespace_miner/machine)
+	var/turf/T = get_turf(machine)
+	if(!T)
+		return
+	play_bluespace_sparks(machine)
+	machine.bsm_rainbow_until = world.time + 1.4 SECONDS
+	machine.update_icon()
+	machine.balloon_alert_to_viewers("радужная вспышка!")
+	machine.visible_message(span_notice("Корпус [machine] на миг переливается всеми цветами — ослепительно, но безвредно."))
+
+/datum/bsm_instability_effect/low/voids_embrace
+
+/datum/bsm_instability_effect/low/voids_embrace/trigger(obj/machinery/mineral/bluespace_miner/machine)
+	var/turf/T = get_turf(machine)
+	if(!T)
+		return
+	playsound(T, 'sound/ambience/VoidsEmbrace.ogg', 72, TRUE, 6)
+	play_bluespace_sparks(machine)
+	for(var/i in 1 to 18)
+		new /obj/effect/temp_visual/heart(T)
+	if(machine.bs_core)
+		machine.bs_core.obj_integrity = min(machine.bs_core.obj_integrity + 10, machine.bs_core.max_integrity)
+		machine.update_icon()
+	machine.balloon_alert_to_viewers("объятия пустоты...")
+	machine.visible_message(span_notice("Вокруг [machine] взмывают призрачные сердца, а блюспейс-ядро на миг стабилизируется."))
