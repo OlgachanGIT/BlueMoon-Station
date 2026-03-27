@@ -1,39 +1,29 @@
-GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
+GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 
-// Configuration defines
 #define BLUESPACE_MINER_BONUS_MULT		CONFIG_GET(number/bluespaceminer_mult_output)
 #define BLUESPACE_MINER_CRYSTAL_TIER	CONFIG_GET(number/bluespaceminer_crystal_tier)
 #define TIME_TO_CORE_DESTROY_MINUTES	CONFIG_GET(number/bluespaceminer_core_work_time_minutes)
 #define TIME_TO_CORE_DESTROY 			(TIME_TO_CORE_DESTROY_MINUTES MINUTES)
-// Вносит частичку хаоса
 #define CORE_CHANSE_NO_DAMAGE			CONFIG_GET(number/bluespaceminer_core_work_chanse_no_damage)
 #define INSTABILITY_COOLDOWN_TIME		CONFIG_GET(number/bluespaceminer_instability_cooldown)
 
 #define CORE_INTEGRITY_PERCENT bs_core ? PERCENT(bs_core.obj_integrity / bs_core.max_integrity) : 0
-// Считаем урон в секунду, что бы разрушить ядро (базовое, если захотят сделать версию круче) в указанное время
 #define CORE_DAMAGE_PER_SECOND (round(((/obj/item/assembly/signaler/anomaly/bluespace::max_integrity SECONDS) / TIME_TO_CORE_DESTROY) * 10000)/10000)
 #define CORE_DAMAGE_DT(DT) (round(CORE_DAMAGE_PER_SECOND*DT*10000)/10000)
 
-// Сколько дает нестабильности БС майнер при работе
 #define BLUESPACE_MINER_INSTABILITY 10
 
-// Сколько нужно нестабильности на уровне, что бы майнеры стали производить аномалии (UI / шкала)
+#define BLUESPACE_INSTABILITY_EVENT_RADIUS 7
+
 #define INSTABILITY_ON_ZLEVEL_TO_EVENT 100
 
-// Шанс (в секунду) на playsound при работе
 #define BLUESPACE_MINER_SOUND_CHANCE 1
 
-// Сигнал при установке ядра
 #define CORE_INSERT_REG_SIGNAL RegisterSignal(bs_core, COMSIG_PARENT_QDELETING, PROC_REF(on_core_remove))
 
-// Названия для instability_settings
-/// Процент распада ядра, для уровня нестабильности
 #define INSTABILITY_SETTINGS_PERCENT "percent"
-/// Сколько процентов к нестабильности дает уровень
 #define INSTABILITY_SETTINGS_VALUE "instability"
-/// Суффикс для оверлея ядра. Если нужен стандартный вписать ""
 #define INSTABILITY_SETTINGS_CORE_ICON_STATE "add_core_state"
-/// Каким цветом будет текст экзамайна, при достижении уровня
 #define INSTABILITY_SETTINGS_EXAMINE_COLOR "examine_color"
 #define INSTABILITY_LIST_ADD(percent, instability, core_state, examine_color) list(\
 		INSTABILITY_SETTINGS_PERCENT = percent,\
@@ -59,7 +49,7 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 
 	var/obj/item/assembly/signaler/anomaly/bluespace/bs_core
 
-	var/registered_z = 0 //BLUEMOON ADD подтверждаем где бс майнер
+	var/registered_z = 0
 	COOLDOWN_DECLARE(z_reg_cooldown)
 	var/const/z_reg_cooldown_time = 20 SECONDS
 
@@ -80,17 +70,14 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 		)
 	var/datum/component/remote_materials/materials
 
-	var/multiplier = 0 //Multiplier by tier, has been made fair and everything
-	// Будет ли ядро получать урон? Для авеек и прочего
+	var/multiplier = 0
 	var/no_core_damage = FALSE
 
-	// Нет необходимости пересчитывать урон ядру постоянно, конфиг не меняется обычно. Так, что делаем КД и выносим в прок
 	var/static/core_damage_per_tick
 	COOLDOWN_DECLARE_STATIC(core_damage_updt_cooldown)
 	var/const/core_damage_updt_cooldown_time = 1 MINUTES
 
-	COOLDOWN_DECLARE_STATIC(instability_cooldown)
-	// ВАЖНО, что бы уровни нестабильности шли по убыванию percent: 90, 80, 70 и т.д.
+	COOLDOWN_DECLARE(instability_cooldown)
 	var/static/list/instability_settings = list(
 		INSTABILITY_LIST_ADD(60, 10, "inst1", "#c5641e"),
 		INSTABILITY_LIST_ADD(30, 20, "inst2", "#c51e1e"),
@@ -106,7 +93,6 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 
 	materials = AddComponent(/datum/component/remote_materials, "bsm", mapload)
 
-	// Set initial multiplier based on config
 	multiplier *= BLUESPACE_MINER_BONUS_MULT
 
 /obj/machinery/mineral/bluespace_miner/examine(mob/user)
@@ -183,7 +169,6 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 		ore_rates -= /datum/material/bluespace
 		ore_rates -= /datum/material/bananium
 
-	// Apply config multiplier here to not interfere with bluespace material check
 	multiplier *= BLUESPACE_MINER_BONUS_MULT
 
 /obj/machinery/mineral/bluespace_miner/deconstruct(disassembled)
@@ -195,10 +180,8 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 
 /obj/machinery/mineral/bluespace_miner/Destroy()
 	materials = null
-	//BLUEMOON ADD считаем бс майнеры на z уровне
 	if(registered_z)
 		SSmachines.bluespaceminer_by_zlevel[registered_z] -= src
-	//BLUEMOON ADD END
 	QDEL_NULL(bs_core)
 	return ..()
 
@@ -230,8 +213,7 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 	var/inst = clamp(get_instability_onzlevel(), 0, INSTABILITY_ON_ZLEVEL_TO_EVENT)
 
 	if(inst)
-		var/idx = min(5, floor(inst / (INSTABILITY_ON_ZLEVEL_TO_EVENT / 4)) + 1) // От 1 до 5. 5 только, когда inst == INSTABILITY_ON_ZLEVEL_TO_EVENT
-		// Не хочу копировать 5 оверлеев на 5 уровней. Если кто будет делать спрайт с большими отличиями, перепишите
+		var/idx = min(5, floor(inst / (INSTABILITY_ON_ZLEVEL_TO_EVENT / 4)) + 1)
 		for(var/i=1, i<=idx, i++)
 			var/mutable_appearance/MA = mutable_appearance(icon, "overlay-instability[suffix]", color = instability_overlay_colors[idx])
 			MA.pixel_y += 2*(i-1)
@@ -284,7 +266,6 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 		var/datum/round_event_control/anomaly/anomaly_bluespace/bluespace_anomaly = new/datum/round_event_control/anomaly/anomaly_bluespace
 		bluespace_anomaly.runEvent()
 
-	//BLUEMOON ADD END магический счётсчки неуспешных процессов
 	var/datum/material/ore = pick(ore_rates)
 	var/datum/component/material_container/mat_container = materials.mat_container
 	mat_container.bsm_insert(((ore_rates[ore] * 1000) * multiplier), ore)
@@ -295,8 +276,6 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 		core_damage_per_tick = CORE_DAMAGE_DT(delta_time)
 
 /obj/machinery/mineral/bluespace_miner/proc/zlevel_reg(unreg = FALSE)
-	// Ставим задержку только на выключение. При перебоях света, майнер 1 раз вычеркнется из списков, но повторное удаление произойдет по КД
-	// Даже если фактически машина опять будет не работать
 	if(unreg && registered_z && COOLDOWN_FINISHED(src, z_reg_cooldown))
 		COOLDOWN_START(src, z_reg_cooldown, z_reg_cooldown_time)
 		SSmachines.bluespaceminer_by_zlevel[registered_z] -= src
@@ -339,9 +318,10 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 
 	return last_z_check
 
-/// Срабатывание не чаще чем раз в `bluespaceminer_instability_cooldown` (дефолт 5 мин); без случайного броска — при пороге нестабильности сразу после ожидания.
 /obj/machinery/mineral/bluespace_miner/proc/instability_check(delta_time = 1)
 	if(!COOLDOWN_FINISHED(src, instability_cooldown))
+		return
+	if(!get_instability_level())
 		return
 
 	var/sector_instability = get_instability_onzlevel()
@@ -352,11 +332,6 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 	return TRUE
 
 /obj/machinery/mineral/bluespace_miner/proc/instability_event_start()
-
-	if(!z_check(TRUE))
-		explosion(get_turf(src), 0, 1, 5, flame_range = 5)
-		qdel(src)
-		return
 
 	var/inst = get_instability_onzlevel()
 	var/picked
@@ -463,6 +438,18 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 /obj/machinery/mineral/bluespace_miner/with_core/infinity
 	no_core_damage = TRUE
 
+/proc/get_safe_random_turf_near(atom/center, radius = BLUESPACE_INSTABILITY_EVENT_RADIUS)
+	var/turf/center_turf = get_turf(center)
+	if(!center_turf)
+		return null
+	var/list/candidates = list()
+	for(var/turf/T in range(radius, center_turf))
+		if(!is_blocked_turf(T, TRUE))
+			candidates += T
+	if(length(candidates))
+		return pick(candidates)
+	return center_turf
+
 //////////////////// material_container ////////////////////
 /datum/component/material_container/proc/bsm_insert(amt, datum/material/mat)
 	if(!istype(mat))
@@ -491,6 +478,7 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 #undef CORE_DAMAGE_DT
 
 #undef BLUESPACE_MINER_INSTABILITY
+#undef BLUESPACE_INSTABILITY_EVENT_RADIUS
 #undef INSTABILITY_ON_ZLEVEL_TO_EVENT
 #undef BLUESPACE_MINER_SOUND_CHANCE
 
@@ -500,6 +488,5 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)	//Miners locked by head ID swipes
 #undef INSTABILITY_SETTINGS_VALUE
 #undef INSTABILITY_SETTINGS_CORE_ICON_STATE
 #undef INSTABILITY_SETTINGS_EXAMINE_COLOR
-// #undef INSTABILITY_LIST_ADD Удаляется раньше, но я оставил тут, для наглядности
 
 #undef MINER_UPDATE_ICON

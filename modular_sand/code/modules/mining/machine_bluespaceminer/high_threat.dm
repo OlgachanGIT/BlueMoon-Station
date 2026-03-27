@@ -1,15 +1,16 @@
-/// Sector instability at or above BSM_INSTABILITY_TIER_HIGH: anomalies, portal storms, spawners, aimed meteors, core detonation.
+#define BSM_HIGH_WEIGHT_ANOMALY 10
+#define BSM_HIGH_WEIGHT_TEAR 10
+#define BSM_HIGH_WEIGHT_PORTAL 10
+#define BSM_HIGH_WEIGHT_SPAWNER 10
+#define BSM_HIGH_WEIGHT_METEOR 5
+#define BSM_HIGH_WEIGHT_CORE_EXPLOSION 15
+#define BSM_HIGH_WEIGHT_RARE_WEAPON 1
 
-#define BSM_HIGH_WEIGHT_ANOMALY 50
-#define BSM_HIGH_WEIGHT_PORTAL 25
-#define BSM_HIGH_WEIGHT_SPAWNER 20
-#define BSM_HIGH_WEIGHT_METEOR 15
-#define BSM_HIGH_WEIGHT_CORE_EXPLOSION 12
-
-/// Marker for aimed meteor in the high-tier pickweight list (not a typepath).
 #define BSM_HIGH_THREAT_METEOR "bsm_high_threat_aimed_meteor"
-/// Cascading bluespace failure: warning, delay, then explosion (same flow as /obj/machinery/vending/inteq_vendomat wrench on station).
 #define BSM_HIGH_THREAT_CORE_EXPLOSION "bsm_high_threat_core_explosion"
+#define BSM_HIGH_THREAT_SUPERMATTER_SWORD "bsm_high_threat_supermatter_sword"
+#define BSM_HIGH_THREAT_PLASMA_RIFLE "bsm_high_threat_plasma_rifle"
+#define BSM_HIGH_THREAT_TEAR "bsm_high_threat_dimensional_tear"
 
 /proc/bsm_get_high_threat_pool()
 	var/static/list/pool
@@ -18,6 +19,7 @@
 	pool = list()
 	for(var/anom_type in subtypesof(/datum/round_event_control/anomaly))
 		pool[anom_type] = BSM_HIGH_WEIGHT_ANOMALY
+	pool[/datum/round_event_control/anomaly/tear] = BSM_HIGH_WEIGHT_TEAR
 	var/static/list/portal_storms = list(
 		/datum/round_event_control/portal_storm_inteq,
 		/datum/round_event_control/portal_storm_narsie,
@@ -32,7 +34,21 @@
 		pool[spawner_path] = BSM_HIGH_WEIGHT_SPAWNER
 	pool[BSM_HIGH_THREAT_METEOR] = BSM_HIGH_WEIGHT_METEOR
 	pool[BSM_HIGH_THREAT_CORE_EXPLOSION] = BSM_HIGH_WEIGHT_CORE_EXPLOSION
+	pool[BSM_HIGH_THREAT_SUPERMATTER_SWORD] = BSM_HIGH_WEIGHT_RARE_WEAPON
+	pool[BSM_HIGH_THREAT_PLASMA_RIFLE] = BSM_HIGH_WEIGHT_RARE_WEAPON
 	return pool
+
+/proc/bsm_spawn_rare_weapon_from_instability(obj/machinery/mineral/bluespace_miner/machine, obj/item/spawn_type)
+	if(QDELETED(machine) || !spawn_type)
+		return
+	var/turf/drop = get_turf(machine)
+	if(!drop)
+		return
+	playsound(machine, 'sound/effects/bamf.ogg', 72, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+	do_sparks(4, TRUE, machine)
+	var/obj/item/loot = new spawn_type(drop)
+	loot.forceMove(drop)
+	machine.visible_message(span_bolddanger("Реальность рвётся — из-под [machine] вылетает [loot]!"))
 
 /proc/bsm_spawn_meteor_at_miner(obj/machinery/mineral/bluespace_miner/machine)
 	var/turf/target = machine ? get_turf(machine) : null
@@ -64,7 +80,6 @@
 	var/meteor_type = pickweight(GLOB.meteors_threatening)
 	new meteor_type(pickedstart, target)
 
-/// Announced delayed detonation; mirrors inteq_vendomat: alert + beep + sparks, then explosion after 2s.
 /proc/bsm_catastrophic_miner_explosion(obj/machinery/mineral/bluespace_miner/machine)
 	if(QDELETED(machine))
 		return
@@ -91,31 +106,18 @@
 	if(!T)
 		qdel(machine)
 		return
-	// Same radii as inteq_vendomat station wrench trap.
 	explosion(T, 2, 4, 5, 8)
 	if(!QDELETED(machine))
 		qdel(machine)
 
-/// Turf in the same area as the bluespace miner (mining "arena") for events that support spawn_location.
-/proc/bsm_spawner_turf_near_miner(obj/machinery/mineral/bluespace_miner/machine)
-	var/turf/center = get_turf(machine)
-	if(!center)
-		return null
-	var/area/mine_area = get_area(center)
-	if(!mine_area)
-		return center
-	var/datum/anomaly_placer/placer = new()
-	var/list/valid_turfs = list()
-	for(var/turf/try_turf as anything in get_area_turfs(mine_area))
-		if(!placer.is_valid_destination(try_turf))
-			continue
-		valid_turfs += try_turf
-	if(length(valid_turfs))
-		return pick(valid_turfs)
-	for(var/turf/T in range(3, center))
-		if(placer.is_valid_destination(T))
-			return T
-	return center
+/proc/bsm_balloon_anomaly_from_miner(obj/machinery/mineral/bluespace_miner/machine)
+	if(QDELETED(machine))
+		return
+	machine.balloon_alert_to_viewers(pick(
+		"аномалия из разлома!",
+		"искажение поля!",
+		"блюспейс трещит!",
+	))
 
 /proc/bsm_fire_high_threat_pick(obj/machinery/mineral/bluespace_miner/machine, picked)
 	if(picked == BSM_HIGH_THREAT_METEOR)
@@ -124,12 +126,37 @@
 	if(picked == BSM_HIGH_THREAT_CORE_EXPLOSION)
 		bsm_catastrophic_miner_explosion(machine)
 		return
+	if(picked == BSM_HIGH_THREAT_SUPERMATTER_SWORD)
+		bsm_spawn_rare_weapon_from_instability(machine, /obj/item/melee/supermatter_sword)
+		return
+	if(picked == BSM_HIGH_THREAT_PLASMA_RIFLE)
+		bsm_spawn_rare_weapon_from_instability(machine, /obj/item/gun/energy/pulse/destroyer)
+		return
+	if(picked == BSM_HIGH_THREAT_TEAR)
+		var/datum/round_event_control/anomaly/tear/tear_control = new()
+		var/datum/round_event/anomaly/tear/tear_ev = tear_control.runEvent(FALSE, increase_occurrences = FALSE)
+		if(!tear_ev)
+			return
+		var/turf/near_turf = get_safe_random_turf_near(machine)
+		tear_ev.spawn_location = near_turf
+		bsm_balloon_anomaly_from_miner(machine)
+		return
 	if(ispath(picked, /datum/bsm_instability_effect))
 		var/datum/bsm_instability_effect/effect = new picked()
 		effect.trigger(machine)
 		return
 	var/datum/round_event_control/event_control = new picked()
 	var/datum/round_event/running_event = event_control.runEvent(FALSE, increase_occurrences = FALSE)
-	if(picked == /datum/round_event_control/spawners/nether && istype(running_event, /datum/round_event/spawners))
-		var/datum/round_event/spawners/spawner_event = running_event
-		spawner_event.spawn_location = bsm_spawner_turf_near_miner(machine)
+	if(!running_event)
+		return
+	var/turf/near_turf = get_safe_random_turf_near(machine)
+	if(istype(running_event, /datum/round_event/anomaly))
+		var/datum/round_event/anomaly/anomaly_ev = running_event
+		anomaly_ev.spawn_location = near_turf
+		bsm_balloon_anomaly_from_miner(machine)
+	else if(istype(running_event, /datum/round_event/spawners))
+		var/datum/round_event/spawners/spawner_ev = running_event
+		spawner_ev.spawn_location = near_turf
+	else if(istype(running_event, /datum/round_event/portal_storm))
+		var/datum/round_event/portal_storm/ps_ev = running_event
+		ps_ev.anchor_turf = near_turf

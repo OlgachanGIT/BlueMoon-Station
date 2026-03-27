@@ -1,6 +1,3 @@
-/// Sector instability below BSM_INSTABILITY_TIER_MEDIUM: harmless / helpful effects only.
-/// Easter eggs: sounds from modular_bluemoon (Black Mesa / HL-style assets); flavor references HL2, Portal, Xen, Combine.
-
 GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	/datum/bsm_instability_effect/low/plush_delight = 5,
 	/datum/bsm_instability_effect/low/harmless_sparkle = 10,
@@ -14,7 +11,6 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 
 /datum/bsm_instability_effect/low
 
-/// Как в admin topic (create_object): Repulse + quantum spark_spread.
 /datum/bsm_instability_effect/low/proc/play_bluespace_sparks(obj/machinery/mineral/bluespace_miner/machine)
 	var/turf/T = get_turf(machine)
 	if(!T)
@@ -47,7 +43,6 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	machine.balloon_alert_to_viewers("безобидные искры!")
 	machine.visible_message(span_notice("Вокруг [machine] на миг вспыхивают безобидные искры блюспейса."))
 
-/// Xen lab ambience — HL / Black Mesa «другой мир», текст — про λ и HL2-лор безопасности.
 /datum/bsm_instability_effect/low/lambda_resonance
 
 /datum/bsm_instability_effect/low/lambda_resonance/trigger(obj/machinery/mineral/bluespace_miner/machine)
@@ -59,7 +54,6 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	machine.balloon_alert_to_viewers("λ-гул из ниоткуда!")
 	machine.visible_message(span_notice("Слышен гул, будто λ-резонанс из чужого отчёта — ЦК бы не оценило, но вреда ноль."))
 
-/// Mesa crowbar strike — отсылка к Freeman / City 17 (HL2).
 /datum/bsm_instability_effect/low/crowbar_echo
 
 /datum/bsm_instability_effect/low/crowbar_echo/trigger(obj/machinery/mineral/bluespace_miner/machine)
@@ -71,7 +65,6 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	machine.balloon_alert_to_viewers("стук монтировки!")
 	machine.visible_message(span_notice("Где-то в шуме блюспейса проступает стук монтировки по металлу."))
 
-/// Vortigaunt alert sting — «союзники» из другой вселенной (HL2).
 /datum/bsm_instability_effect/low/vortigaunt_whisper
 
 /datum/bsm_instability_effect/low/vortigaunt_whisper/trigger(obj/machinery/mineral/bluespace_miner/machine)
@@ -83,7 +76,6 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	machine.balloon_alert_to_viewers("чужой голос...")
 	machine.visible_message(span_notice("Искажение шепчет чужой голос — не вредит, но ощущение, будто неизвестный союзник кивнул из-за завесы."))
 
-/// Snark — HL1/Xen «врединка», только звук и текст.
 /datum/bsm_instability_effect/low/xen_snark_chitter
 
 /datum/bsm_instability_effect/low/xen_snark_chitter/trigger(obj/machinery/mineral/bluespace_miner/machine)
@@ -95,7 +87,6 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	machine.balloon_alert_to_viewers("треск снарка?")
 	machine.visible_message(span_notice("Из разлома доносится треск мелкой твари с другого пласта реальности — она явно не добралась до вас."))
 
-/// Portal — кусок торта; торт не ложь на этот раз.
 /datum/bsm_instability_effect/low/portal_cake_rift
 
 /datum/bsm_instability_effect/low/portal_cake_rift/trigger(obj/machinery/mineral/bluespace_miner/machine)
@@ -108,7 +99,6 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	machine.balloon_alert_to_viewers("торт из разлома!")
 	machine.visible_message(span_notice("Блюспейс-майнер выдавливает ломтик торта. Протокол испытаний Aperture неприменим — сладкое настоящее."))
 
-/// Combine / HL2 — короткий «далёкий» выстрел, как эхо патруля.
 /datum/bsm_instability_effect/low/combine_scan_chirp
 
 /datum/bsm_instability_effect/low/combine_scan_chirp/trigger(obj/machinery/mineral/bluespace_miner/machine)

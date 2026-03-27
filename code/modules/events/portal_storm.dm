@@ -163,6 +163,8 @@
 	var/number_of_hostiles
 	var/mutable_appearance/storm
 	var/triggersound
+	/// Если задан (например, БС-майнером), порталы и эффекты привязываются к этой зоне вместо станции
+	var/turf/anchor_turf
 
 /datum/round_event/portal_storm/setup()
 	storm = mutable_appearance('icons/obj/tesla_engine/energy_ball.dmi', "energy_ball_fast", FLY_LAYER)
@@ -177,10 +179,16 @@
 		number_of_hostiles += hostile_types[hostile]
 
 	while(number_of_bosses > boss_spawn.len)
-		boss_spawn += get_safe_random_station_turf() //BLUEMOON CHANGES (WAS - get_random_station_turf)
+		if(anchor_turf)
+			boss_spawn += get_safe_random_turf_near(anchor_turf)
+		else
+			boss_spawn += get_safe_random_station_turf() //BLUEMOON CHANGES (WAS - get_random_station_turf)
 
 	while(number_of_hostiles > hostiles_spawn.len)
-		hostiles_spawn += get_safe_random_station_turf() //BLUEMOON CHANGES (WAS - get_random_station_turf)
+		if(anchor_turf)
+			hostiles_spawn += get_safe_random_turf_near(anchor_turf)
+		else
+			hostiles_spawn += get_safe_random_station_turf() //BLUEMOON CHANGES (WAS - get_random_station_turf)
 
 	next_boss_spawn = start_when + CEILING(2 * number_of_hostiles / number_of_bosses, 1)
 
@@ -191,12 +199,23 @@
 	set waitfor = FALSE
 	sound_to_playing_players('sound/magic/lightning_chargeup.ogg')
 	sleep(80)
-	priority_announce("На [station_name()] зафиксирована крупная блюспейс-аномалия. Приготовьтесь к столкновению с угрозами.", "Центральное Командование, Отдел Работы с Реальностью", triggersound)
+	var/announce_body
+	if(anchor_turf)
+		var/area/impact = get_area(anchor_turf)
+		var/area_name = impact?.name || "неизвестной зоны"
+		if(is_station_level(anchor_turf.z))
+			announce_body = "На [station_name()], в районе [area_name], зафиксирована крупная блюспейс-аномалия. Источник — локальная нестабильность. Приготовьтесь к столкновению с угрозами."
+		else
+			announce_body = "Зафиксирована крупная блюспейс-аномалия в районе [area_name] на внешнем объекте. Источник — локальная нестабильность. Приготовьтесь к столкновению с угрозами."
+	else
+		announce_body = "На [station_name()] зафиксирована крупная блюспейс-аномалия. Приготовьтесь к столкновению с угрозами."
+	priority_announce(announce_body, "Центральное Командование, Отдел Работы с Реальностью", triggersound)
 	sleep(20)
 	sound_to_playing_players('sound/magic/lightningbolt.ogg')
 
 /datum/round_event/portal_storm/tick()
-	spawn_effects(get_safe_random_station_turf()) //BLUEMOON CHANGES (WAS - get_random_station_turf)
+	var/turf/fx_turf = anchor_turf ? get_safe_random_turf_near(anchor_turf) : get_safe_random_station_turf()
+	spawn_effects(fx_turf) //BLUEMOON CHANGES (WAS - get_random_station_turf)
 
 	if(spawn_hostile())
 		var/type = safepick(hostile_types)
