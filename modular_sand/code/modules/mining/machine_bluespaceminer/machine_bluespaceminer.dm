@@ -21,6 +21,9 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 
 #define BSM_CORE_TEMP_OPTIMAL_LOW (T0C - 10)
 #define BSM_CORE_TEMP_OPTIMAL_HIGH (T0C + 10)
+/// Номинальное давление вокруг майнера (кПа); вне ±BSM_CORE_PRESSURE_TOLERANCE_KPA — двойной износ ядра
+#define BSM_CORE_PRESSURE_NOMINAL_KPA 101.28
+#define BSM_CORE_PRESSURE_TOLERANCE_KPA 50
 
 #define CORE_INSERT_REG_SIGNAL RegisterSignal(bs_core, COMSIG_PARENT_QDELETING, PROC_REF(on_core_remove))
 
@@ -105,12 +108,13 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 
 		var/list/display_list = list("Статус дисплей показывает:")
 		display_list += "Эффективность: <b>[PERCENT(multiplier)]%</b>. \
-		Добыча Bluespace кристаллов: <b>[multiplier >= BLUESPACE_MINER_CRYSTAL_TIER ? span_green("Активна") : span_danger("Неактивна")]</b>"
+		Добыча блюспейс-кристаллов: <b>[multiplier >= BLUESPACE_MINER_CRYSTAL_TIER ? span_green("Активна") : span_danger("Неактивна")]</b>"
 		if(no_core_damage)
 			display_list += "Установлен [span_bold(span_green("стабилизатор"))], ядро [span_bold(span_green("не будет"))] повреждаться при работе."
 		else
 			display_list += "Ожидаемое время работы целого ядра <b>~[TIME_TO_CORE_DESTROY_MINUTES]</b> минут."
 			display_list += "Рекомендуемая температура вокруг майнера: от <b>−10°C</b> до <b>+10°C</b>. Ниже или выше — ядро изнашивается <b>в два раза быстрее</b>."
+			display_list += "Рекомендуемое давление: около <b>[BSM_CORE_PRESSURE_NOMINAL_KPA] кПа</b> (±<b>[BSM_CORE_PRESSURE_TOLERANCE_KPA] кПа</b>). Сильнее отклонение — ядро изнашивается <b>в два раза быстрее</b> (умножается с температурой)."
 		if(bs_core)
 			var/list/inst_pattern = LAZYACCESS(instability_settings, get_instability_level())
 			var/percent_core_integrity_text = span_bold("[CORE_INTEGRITY_PERCENT]%")
@@ -137,7 +141,7 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 	if(!bs_core)
 		. += span_warning("Bluespace ядро не установлено, без него машина не будет работать.")
 	if(on_hold())
-		. += span_warning("Все майнеры на станции отключены, пожалуйста свяжитесь с командованием.")
+		. += span_warning("Все майнеры на станции отключены; пожалуйста, свяжитесь с командованием.")
 	if(!anchored)
 		. += span_warning("Машина не будет работать, пока не будет надежно прикреплена к полу.")
 	if(!materials?.silo)
@@ -211,15 +215,6 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 			MA.pixel_y += 2*(i-1)
 			. += MA
 
-	if(world.time < bsm_rainbow_until)
-		var/static/list/rainbow_prism_colors = list("#e40303", "#ff8c00", "#ffed00", "#008026", "#24408e", "#732982")
-		for(var/prism_color in rainbow_prism_colors)
-			var/mutable_appearance/prism = mutable_appearance(icon, "overlay-instability[suffix]")
-			prism.color = prism_color
-			prism.alpha = 130
-			prism.blend_mode = BLEND_ADD
-			. += prism
-
 	if(!(panel_open || bs_core))
 		return
 
@@ -233,6 +228,16 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 
 	if(panel_open)
 		. += mutable_appearance(icon, "overlay-maintenance[suffix]")
+
+	// Rainbow prism must sit above overlay-core or the core sprite hides it entirely.
+	if(world.time < bsm_rainbow_until)
+		var/static/list/rainbow_prism_colors = list("#e40303", "#ff8c00", "#ffed00", "#008026", "#24408e", "#732982")
+		for(var/prism_color in rainbow_prism_colors)
+			var/mutable_appearance/prism = mutable_appearance(icon, "overlay-instability[suffix]")
+			prism.color = prism_color
+			prism.alpha = 130
+			prism.blend_mode = BLEND_ADD
+			. += prism
 
 /obj/machinery/mineral/bluespace_miner/attackby(obj/item/I, mob/living/user, params)
 	if(bs_core || !istype(I, ANOMALY_CORE_BLUESPACE))
@@ -256,8 +261,8 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 		return
 
 	if(!no_core_damage && !DT_PROB(CORE_CHANSE_NO_DAMAGE, delta_time))
-		var/temp_mult = get_bs_core_temp_damage_multiplier()
-		bs_core.take_damage(core_damage_per_tick * temp_mult, sound_effect = FALSE)
+		var/env_damage_mult = get_bs_core_temp_damage_multiplier() * get_bs_core_pressure_damage_multiplier()
+		bs_core.take_damage(core_damage_per_tick * env_damage_mult, sound_effect = FALSE)
 
 	if(instability_check(delta_time) && QDELETED(src))
 		return PROCESS_KILL
@@ -291,6 +296,18 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 		return
 	var/env_temp = env.return_temperature()
 	if(env_temp < BSM_CORE_TEMP_OPTIMAL_LOW || env_temp > BSM_CORE_TEMP_OPTIMAL_HIGH)
+		return 2
+
+/obj/machinery/mineral/bluespace_miner/proc/get_bs_core_pressure_damage_multiplier()
+	. = 1
+	var/turf/T = get_turf(src)
+	if(!T)
+		return
+	var/datum/gas_mixture/env = T.return_air()
+	if(!env)
+		return
+	var/pressure_kpa = env.return_pressure()
+	if(pressure_kpa < BSM_CORE_PRESSURE_NOMINAL_KPA - BSM_CORE_PRESSURE_TOLERANCE_KPA || pressure_kpa > BSM_CORE_PRESSURE_NOMINAL_KPA + BSM_CORE_PRESSURE_TOLERANCE_KPA)
 		return 2
 
 /// Случайно нагревает или охлаждает газ на 1–3 открытых тайлах рядом.
@@ -517,6 +534,8 @@ GLOBAL_VAR_INIT(bsminers_lock, FALSE)
 #undef BSM_AMBIENT_TEMP_CHAOS_PROB
 #undef BSM_CORE_TEMP_OPTIMAL_LOW
 #undef BSM_CORE_TEMP_OPTIMAL_HIGH
+#undef BSM_CORE_PRESSURE_NOMINAL_KPA
+#undef BSM_CORE_PRESSURE_TOLERANCE_KPA
 
 #undef CORE_INSERT_REG_SIGNAL
 

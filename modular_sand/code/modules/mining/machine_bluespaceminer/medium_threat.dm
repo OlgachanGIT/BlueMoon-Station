@@ -1,11 +1,11 @@
 GLOBAL_LIST_INIT(bsm_medium_threat_pool, list(
-	/datum/bsm_instability_effect/medium/plasma_burp = 45,
-	/datum/bsm_instability_effect/medium/nitrogen_burp = 45,
-	/datum/bsm_instability_effect/medium/co2_vent = 28,
-	/datum/bsm_instability_effect/medium/water_vapor_gust = 22,
-	/datum/bsm_instability_effect/medium/cold_snap = 24,
-	/datum/bsm_instability_effect/medium/nitrous_whiff = 14,
-	/datum/bsm_instability_effect/medium/pressure_ping = 28,
+	/datum/bsm_instability_effect/medium/plasma_burp = 5,
+	/datum/bsm_instability_effect/medium/nitrogen_burp = 10,
+	/datum/bsm_instability_effect/medium/co2_vent = 10,
+	/datum/bsm_instability_effect/medium/water_vapor_gust = 10,
+	/datum/bsm_instability_effect/medium/cold_snap = 10,
+	/datum/bsm_instability_effect/medium/nitrous_whiff = 10,
+	/datum/bsm_instability_effect/medium/pressure_ping = 5,
 ))
 
 /datum/bsm_instability_effect/medium
@@ -17,6 +17,7 @@ GLOBAL_LIST_INIT(bsm_medium_threat_pool, list(
 	if(!center)
 		return
 	playsound(machine, 'sound/effects/bamf.ogg', 60, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+	machine.balloon_alert_to_viewers("плазма!")
 	machine.visible_message(span_warning("Блюспейс-майнер срыгивает облако плазмы!"))
 	for(var/turf/open/open_turf in range(1, center))
 		if(!open_turf.air)
@@ -31,6 +32,7 @@ GLOBAL_LIST_INIT(bsm_medium_threat_pool, list(
 	if(!center)
 		return
 	playsound(machine, 'sound/effects/bamf.ogg', 55, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+	machine.balloon_alert_to_viewers("холодный азот!")
 	machine.visible_message(span_warning("Из блюспейс-майнера вырывается холодный азот!"))
 	for(var/turf/open/open_turf in range(1, center))
 		if(!open_turf.air)
@@ -45,6 +47,7 @@ GLOBAL_LIST_INIT(bsm_medium_threat_pool, list(
 	if(!center)
 		return
 	playsound(machine, 'sound/effects/bamf.ogg', 48, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+	machine.balloon_alert_to_viewers("выброс CO₂!")
 	machine.visible_message(span_warning("Блюспейс-майнер выпускает углекислый газ!"))
 	for(var/turf/open/open_turf in range(1, center))
 		if(!open_turf.air)
@@ -59,6 +62,7 @@ GLOBAL_LIST_INIT(bsm_medium_threat_pool, list(
 	if(!center)
 		return
 	playsound(machine, 'sound/effects/bamf.ogg', 42, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+	machine.balloon_alert_to_viewers("пар!")
 	machine.visible_message(span_warning("Вокруг [machine] на секунду сгущается пар!"))
 	for(var/turf/open/open_turf in range(1, center))
 		if(!open_turf.air)
@@ -72,12 +76,13 @@ GLOBAL_LIST_INIT(bsm_medium_threat_pool, list(
 	var/turf/center = get_turf(machine)
 	if(!center)
 		return
-	playsound(machine, 'sound/effects/glassbr1.ogg', 52, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
-	machine.visible_message(span_warning("Блюспейс разряжается — воздух вокруг [machine] резко охлаждается!"))
-	for(var/turf/open/open_turf in range(2, center))
+	playsound(machine, 'sound/effects/glassbr1.ogg', 72, TRUE, MEDIUM_RANGE_SOUND_EXTRARANGE)
+	machine.balloon_alert_to_viewers("криогенный скачок!")
+	machine.visible_message(span_warning("Блюспейс обрушивается в криогенный разряд — воздух вокруг [machine] на мгновение проваливается ниже нуля!"))
+	for(var/turf/open/open_turf in range(3, center))
 		if(!open_turf.air)
 			continue
-		var/new_temp = max(TCMB + 15, open_turf.air.return_temperature() - rand(35, 60))
+		var/new_temp = max(TCMB + 5, open_turf.air.return_temperature() - rand(75, 130))
 		open_turf.air.set_temperature(new_temp)
 		open_turf.air_update_turf()
 
@@ -88,6 +93,7 @@ GLOBAL_LIST_INIT(bsm_medium_threat_pool, list(
 	if(!center)
 		return
 	playsound(machine, 'sound/effects/bamf.ogg', 40, TRUE, SHORT_RANGE_SOUND_EXTRARANGE)
+	machine.balloon_alert_to_viewers("сладкий газ...")
 	machine.visible_message(span_warning("Сладковатый запах — в разломе мелькает закись азота!"))
 	for(var/turf/open/open_turf in range(1, center))
 		if(!open_turf.air)
@@ -101,6 +107,7 @@ GLOBAL_LIST_INIT(bsm_medium_threat_pool, list(
 	var/turf/center = get_turf(machine)
 	if(!center)
 		return
+	machine.balloon_alert_to_viewers("скачок давления!")
 	machine.visible_message(span_warning("Скачок давления и ослепительная вспышка от [machine]!"))
 	do_sparks(rand(4, 8), FALSE, machine)
 	playsound(center, 'sound/weapons/flashbang.ogg', 90, TRUE, 8, 0.9)
