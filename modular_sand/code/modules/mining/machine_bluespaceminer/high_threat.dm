@@ -4,7 +4,7 @@
 #define BSM_HIGH_WEIGHT_SPAWNER 10
 #define BSM_HIGH_WEIGHT_METEOR 5
 #define BSM_HIGH_WEIGHT_CORE_EXPLOSION 15
-#define BSM_HIGH_WEIGHT_RARE_WEAPON 1
+#define BSM_HIGH_WEIGHT_RARE_ITEM 1
 
 #define BSM_HIGH_THREAT_METEOR "bsm_high_threat_aimed_meteor"
 #define BSM_HIGH_THREAT_CORE_EXPLOSION "bsm_high_threat_core_explosion"
@@ -34,8 +34,8 @@
 		pool[spawner_path] = BSM_HIGH_WEIGHT_SPAWNER
 	pool[BSM_HIGH_THREAT_METEOR] = BSM_HIGH_WEIGHT_METEOR
 	pool[BSM_HIGH_THREAT_CORE_EXPLOSION] = BSM_HIGH_WEIGHT_CORE_EXPLOSION
-	pool[BSM_HIGH_THREAT_SUPERMATTER_SWORD] = BSM_HIGH_WEIGHT_RARE_WEAPON
-	pool[BSM_HIGH_THREAT_PLASMA_RIFLE] = BSM_HIGH_WEIGHT_RARE_WEAPON
+	pool[BSM_HIGH_THREAT_SUPERMATTER_SWORD] = BSM_HIGH_WEIGHT_RARE_ITEM
+	pool[BSM_HIGH_THREAT_PLASMA_RIFLE] = BSM_HIGH_WEIGHT_RARE_ITEM
 	return pool
 
 /proc/bsm_spawn_rare_weapon_from_instability(obj/machinery/mineral/bluespace_miner/machine, obj/item/spawn_type)
@@ -118,7 +118,6 @@
 		"искажение поля!",
 		"блюспейс трещит!",
 	))
-
 /proc/bsm_fire_high_threat_pick(obj/machinery/mineral/bluespace_miner/machine, picked)
 	if(picked == BSM_HIGH_THREAT_METEOR)
 		bsm_spawn_meteor_at_miner(machine)

@@ -4,8 +4,12 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	/datum/bsm_instability_effect/low/crowbar_echo = 10,
 	/datum/bsm_instability_effect/low/xen_snark_chitter = 10,
 	/datum/bsm_instability_effect/low/portal_cake_rift = 10,
-	/datum/bsm_instability_effect/low/prism_rainbow = 5,
 	/datum/bsm_instability_effect/low/voids_embrace = 5,
+	/datum/bsm_instability_effect/low/bluespace_snack = 10,
+	/datum/bsm_instability_effect/low/bluespace_drink = 10,
+	/datum/bsm_instability_effect/low/bluespace_syringe = 10,
+	/datum/bsm_instability_effect/low/beer_keg_rift = 5,
+	/datum/bsm_instability_effect/low/gondola_peace = 10,
 ))
 
 /datum/bsm_instability_effect/low
@@ -80,18 +84,73 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	machine.balloon_alert_to_viewers("Still Alive, huh?")
 	machine.visible_message(span_notice("Блюспейс-майнер выдавливает ломтик торта. Протокол испытаний Aperture неприменим — сладкое настоящее."))
 
+/datum/bsm_instability_effect/low/bluespace_snack
+
+/datum/bsm_instability_effect/low/bluespace_snack/trigger(obj/machinery/mineral/bluespace_miner/machine)
+	var/turf/drop = get_turf(machine)
+	if(!drop)
+		return
+	var/food_path = get_random_food()
+	if(!food_path)
+		return
+	new food_path(drop)
+	play_bluespace_sparks(machine)
+	machine.balloon_alert_to_viewers("еда из разлома!")
+	machine.visible_message(span_notice("Из блюспейс-разлома выпадает еда. Можно попробовать."))
+
+/datum/bsm_instability_effect/low/bluespace_drink
+
+/datum/bsm_instability_effect/low/bluespace_drink/trigger(obj/machinery/mineral/bluespace_miner/machine)
+	var/turf/drop = get_turf(machine)
+	if(!drop)
+		return
+	var/drink_path = get_random_drink()
+	if(!drink_path)
+		return
+	new drink_path(drop)
+	play_bluespace_sparks(machine)
+	machine.balloon_alert_to_viewers("напиток из разлома!")
+	machine.visible_message(span_notice("Рядом с [machine] проявился стакан с жидкостью."))
+
+/datum/bsm_instability_effect/low/bluespace_syringe
+
+/datum/bsm_instability_effect/low/bluespace_syringe/trigger(obj/machinery/mineral/bluespace_miner/machine)
+	var/turf/drop = get_turf(machine)
+	if(!drop)
+		return
+	var/drug_path = get_random_drug()
+	if(!drug_path)
+		return
+	new drug_path(drop)
+	play_bluespace_sparks(machine)
+	machine.balloon_alert_to_viewers("шприц из разлома!")
+	machine.visible_message(span_notice("На пол падает шприц — содержимое лучше не принимать."))
+
+/datum/bsm_instability_effect/low/beer_keg_rift
+
+/datum/bsm_instability_effect/low/beer_keg_rift/trigger(obj/machinery/mineral/bluespace_miner/machine)
+	var/turf/drop = get_turf(machine)
+	if(!drop)
+		return
+	new /obj/structure/reagent_dispensers/beerkeg(drop)
+	play_bluespace_sparks(machine)
+	machine.balloon_alert_to_viewers("кега?!")
+	machine.visible_message(span_notice("Блюспейс вываливает пивную кегу — праздник близко."))
+
+/datum/bsm_instability_effect/low/gondola_peace
+
+/datum/bsm_instability_effect/low/gondola_peace/trigger(obj/machinery/mineral/bluespace_miner/machine)
+	var/turf/drop = get_turf(machine)
+	if(!drop)
+		return
+	var/mob/living/simple_animal/pet/gondola/spawned_gondola = new /mob/living/simple_animal/pet/gondola(drop)
+	play_bluespace_sparks(machine)
+	machine.balloon_alert_to_viewers("гондола...")
+	machine.visible_message(span_notice("Из разлома выходит гондола и молча принимает мир таким, какой он есть."))
+	notify_ghosts("Появилась гондола из блюспейс-разлома в [get_area_name(drop)]! Нажмите на уведомление или кликните по ней как призрак, чтобы войти.", source = spawned_gondola, action = NOTIFY_ATTACK, flashwindow = FALSE, ignore_dnr_observers = TRUE, header = "Гондола")
+
 #define BSM_LOW_EFFECT_DURATION 20 SECONDS
 #define BSM_VOIDS_HEART_PULSES 40
-
-/datum/bsm_instability_effect/low/prism_rainbow/trigger(obj/machinery/mineral/bluespace_miner/machine)
-	var/turf/T = get_turf(machine)
-	if(!T)
-		return
-	play_bluespace_sparks(machine)
-	machine.bsm_rainbow_until = world.time + BSM_LOW_EFFECT_DURATION
-	machine.update_icon()
-	machine.balloon_alert_to_viewers("радужная вспышка!")
-	machine.visible_message(span_notice("Корпус [machine] долго переливается всеми цветами — ослепительно, но безвредно."))
 
 /datum/bsm_instability_effect/low/voids_embrace/trigger(obj/machinery/mineral/bluespace_miner/machine)
 	var/turf/T = get_turf(machine)
