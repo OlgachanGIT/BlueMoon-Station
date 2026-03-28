@@ -97,10 +97,13 @@ SUBSYSTEM_DEF(security_level)
 							SSshuttle.emergency.modTimer(1.5)
 				GLOB.security_level = SEC_LEVEL_VIOLET
 				var/obj/machinery/computer/communications/C = locate() in GLOB.machines
-				if(C)
-					C.post_status("alert", "violetalert")
+				if(prob(90))
+					C?.post_status("alert", "violetalert")
+					sound_to_playing_players('sound/misc/alerts/violet.ogg', volume = 50)
+				else
+					C?.post_status("alert", "violetalert_secret")
+					sound_to_playing_players('sound/misc/alerts/violet_secret.ogg')
 				unset_stationwide_emergency_lighting()
-				sound_to_playing_players('sound/misc/alerts/violet.ogg', volume = 50)
 				for(var/obj/machinery/firealarm/FA in GLOB.machines)
 					if(is_station_level(FA.z))
 						FA.update_icon()
@@ -146,8 +149,12 @@ SUBSYSTEM_DEF(security_level)
 				sound_to_playing_players('sound/misc/alerts/red.ogg', volume = 50)
 				GLOB.security_level = SEC_LEVEL_RED
 				var/obj/machinery/computer/communications/C = locate() in GLOB.machines
-				if(C)
-					C.post_status("alert", "redalert")
+				if(prob(90))
+					C?.post_status("alert", "redalert")
+					sound_to_playing_players('sound/misc/alerts/amber.ogg', volume = 50)
+				else
+					C?.post_status("alert", "redalert_secret")
+					sound_to_playing_players('sound/misc/alerts/red_secret.ogg')
 				for(var/obj/machinery/firealarm/FA in GLOB.machines)
 					if(is_station_level(FA.z))
 						FA.update_icon()

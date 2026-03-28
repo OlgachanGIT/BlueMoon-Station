@@ -163,7 +163,6 @@
 	var/number_of_hostiles
 	var/mutable_appearance/storm
 	var/triggersound
-	/// Если задан (например, БС-майнером), порталы и эффекты привязываются к этой зоне вместо станции
 	var/turf/anchor_turf
 
 /datum/round_event/portal_storm/setup()
@@ -214,17 +213,21 @@
 	sound_to_playing_players('sound/magic/lightningbolt.ogg')
 
 /datum/round_event/portal_storm/tick()
-	var/turf/fx_turf = anchor_turf ? get_safe_random_turf_near(anchor_turf) : get_safe_random_station_turf()
-	spawn_effects(fx_turf) //BLUEMOON CHANGES (WAS - get_random_station_turf)
+	var/do_hostile = spawn_hostile()
+	var/do_boss = spawn_boss()
+	// Не показывать «случайный» портал отдельно от спавна моба — иначе эффект и моб оказываются на разных тайлах
+	if(!do_hostile && !do_boss)
+		var/turf/fx_turf = anchor_turf ? get_safe_random_turf_near(anchor_turf) : get_safe_random_station_turf()
+		spawn_effects(fx_turf) //BLUEMOON CHANGES (WAS - get_random_station_turf)
 
-	if(spawn_hostile())
+	if(do_hostile)
 		var/type = safepick(hostile_types)
 		hostile_types[type] = hostile_types[type] - 1
 		spawn_mob(type, hostiles_spawn)
 		if(!hostile_types[type])
 			hostile_types -= type
 
-	if(spawn_boss())
+	if(do_boss)
 		var/type = safepick(boss_types)
 		boss_types[type] = boss_types[type] - 1
 		spawn_mob(type, boss_spawn)
