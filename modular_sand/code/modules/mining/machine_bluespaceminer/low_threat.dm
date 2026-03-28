@@ -162,7 +162,7 @@ GLOBAL_LIST_INIT(bsm_low_threat_pool, list(
 	for(var/i in 1 to BSM_VOIDS_HEART_PULSES)
 		addtimer(CALLBACK(GLOBAL_PROC, GLOBAL_PROC_REF(bsm_voids_embrace_heart_tick), machine), (i - 1) * pulse_spacing)
 	if(machine.bs_core)
-		machine.bs_core.obj_integrity = min(machine.bs_core.obj_integrity + 10, machine.bs_core.max_integrity)
+		machine.bs_core.obj_integrity = min(machine.bs_core.obj_integrity + 100, machine.bs_core.max_integrity)
 		machine.update_icon()
 	machine.balloon_alert_to_viewers("объятия пустоты...")
 	machine.visible_message(span_notice("Вокруг [machine] долго взмывают призрачные сердца, а блюспейс-ядро на миг стабилизируется."))

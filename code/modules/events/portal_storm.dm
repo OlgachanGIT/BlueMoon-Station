@@ -154,11 +154,9 @@
 	end_when = 999
 	announce_when = 1
 
-	var/list/boss_spawn = list()
 	var/list/boss_types = list() //only configure this if you have hostiles
 	var/number_of_bosses
 	var/next_boss_spawn
-	var/list/hostiles_spawn = list()
 	var/list/hostile_types = list()
 	var/number_of_hostiles
 	var/mutable_appearance/storm
@@ -177,19 +175,8 @@
 	for(var/hostile in hostile_types)
 		number_of_hostiles += hostile_types[hostile]
 
-	while(number_of_bosses > boss_spawn.len)
-		if(anchor_turf)
-			boss_spawn += get_safe_random_turf_near(anchor_turf)
-		else
-			boss_spawn += get_safe_random_station_turf() //BLUEMOON CHANGES (WAS - get_random_station_turf)
-
-	while(number_of_hostiles > hostiles_spawn.len)
-		if(anchor_turf)
-			hostiles_spawn += get_safe_random_turf_near(anchor_turf)
-		else
-			hostiles_spawn += get_safe_random_station_turf() //BLUEMOON CHANGES (WAS - get_random_station_turf)
-
-	next_boss_spawn = start_when + CEILING(2 * number_of_hostiles / number_of_bosses, 1)
+	if(number_of_bosses)
+		next_boss_spawn = start_when + CEILING(2 * number_of_hostiles / number_of_bosses, 1)
 
 /datum/round_event/portal_storm/announce(fake)
 	do_announce()
@@ -215,31 +202,31 @@
 /datum/round_event/portal_storm/tick()
 	var/do_hostile = spawn_hostile()
 	var/do_boss = spawn_boss()
-	// Не показывать «случайный» портал отдельно от спавна моба — иначе эффект и моб оказываются на разных тайлах
-	if(!do_hostile && !do_boss)
-		var/turf/fx_turf = anchor_turf ? get_safe_random_turf_near(anchor_turf) : get_safe_random_station_turf()
-		spawn_effects(fx_turf) //BLUEMOON CHANGES (WAS - get_random_station_turf)
 
 	if(do_hostile)
 		var/type = safepick(hostile_types)
 		hostile_types[type] = hostile_types[type] - 1
-		spawn_mob(type, hostiles_spawn)
+		spawn_mob(type)
 		if(!hostile_types[type])
 			hostile_types -= type
 
 	if(do_boss)
 		var/type = safepick(boss_types)
 		boss_types[type] = boss_types[type] - 1
-		spawn_mob(type, boss_spawn)
+		spawn_mob(type)
 		if(!boss_types[type])
 			boss_types -= type
 
 	time_to_end()
 
-/datum/round_event/portal_storm/proc/spawn_mob(type, spawn_list)
+/datum/round_event/portal_storm/proc/spawn_mob(type)
 	if(!type)
 		return
-	var/turf/T = pick_n_take(spawn_list)
+	var/turf/T
+	if(anchor_turf)
+		T = get_safe_random_turf_near(anchor_turf)
+	else
+		T = get_safe_random_station_turf()
 	if(!T)
 		return
 	new type(T)
