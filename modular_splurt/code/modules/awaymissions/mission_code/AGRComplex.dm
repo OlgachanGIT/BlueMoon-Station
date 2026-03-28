@@ -797,7 +797,7 @@
 	require_module = 1
 
 //Yes this is 100% recycled from traitor clockwork slabs and holy water code.
-/obj/item/borg/upgrade/clockwork/action(mob/living/silicon/robot/L, user = usr)
+/obj/item/borg/upgrade/clockwork/action(mob/living/silicon/robot/L, mob/user = usr)
 	. = ..()
 	if(!.)
 		return FALSE
@@ -817,7 +817,7 @@
 		to_chat(user, "<span class='userdanger'>[src] falls dark. It appears they were already worthy.</span>")
 	return TRUE
 
-/obj/item/borg/upgrade/clockwork/deactivate(mob/living/silicon/robot/L, user = usr)
+/obj/item/borg/upgrade/clockwork/deactivate(mob/living/silicon/robot/L, mob/user = usr)
 	. = ..()
 	if (.)
 		to_chat(L, "<span class='userdanger'>A fog spreads through your mind, purging the Justiciar's influence!</span>")
