@@ -16,9 +16,9 @@ export const SatelliteControl = (props, context) => {
               <LabeledList.Item label="Coverage">
                 <ProgressBar
                   value={data.meteor_shield_coverage
-                    / Math.max(1, data.meteor_shield_coverage_max || 1)}
-                  content={Math.round(100 * data.meteor_shield_coverage
-                    / Math.max(1, data.meteor_shield_coverage_max || 1)) + '%'}
+                    / data.meteor_shield_coverage_max}
+                  content={100 * data.meteor_shield_coverage
+                    / data.meteor_shield_coverage_max + '%'}
                   ranges={{
                     good: [1, Infinity],
                     average: [0.30, 1],
