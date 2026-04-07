@@ -136,17 +136,6 @@
 	end_day = 17
 	begin_month = JUNE
 
-/datum/holiday/russia_day
-	name = "День России |"
-	begin_day = 12
-	begin_month = JUNE
-
-/datum/holiday/russia_day/greet()
-	return "С праздником — Днём России!"
-
-/datum/holiday/russia_day/getStationPrefix()
-	return pick("Патриотичный Сектор |", "Российский Сектор |", "Двуглавый Сектор |")
-
 /datum/holiday/birthday
 	name = "день рождения Space Station 13"
 	begin_day = 16

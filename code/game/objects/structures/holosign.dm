@@ -64,7 +64,7 @@
 /obj/structure/holosign/barrier/attack_holosign(mob/living/user)
 	if(world.time < next_unarmed_hit)
 		to_chat(user, span_notice("Голографический барьер ещё мерцает — подождите мгновение."))
-		user.changeNext_move(CLICK_CD_FAST)
+		user.changeNext_move(CLICK_CD_RAPID)
 		return
 	next_unarmed_hit = world.time + CLICK_CD_MELEE
 	return ..()
