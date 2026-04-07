@@ -31,20 +31,24 @@ GLOBAL_LIST_EMPTY(meteor_satellites) // BLUEMOON ADD - список всех п�
 /datum/station_goal/station_shield/check_completion()
 	if(..())
 		return TRUE
-	if(get_coverage() >= coverage_goal)
+	if(get_meteor_shield_coverage() >= coverage_goal)
 		return TRUE
 	return FALSE
 
-/datum/station_goal/proc/get_coverage()
+/// Считает покрытие активными M-SHIELD спутниками (космос + openspace в радиусе). Не зависит от station goal.
+/proc/get_meteor_shield_coverage()
 	var/list/coverage = list()
 	for(var/obj/machinery/satellite/meteor_shield/A in GLOB.machines)
 		if(!A.active || !is_station_level(A.z))
 			continue
-		coverage |= view(A.kill_range,A)
+		coverage |= view(A.kill_range, A)
 	var/counter = 0
 	counter += count_by_type(coverage, /turf/open/space)
 	counter += count_by_type(coverage, /turf/open/openspace) // for multi-z stations
 	return counter
+
+/datum/station_goal/proc/get_coverage()
+	return get_meteor_shield_coverage()
 
 /obj/machinery/computer/sat_control
 	name = "satellite control"
@@ -84,11 +88,12 @@ GLOBAL_LIST_EMPTY(meteor_satellites) // BLUEMOON ADD - список всех п�
 	data["notice"] = notice
 
 
-	var/datum/station_goal/station_shield/G = locate() in SSticker.mode.station_goals
-	if(G)
+	// Показ прогресса при наличии M-SHIELD на карте (не только при цели станции). meteor_satellites содержит все спутники — проверяем тип.
+	if(locate(/obj/machinery/satellite/meteor_shield) in GLOB.machines)
 		data["meteor_shield"] = 1
-		data["meteor_shield_coverage"] = G.get_coverage()
-		data["meteor_shield_coverage_max"] = G.coverage_goal
+		data["meteor_shield_coverage"] = get_meteor_shield_coverage()
+		var/datum/station_goal/station_shield/G = SSticker.mode && locate(/datum/station_goal/station_shield) in SSticker.mode.station_goals
+		data["meteor_shield_coverage_max"] = G ? G.coverage_goal : 5000
 	return data
 
 
