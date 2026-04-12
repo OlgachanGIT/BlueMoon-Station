@@ -191,14 +191,14 @@
 	name = "Тактическая водолазка Синдиката"
 	desc = "Классические тёмные штаны и водолазка."
 	cost = 25
-	catalog = METADOLLAR_CATALOG_SMUGGLE
+	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/clothing/under/syndicate
 
 /datum/metadollar_shop_item/item/don_syndie_skirtleneck
 	name = "Тактическая юбка Синдиката"
 	desc = "Классические тёмные штаны и юбка."
 	cost = 25
-	catalog = METADOLLAR_CATALOG_SMUGGLE
+	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/clothing/under/syndicate/skirt
 
 /datum/metadollar_shop_item/item/don_summon_pie
@@ -212,14 +212,14 @@
 	name = "Игрушечный пенный пулемёт"
 	desc = "Foam LMG — безопасный для станции."
 	cost = 100
-	catalog = METADOLLAR_CATALOG_LEGIT
+	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/gun/ballistic/automatic/l6_saw/toy/unrestricted/riot
 
 /datum/metadollar_shop_item/item/don_foam_lmg_mag
 	name = "Магазин пенного LMG"
 	desc = "Боезапас к игрушечному пулемёту."
 	cost = 25
-	catalog = METADOLLAR_CATALOG_LEGIT
+	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/ammo_box/magazine/toy/m762/riot
 
 /datum/metadollar_shop_item/item/don_jukebox

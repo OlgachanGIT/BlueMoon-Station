@@ -14,20 +14,11 @@ SUBSYSTEM_DEF(metadollars)
 	round_earnings = list()
 	metadollar_burn_round_notice = null
 
-/proc/metadollar_living_excluded_antag(datum/antagonist/A)
-	return istype(A, /datum/antagonist/ghost_role) || istype(A, /datum/antagonist/ashwalker)
-
 /proc/metadollar_living_multiplier(mob/living/L)
 	if(!L?.mind)
 		return 1
 	var/datum/mind/M = L.mind
-	for(var/datum/antagonist/A in M.antag_datums)
-		if(metadollar_living_excluded_antag(A))
-			continue
-		return 2
 	if(M.assigned_role && (M.assigned_role in GLOB.command_positions))
-		return 2
-	if(M.assigned_role && (M.assigned_role in GLOB.security_positions))
 		return 2
 	return 1
 
@@ -83,7 +74,7 @@ SUBSYSTEM_DEF(metadollars)
 		return 2 * completed_goals
 	return 0
 
-/// Полная выплата за ЦК для моба: цели смены + надбавка за роль (как metadollar_living_multiplier: 2 — антаг/ком/СБ, 1 — остальные).
+/// Полная выплата за ЦК для моба: цели смены + надбавка за роль (как metadollar_living_multiplier: 2 — командование, 1 — остальные).
 /datum/controller/subsystem/metadollars/proc/cc_total_payout_for_mob(mob/M, completed_goals)
 	var/goals_part = cc_station_goals_metadollars(completed_goals)
 	var/role_part = isliving(M) ? metadollar_living_multiplier(M) : 1
@@ -150,17 +141,17 @@ SUBSYSTEM_DEF(metadollars)
 			else if(!M.onCentCom())
 				reasons += "персонаж не на площадке Центрального Командования в конце раунда"
 			if(length(reasons))
-				missed += "Недополучено <b>[missed_cc] М$</b> за эвакуацию на ЦК (из <b>[cc_pay] М$</b> для вашей роли: цели смены + надбавка 1–2 М$). Причина: [reasons.Join("; ")]."
+				missed += "Недополучено <b>[missed_cc] М$</b> за эвакуацию на ЦК (из <b>[cc_pay] М$</b> для вашей роли: цели смены + надбавка по роли 1–2 М$). Причина: [reasons.Join("; ")]."
 			else
 				missed += "Недополучено <b>[missed_cc] М$</b> за эвакуацию на ЦК при том, что условия, казалось бы, выполнены — если это ошибка, сообщите администрации."
 	else if(!esc_ok)
 		if(completed_goals > 0)
 			var/cc_min = goals_part + 1
 			var/cc_max = goals_part + 2
-			missed += "Бонус за ЦК (цели смены + 1–2 М$ по роли: командование, СБ, антагонисты — 2; остальные — 1), всего от <b>[cc_min]</b> до <b>[cc_max] М$</b>, <b>не начислялся</b>: эвакуация не в режиме успешного побега (шаттл не ушёл как «побег» / не конец игры по эвакуации)."
+			missed += "Бонус за ЦК (цели смены + 1–2 М$ по роли: командование — 2; остальные — 1), всего от <b>[cc_min]</b> до <b>[cc_max] М$</b>, <b>не начислялся</b>: эвакуация не в режиме успешного побега (шаттл не ушёл как «побег» / не конец игры по эвакуации)."
 		else if(M.stat != DEAD && !isbrain(M) && M.onCentCom())
 			var/role_only = isliving(M) ? metadollar_living_multiplier(M) : 1
-			missed += "Бонус <b>[role_only] М$</b> за прибытие живым на ЦК (по роли: командование, СБ, антагонисты — 2; остальные — 1) <b>не начислён</b>: эвакуация не в режиме успешного побега, поэтому выплата не производилась."
+			missed += "Бонус <b>[role_only] М$</b> за прибытие живым на ЦК (по роли: командование — 2; остальные — 1) <b>не начислён</b>: эвакуация не в режиме успешного побега, поэтому выплата не производилась."
 
 	var/potential_antag = potential_antag_metadollars(M.mind)
 	var/got_antag = E["antag"] || 0
