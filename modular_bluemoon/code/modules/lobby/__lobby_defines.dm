@@ -2,7 +2,7 @@
 #define BM_LOBBY_HTML_FILE "config/bluemoon/lobby_html.txt"
 
 /// Шанс (1–100), что кнопка «Магазин» получит радужную анимацию. То же значение — в bm_lobby.js (BM_METASHOP_RAINBOW_P).
-#define BM_METASHOP_RAINBOW_CHANCE 100
+#define BM_METASHOP_RAINBOW_CHANCE 10
 
 #define BM_LOBBY_IMAGES_SFW "config/title_screens/"
 
