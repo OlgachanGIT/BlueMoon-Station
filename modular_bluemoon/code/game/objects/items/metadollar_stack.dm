@@ -5,8 +5,8 @@
 	MD.admin_spawned_by_ckey = M.ckey
 
 /obj/item/stack/metadollar
-	name = "метадолларовые купюры"
-	singular_name = "метадоллар"
+	name = "metadollar"
+	singular_name = "metadollar"
 	desc = "Межгалактические казначейские купюры. Зачисление на постоянный счёт: проведите стопкой по КПК или по ID-карте."
 	icon = 'icons/obj/economy.dmi'
 	icon_state = "metadollar"
