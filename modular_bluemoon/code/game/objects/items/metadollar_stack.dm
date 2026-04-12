@@ -18,9 +18,6 @@
 /obj/item/stack/metadollar/get_item_credit_value()
 	return 0
 
-/obj/item/stack/metadollar/get_main_recipes()
-	return list()
-
 /obj/item/stack/metadollar/update_icon_state()
 	update_metadollar_icon()
 

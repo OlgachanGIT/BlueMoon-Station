@@ -52,6 +52,12 @@
 	if(!owner?.prefs)
 		return TRUE
 	switch(action)
+		if("topup")
+			var/mob/topupper = usr
+			if(!istype(topupper))
+				return TRUE
+			tgui_alert_async(topupper, "Для пополнения счёта напишите \"SmiLeY\"/\"5mi1ey_owo\". Спасибо!", "Пополнение счёта")
+			return TRUE
 		if("toggle_smuggle")
 			inteq_mode = !inteq_mode
 			return TRUE

@@ -29,9 +29,20 @@ export const MetadollarShop = (props, context) => {
             <Section
               title="Баланс"
               buttons={(
-                <Box color="label">
-                  {balance} M$
-                </Box>
+                <Stack direction="row" align="center">
+                  <Stack.Item>
+                    <Box color="label">
+                      {balance} M$
+                    </Box>
+                  </Stack.Item>
+                  <Stack.Item>
+                    <Button
+                      icon="wallet"
+                      onClick={() => act('topup')}>
+                      ПОПОЛНИТЬ СЧЁТ
+                    </Button>
+                  </Stack.Item>
+                </Stack>
               )}>
               {inteqMode ? (
                 <Box>
