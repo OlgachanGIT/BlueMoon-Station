@@ -1,8 +1,9 @@
 // Пути
-#define BM_LOBBY_HTML_FILE "config/bluemoon/lobby_html.txt"
+/// Разметка/стили лобби (в репозитории рядом с модулями лобби, не в config/).
+#define BM_LOBBY_HTML_FILE "modular_bluemoon/code/modules/lobby/lobby_html.txt"
 
-/// Шанс (1–100), что кнопка «Магазин» получит радужную анимацию. То же значение — в bm_lobby.js (BM_METASHOP_RAINBOW_P).
-#define BM_METASHOP_RAINBOW_CHANCE 10
+/// Вероятность радуги для кнопки «Магазин» в процентах (0–100). 100 = всегда. Дублируется в bm_lobby.js: `BM_METASHOP_RAINBOW_P`.
+#define BM_METASHOP_RAINBOW_P 100
 
 #define BM_LOBBY_IMAGES_SFW "config/title_screens/"
 
@@ -29,6 +30,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Co
 @keyframes bm-ms-rainbow{0%{filter:hue-rotate(0deg);color:#8cf}100%{filter:hue-rotate(360deg);color:#fc8}}
 .bm-metashop{font-weight:bold}
 .bm-ms-rainbow{animation:bm-ms-rainbow 5s linear infinite}
+.bm-metashop-slot{display:flex;flex-direction:column;width:100%;margin:0.55vmin 0;padding:0;border-top:1px solid rgba(60,90,160,0.2);border-bottom:1px solid rgba(60,90,160,0.2);background:rgba(0,6,22,0.48)}
+.bm-metashop-nullspace{height:clamp(5px,1vmin,12px);min-height:5px;width:100%;pointer-events:none;flex-shrink:0;display:block;font-size:0;line-height:0;overflow:hidden}
 </style>
 </head><body>
 "}

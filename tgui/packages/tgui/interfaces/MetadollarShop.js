@@ -57,29 +57,40 @@ export const MetadollarShop = (props, context) => {
                 const cantAfford = balance < entry.cost;
                 return (
                   <Stack.Item key={entry.id}>
-                    <Box mb={1}>
-                      <Box bold>{entry.name}</Box>
-                      <Box color="label" fontSize={0.9}>
-                        {entry.desc}
-                      </Box>
-                      {minP > 0 && (
-                        <Box color={lowPop ? 'bad' : 'label'} fontSize={0.85} mt={0.5}>
-                          Игроков онлайн: {onlinePlayers} / нужно ≥{minP}
+                    <Box
+                      p={1.2}
+                      mb={1}
+                      className="MetadollarShop__card"
+                      style={{
+                        border: '1px solid rgba(120, 180, 255, 0.35)',
+                        borderRadius: '4px',
+                        backgroundColor: 'rgba(15, 25, 45, 0.55)',
+                        boxShadow: 'inset 0 0 0 1px rgba(0, 0, 0, 0.35)',
+                      }}>
+                      <Box mb={1}>
+                        <Box bold>{entry.name}</Box>
+                        <Box color="label" fontSize={0.9}>
+                          {entry.desc}
                         </Box>
-                      )}
+                        {minP > 0 && (
+                          <Box color={lowPop ? 'bad' : 'label'} fontSize={0.85} mt={0.5}>
+                            Игроков онлайн: {onlinePlayers} / нужно ≥{minP}
+                          </Box>
+                        )}
+                      </Box>
+                      <Button
+                        fluid
+                        icon="cart-plus"
+                        color={inteqMode ? 'bad' : 'good'}
+                        disabled={cantAfford || lowPop}
+                        tooltip={lowPop
+                          ? `Нужно минимум ${minP} игроков на сервере (сейчас ${onlinePlayers})`
+                          : cantAfford
+                            ? 'Недостаточно метадолларов'
+                            : null}
+                        content={`Купить за ${entry.cost} M$`}
+                        onClick={() => act('buy', { id: entry.id })} />
                     </Box>
-                    <Button
-                      fluid
-                      icon="cart-plus"
-                      color={inteqMode ? 'bad' : 'good'}
-                      disabled={cantAfford || lowPop}
-                      tooltip={lowPop
-                        ? `Нужно минимум ${minP} игроков на сервере (сейчас ${onlinePlayers})`
-                        : cantAfford
-                          ? 'Недостаточно метадолларов'
-                          : null}
-                      content={`Купить за ${entry.cost} M$`}
-                      onClick={() => act('buy', { id: entry.id })} />
                   </Stack.Item>
                 );
               })}

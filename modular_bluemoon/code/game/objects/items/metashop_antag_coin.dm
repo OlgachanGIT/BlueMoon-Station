@@ -10,11 +10,6 @@
 /obj/item/coin/antagtoken/metashop/AltClick(mob/user)
 	try_activate(user)
 
-/obj/item/coin/antagtoken/metashop/attack_self(mob/user)
-	if(try_activate(user))
-		return TRUE
-	return FALSE
-
 /obj/item/coin/antagtoken/metashop/proc/try_activate(mob/user)
 	if(!isliving(user))
 		return FALSE
@@ -60,12 +55,17 @@
 	name = "Жетон Предателя"
 	desc = "Пластиковая безделушка с отметиной InteQ. Одноразовая."
 	antag_type = /datum/antagonist/traitor
+	icon = 'modular_bluemoon/krashly/icons/obj/inteq-uplink.dmi'
+	icon_state = "inteq-uplink"
 
 /obj/item/coin/antagtoken/metashop/traitor/examine(mob/user)
 	. = ..()
-	. += span_notice("Активация: <b>Z</b> в руке или <b>Alt+ЛКМ</b> по жетону (в руке или рядом на полу), чтобы попытаться получить роль предателя.")
+	. += span_notice("Активация: <b>Alt+ЛКМ</b> по предмету, чтобы получить роль предателя.")
 
 /obj/item/coin/antagtoken/metashop/traitor/on_activation_success(mob/living/carbon/human/H, datum/antagonist/T)
 	to_chat(H, span_bolddanger("Вы чувствуете холодок по спине. Система отмечает вас как угрозу экипажу."))
 	message_admins("[key_name_admin(H)] активировал метамагазинный жетон предателя.")
 	log_game("Metashop antag token: [key_name(H)] became traitor via coin.")
+
+/obj/item/coin/antagtoken/metashop/traitor/attack_self(mob/user)
+	return TRUE
