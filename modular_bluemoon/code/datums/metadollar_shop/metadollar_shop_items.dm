@@ -84,8 +84,8 @@
 
 /datum/metadollar_shop_item/item/metadollar_total_burn
 	name = "Протокол «Пепелище»"
-	desc = "10000 М$: обнулить метадоллары у всех игроков (сохранения на сервере). На вашем счёте должно быть не меньше 10000 М$."
-	cost = 10000
+	desc = "100000 М$: обнулить метадоллары у всех игроков. На вашем счёте должно быть не меньше 100000 М$."
+	cost = 100000
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = null
 	minimum_players = 100

@@ -1,3 +1,9 @@
+/proc/bm_set_admin_spawner_if_metadollar(atom/movable/O, mob/M)
+	if(!istype(O, /obj/item/stack/metadollar) || !M?.ckey)
+		return
+	var/obj/item/stack/metadollar/MD = O
+	MD.admin_spawned_by_ckey = M.ckey
+
 /obj/item/stack/metadollar
 	name = "метадолларовые купюры"
 	singular_name = "метадоллар"
@@ -10,10 +16,21 @@
 	full_w_class = WEIGHT_CLASS_TINY
 	amount = 1
 	resistance_flags = FLAMMABLE
+	var/admin_spawned_by_ckey
 
 /obj/item/stack/metadollar/Initialize(mapload, new_amount, merge = TRUE)
 	. = ..()
 	update_metadollar_icon()
+	if(!mapload)
+		addtimer(CALLBACK(src, PROC_REF(bm_log_admin_spawn_if_needed)), 1)
+
+/obj/item/stack/metadollar/proc/bm_log_admin_spawn_if_needed()
+	if(QDELETED(src) || !(flags_1 & ADMIN_SPAWNED_1))
+		return
+	var/who = admin_spawned_by_ckey || "ckey неизвестен (не панель/верб Spawn?)"
+	var/msg = "Метадоллары: [who] заспаунил [get_amount()] М$, тип [src.type]."
+	send2adminchat("Metadollar", msg)
+	log_admin("METADOLLAR ADMIN SPAWN: [msg]")
 
 /obj/item/stack/metadollar/get_item_credit_value()
 	return 0
