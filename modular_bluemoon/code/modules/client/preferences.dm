@@ -2,10 +2,8 @@
 	var/body_weight = NAME_WEIGHT_NORMAL
 	var/normalized_size = RESIZE_NORMAL
 	var/custom_laugh = "Default"
-	/// Метавалюта лобби-магазина; `metadollar_minute_pool` — накопление до целого метадоллара (минуты×множитель).
 	var/metadollars = 0
 	var/metadollar_minute_pool = 0
-	/// Список текстовых путей /obj/item для выдачи в рюкзак при спавне (метамаазин).
 	var/list/metadollar_pending_items = list()
 
 #define ACTION_HEADSHOT_LINK_NOOP 0

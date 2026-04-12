@@ -1,4 +1,3 @@
-/// Вспомогательные проки для TGS: доступ к /datum/preferences по ckey (игрок в сети или savefile).
 /proc/bm_tgs_get_prefs_for_ckey(target_ckey)
 	var/key = ckey(target_ckey)
 	if(!key)

@@ -21,7 +21,6 @@
 /obj/item/stack/metadollar/update_icon_state()
 	update_metadollar_icon()
 
-/// Спрайт по сумме в стопке (economy.dmi: metadollar*).
 /obj/item/stack/metadollar/proc/update_metadollar_icon()
 	var/n = amount
 	if(n <= 0)
@@ -44,7 +43,6 @@
 	else
 		icon_state = "metadollar1000"
 
-/// Зачислить стопку на лобби-счёт игрока и удалить её. [source] — КПК или ID для текста.
 /obj/item/stack/metadollar/proc/deposit_to_lobby_prefs(mob/user, atom/source)
 	var/client/C = user?.client
 	if(!C?.prefs)
@@ -77,6 +75,5 @@
 	split_stack(user, split_amount)
 	to_chat(user, span_notice("Вы отделяете [split_amount] М$."))
 
-/// Поставка из метамаазина: 50 М$ за 50 М$.
 /obj/item/stack/metadollar/fifty
 	amount = 50

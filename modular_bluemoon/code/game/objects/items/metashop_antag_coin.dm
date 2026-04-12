@@ -1,73 +1,71 @@
-/// Жетон из метамаазина: Alt+ЛКМ — попытка выдать роль (подтипы задают antag_type).
 /obj/item/coin/antagtoken/metashop
-	name = "метамаазинный жетон"
+	name = "метамагазинный жетон"
 	desc = "Пластиковая безделушка.."
 	icon_state = "coin_valid"
-	/// Подтип /datum/antagonist; подклассы обязаны задать.
 	var/antag_type = null
-	/// Минимум игроков на сервере для активации (как идея «станция готова»).
-	var/minimum_players = 20
 
 /obj/item/coin/antagtoken/metashop/examine(mob/user)
 	. = ..()
 
 /obj/item/coin/antagtoken/metashop/AltClick(mob/user)
+	try_activate(user)
+
+/obj/item/coin/antagtoken/metashop/attack_self(mob/user)
+	if(try_activate(user))
+		return TRUE
+	return FALSE
+
+/obj/item/coin/antagtoken/metashop/proc/try_activate(mob/user)
 	if(!isliving(user))
-		return
+		return FALSE
 	if(!user.canUseTopic(src, BE_CLOSE, FALSE, NO_TK))
-		return
+		return FALSE
 	if(!ishuman(user))
 		to_chat(user, span_warning("Жетон не реагирует на вас."))
-		return
+		return FALSE
 	var/mob/living/carbon/human/H = user
 	if(!H.mind)
 		to_chat(H, span_warning("У вас нет разума — странно."))
-		return
+		return FALSE
 	if(H.stat != CONSCIOUS)
 		to_chat(H, span_warning("Сейчас вы не в состоянии сосредоточиться на жетоне."))
-		return
+		return FALSE
 	if(SSticker.current_state != GAME_STATE_PLAYING || !SSticker.mode)
 		to_chat(H, span_warning("Сейчас нельзя активировать жетон."))
-		return
-	if(GLOB.player_list.len < minimum_players)
-		to_chat(H, span_warning("На станции слишком мало экипажа для такого риска... (нужно минимум [minimum_players] игроков.)"))
-		return
+		return FALSE
 	if(!ispath(antag_type, /datum/antagonist))
 		to_chat(H, span_warning("Жетон мёртвый — тип роли не задан."))
-		return
+		return FALSE
 	if(H.mind.has_antag_datum(antag_type))
 		to_chat(H, span_warning(already_has_antag_message()))
-		return
+		return FALSE
 	var/datum/antagonist/T = H.mind.add_antag_datum(antag_type)
 	if(!T)
 		to_chat(H, span_warning(role_unavailable_message()))
-		return
+		return FALSE
 	playsound(H, 'sound/items/coinflip.ogg', 50, TRUE)
 	on_activation_success(H, T)
 	qdel(src)
+	return TRUE
 
-/// Сообщение, если этот тип антага уже есть у носителя.
 /obj/item/coin/antagtoken/metashop/proc/already_has_antag_message()
 	return "Вы уже связаны с силами, с которыми хотел бы связаться жетон."
 
-/// Сообщение при отказе add_antag_datum (роль недоступна).
 /obj/item/coin/antagtoken/metashop/proc/role_unavailable_message()
 	return "Жетон нагревается и остывает — роль недоступна."
 
-/// Успешная выдача: чат игроку, логи.
 /obj/item/coin/antagtoken/metashop/proc/on_activation_success(mob/living/carbon/human/H, datum/antagonist/T)
 
-/// Жетон предателя (метамаазин).
 /obj/item/coin/antagtoken/metashop/traitor
-	name = "жетон сомнительной валидности"
-	desc = "Пластиковая безделушка с отметиной SyndiCartel. Подсказка: Alt+ЛКМ, находясь рядом с жетоном, чтобы связаться с... интересными людьми. Одноразовая."
+	name = "Жетон Предателя"
+	desc = "Пластиковая безделушка с отметиной InteQ. Одноразовая."
 	antag_type = /datum/antagonist/traitor
 
 /obj/item/coin/antagtoken/metashop/traitor/examine(mob/user)
 	. = ..()
-	. += span_notice("Используйте <b>Alt+ЛКМ</b> по жетону в руках или рядом с ним на земле, чтобы попытаться получить роль предателя.")
+	. += span_notice("Активация: <b>Z</b> в руке или <b>Alt+ЛКМ</b> по жетону (в руке или рядом на полу), чтобы попытаться получить роль предателя.")
 
 /obj/item/coin/antagtoken/metashop/traitor/on_activation_success(mob/living/carbon/human/H, datum/antagonist/T)
 	to_chat(H, span_bolddanger("Вы чувствуете холодок по спине. Система отмечает вас как угрозу экипажу."))
-	message_admins("[key_name_admin(H)] активировал метамаазинный жетон предателя.")
+	message_admins("[key_name_admin(H)] активировал метамагазинный жетон предателя.")
 	log_game("Metashop antag token: [key_name(H)] became traitor via coin.")

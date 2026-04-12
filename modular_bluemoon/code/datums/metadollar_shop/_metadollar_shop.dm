@@ -1,6 +1,5 @@
 /datum/metadollar_shop
 	var/client/owner
-	/// «Подпольный» режим витрины (тема inteq).
 	var/inteq_mode = FALSE
 
 /datum/metadollar_shop/New(client/owner)
@@ -29,6 +28,7 @@
 			"name" = I.name,
 			"desc" = I.desc,
 			"cost" = I.cost,
+			"minPlayers" = I.minimum_players,
 		))
 		qdel(I)
 	return out
@@ -43,6 +43,7 @@
 	var/list/data = list()
 	data["balance"] = owner?.prefs?.metadollars || 0
 	data["inteqMode"] = inteq_mode
+	data["onlinePlayers"] = length(GLOB.player_list)
 	return data
 
 /datum/metadollar_shop/ui_act(action, list/params, datum/tgui/ui, datum/ui_state/state)

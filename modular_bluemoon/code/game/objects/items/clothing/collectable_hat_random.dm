@@ -1,7 +1,6 @@
-/// При появлении заменяется на случайный подтип /obj/item/clothing/head/collectable (кроме самого random_metashop).
 /obj/item/clothing/head/collectable/random_metashop
 	name = "коллекционная шляпа (случайная)"
-	desc = "Заказ из метамаазина: при выдаче превращается в одну из коллекционных шляп серии."
+	desc = "Заказ из метамагазина: при выдаче превращается в одну из коллекционных шляп серии."
 	icon_state = "petehat"
 
 /obj/item/clothing/head/collectable/random_metashop/Initialize(mapload)

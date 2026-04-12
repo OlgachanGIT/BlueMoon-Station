@@ -1,17 +1,19 @@
 #define METADOLLAR_CATALOG_LEGIT "legit"
 #define METADOLLAR_CATALOG_SMUGGLE "smuggle"
 
-/// Каталог метамаазина: один подтип = один товар (как /datum/gear в лодауте).
 /datum/metadollar_shop_item
 	var/name = "Товар"
 	var/desc = ""
 	var/cost = 0
-	/// METADOLLAR_CATALOG_* — легальный витрина или «подполье».
 	var/catalog = METADOLLAR_CATALOG_LEGIT
+	var/minimum_players = 0
 
 /datum/metadollar_shop_item/proc/try_purchase(client/C)
 	if(!C?.prefs)
 		return FALSE
+	if(minimum_players && length(GLOB.player_list) < minimum_players)
+		to_chat(C.mob, span_warning("На сервере слишком мало игроков для этой покупки (нужно минимум [minimum_players])."))
+		return TRUE
 	if(C.prefs.metadollars < cost)
 		to_chat(C.mob, span_warning("Недостаточно метадолларов."))
 		return TRUE
@@ -22,14 +24,12 @@
 	to_chat(C.mob, span_notice("[delivery_message()]"))
 	return TRUE
 
-/// Добавить доставку; вернуть FALSE при отказе (без списания — вызывающий не списывает до успеха).
 /datum/metadollar_shop_item/proc/queue_delivery(client/C)
 	return FALSE
 
 /datum/metadollar_shop_item/proc/delivery_message()
 	return "Заказ будет в рюкзаке при следующем появлении на станции."
 
-/// Товар — спавн одного /obj/item в рюкзаке при входе в раунд.
 /datum/metadollar_shop_item/item
 	var/obj/item/spawn_type
 
@@ -60,19 +60,48 @@
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/clothing/glasses/sunglasses
 
+/datum/metadollar_shop_item/item/gift_anything_lootbox
+	name = "Лутбокс"
+	desc = "Коробка-сюрприз: используйте в руке (как подарок) — внутри окажется случайный предмет со станции."
+	cost = 25
+	catalog = METADOLLAR_CATALOG_LEGIT
+	spawn_type = /obj/item/a_gift/anything
+
 /datum/metadollar_shop_item/item/captain_spare_id
 	name = "Запасная ID капитана"
 	desc = "Золотая карта с полным доступом капитана (как из сейфа на мостике). Осторожно: это заметная вещь."
-	cost = 250
+	cost = 500
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/card/id/captains_spare
 
 /datum/metadollar_shop_item/item/traitor_token
 	name = "Жетон «Предатель»"
-	desc = "Пластиковая монета. ALT+ЛКМ по жетону, чтобы получить особые силы."
+	desc = "Пластиковая монета. Купить можно только при ≥50 игроках на сервере. В смене: Z или Alt+ЛКМ по жетону, чтобы получить роль предателя."
 	cost = 250
 	catalog = METADOLLAR_CATALOG_SMUGGLE
+	minimum_players = 50
 	spawn_type = /obj/item/coin/antagtoken/metashop/traitor
+
+/datum/metadollar_shop_item/item/metadollar_total_burn
+	name = "Протокол «Пепелище»"
+	desc = "10000 М$: обнулить метадоллары у всех игроков (сохранения на сервере). На вашем счёте должно быть не меньше 10000 М$."
+	cost = 10000
+	catalog = METADOLLAR_CATALOG_SMUGGLE
+	spawn_type = null
+	minimum_players = 100
+
+/datum/metadollar_shop_item/item/metadollar_total_burn/try_purchase(client/C)
+	if(!C?.prefs)
+		return FALSE
+	if(C.prefs.metadollars < cost)
+		to_chat(C.mob, span_warning("Недостаточно метадолларов (нужно [cost] М$)."))
+		return TRUE
+	bm_metadollar_global_burn(C.mob)
+	message_admins("[key_name_admin(C.mob)] активировал протокол «Пепелище»: обнулены все балансы метадолларов.")
+	log_game("Metadollar total burn: [key_name(C.mob)] wiped all metadollar balances.")
+	for(var/mob/M in GLOB.player_list)
+		to_chat(M, span_danger("Межгалактическое казначейство: все балансы метадолларов обнулены. Сгорело всё."))
+	return TRUE
 
 /datum/metadollar_shop_item/item/don_golden_horn
 	name = "Золотой клаксон"
@@ -89,7 +118,7 @@
 	spawn_type = /obj/item/clothing/mask/screammask
 
 /datum/metadollar_shop_item/item/don_desk_beacon
-	name = "Маяк «мебель для стола»"
+	name = "Маяк «Мебель»"
 	desc = "Вызывает доставку мебели на выбор."
 	cost = 10
 	catalog = METADOLLAR_CATALOG_LEGIT
@@ -140,7 +169,7 @@
 /datum/metadollar_shop_item/item/don_spacecash_1000
 	name = "Пачка кредитов (1000 кр.)"
 	desc = "Красивые станционные кредиты."
-	cost = 25
+	cost = 10
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/stack/spacecash/c1000
 
@@ -175,14 +204,14 @@
 /datum/metadollar_shop_item/item/don_summon_pie
 	name = "Книга заклинания «Пирог»"
 	desc = "Учит простому заклинанию призыва пирога."
-	cost = 50
+	cost = 100
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/book/granter/spell/summon_pie
 
 /datum/metadollar_shop_item/item/don_foam_lmg
 	name = "Игрушечный пенный пулемёт"
 	desc = "Foam LMG — безопасный для станции."
-	cost = 50
+	cost = 100
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/gun/ballistic/automatic/l6_saw/toy/unrestricted/riot
 

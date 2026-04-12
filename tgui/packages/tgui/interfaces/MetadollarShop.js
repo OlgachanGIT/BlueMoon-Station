@@ -9,6 +9,7 @@ export const MetadollarShop = (props, context) => {
     inteqMode = false,
     legit = [],
     smuggle = [],
+    onlinePlayers = 0,
   } = data;
   const theme = inteqMode ? 'inteq' : 'neutral';
   const catalog = inteqMode ? smuggle : legit;
@@ -17,7 +18,7 @@ export const MetadollarShop = (props, context) => {
       width={520}
       height={480}
       theme={theme}
-      title="Метамаазин">
+      title="Метамагазин">
       <Window.Content
         scrollable
         style={{
@@ -56,23 +57,38 @@ export const MetadollarShop = (props, context) => {
             </Section>
             <Section title="Товары">
               <Stack vertical>
-                {catalog.map(entry => (
-                  <Stack.Item key={entry.id}>
-                    <Box mb={1}>
-                      <Box bold>{entry.name}</Box>
-                      <Box color="label" fontSize={0.9}>
-                        {entry.desc}
+                {catalog.map(entry => {
+                  const minP = entry.minPlayers || 0;
+                  const lowPop = minP > 0 && onlinePlayers < minP;
+                  const cantAfford = balance < entry.cost;
+                  return (
+                    <Stack.Item key={entry.id}>
+                      <Box mb={1}>
+                        <Box bold>{entry.name}</Box>
+                        <Box color="label" fontSize={0.9}>
+                          {entry.desc}
+                        </Box>
+                        {minP > 0 && (
+                          <Box color={lowPop ? 'bad' : 'label'} fontSize={0.85} mt={0.5}>
+                            Игроков онлайн: {onlinePlayers} / нужно ≥{minP}
+                          </Box>
+                        )}
                       </Box>
-                    </Box>
-                    <Button
-                      fluid
-                      icon="cart-plus"
-                      color={inteqMode ? 'bad' : 'good'}
-                      disabled={balance < entry.cost}
-                      content={`Купить за ${entry.cost} M$`}
-                      onClick={() => act('buy', { id: entry.id })} />
-                  </Stack.Item>
-                ))}
+                      <Button
+                        fluid
+                        icon="cart-plus"
+                        color={inteqMode ? 'bad' : 'good'}
+                        disabled={cantAfford || lowPop}
+                        tooltip={lowPop
+                          ? `Нужно минимум ${minP} игроков на сервере (сейчас ${onlinePlayers})`
+                          : cantAfford
+                            ? 'Недостаточно метадолларов'
+                            : null}
+                        content={`Купить за ${entry.cost} M$`}
+                        onClick={() => act('buy', { id: entry.id })} />
+                    </Stack.Item>
+                  );
+                })}
               </Stack>
             </Section>
           </Stack.Item>

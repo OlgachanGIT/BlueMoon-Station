@@ -1,9 +1,8 @@
-/// Внутриигровая валюта «метадоллары»: начисление за время жизни на станции и бонусы в конце раунда.
 SUBSYSTEM_DEF(metadollars)
 	name = "Metadollars"
 	flags = SS_NO_FIRE
-	/// ckey -> assoc list ключей вида living/cc/goals/antag/total
 	var/list/round_earnings = list()
+	var/metadollar_burn_round_notice = null
 
 /datum/controller/subsystem/metadollars/Initialize()
 	. = ..()
@@ -13,12 +12,11 @@ SUBSYSTEM_DEF(metadollars)
 /datum/controller/subsystem/metadollars/proc/round_begin_reset()
 	SIGNAL_HANDLER
 	round_earnings = list()
+	metadollar_burn_round_notice = null
 
-/// Антаг-роли без повышенного начисления за время жизни (ср. Hilbert / ghost spawns).
 /proc/metadollar_living_excluded_antag(datum/antagonist/A)
 	return istype(A, /datum/antagonist/ghost_role) || istype(A, /datum/antagonist/ashwalker)
 
-/// Множитель «часовых» метадолларов: 1 для обычных ролей, 2 для командования, СБ и «полных» антагонистов.
 /proc/metadollar_living_multiplier(mob/living/L)
 	if(!L?.mind)
 		return 1
@@ -39,7 +37,11 @@ SUBSYSTEM_DEF(metadollars)
 	if(!isliving(C.mob) || C.mob.stat == DEAD)
 		return
 	var/mult = metadollar_living_multiplier(C.mob)
-	C.prefs.metadollar_minute_pool += minutes * mult
+	var/old_living = 0
+	if(C.prefs.exp)
+		old_living = text2num(C.prefs.exp[EXP_TYPE_LIVING])
+	var/newbie_mult = (old_living < 6000) ? 2 : 1
+	C.prefs.metadollar_minute_pool += minutes * mult * newbie_mult
 	var/granted = 0
 	while(C.prefs.metadollar_minute_pool >= 60)
 		C.prefs.metadollar_minute_pool -= 60
@@ -59,8 +61,10 @@ SUBSYSTEM_DEF(metadollars)
 	round_earnings[ck][category] += amount
 	round_earnings[ck]["total"] = (round_earnings[ck]["total"] || 0) + amount
 	C.prefs.save_preferences()
+	if(category == "living" && isliving(C.mob))
+		to_chat(C.mob, span_purple("Вы получили [amount] М$ за работу на ПАКТ."))
+		SEND_SOUND(C.mob, sound('sound/machines/terminal_success.ogg', 35))
 
-/// Бонусы за эвак на ЦК / цели смены / выполненные цели антагониста (конец раунда).
 /datum/controller/subsystem/metadollars/proc/apply_round_end_rewards()
 	var/completed_station_goals = 0
 	if(SSticker?.mode?.station_goals?.len)
@@ -91,24 +95,65 @@ SUBSYSTEM_DEF(metadollars)
 			if(O.check_completion())
 				add_amount(C, 2, "antag")
 
-/// HTML-блок для персонального отчёта конца раунда.
 /datum/controller/subsystem/metadollars/proc/personal_roundend_html(client/C)
 	if(!C?.ckey)
 		return ""
+	var/list/chunks = list()
+	if(metadollar_burn_round_notice)
+		chunks += "<div class='panel redborder'><span class='header'>Сжигание метадолларов</span><br>[html_encode(metadollar_burn_round_notice)]</div>"
 	var/list/E = round_earnings[C.ckey]
-	if(!E || !E["total"])
+	if(E && E["total"])
+		var/total = E["total"]
+		var/list/lines = list()
+		if(E["living"])
+			lines += "За время на станции: <b>[E["living"]]</b> М$"
+		if(E["cc"])
+			lines += "Эвакуация / цели смены: <b>[E["cc"]]</b> М$"
+		if(E["antag"])
+			lines += "Цели антагониста: <b>[E["antag"]]</b> М$"
+		if(E["voucher"])
+			lines += "Жетон обмена: <b>[E["voucher"]]</b> М$"
+		chunks += "<div class='panel stationborder'><span class='header'>Метадоллары за раунд</span><br>Всего начислено: <b>[total] М$</b>.<br><small>[lines.Join("<br>")]</small><br>Текущий баланс: <b>[C.prefs.metadollars] М$</b>.</div>"
+	if(!length(chunks))
 		return ""
-	var/total = E["total"]
-	var/list/lines = list()
-	if(E["living"])
-		lines += "За время на станции: <b>[E["living"]]</b> М$"
-	if(E["cc"])
-		lines += "Эвакуация / цели смены: <b>[E["cc"]]</b> М$"
-	if(E["antag"])
-		lines += "Цели антагониста: <b>[E["antag"]]</b> М$"
-	if(E["voucher"])
-		lines += "Жетон обмена: <b>[E["voucher"]]</b> М$"
-	return "<div class='panel stationborder'><span class='header'>Метадоллары за раунд</span><br>Всего начислено: <b>[total] М$</b>.<br><small>[lines.Join("<br>")]</small><br>Текущий баланс: <b>[C.prefs.metadollars] М$</b>.</div>"
+	return chunks.Join("")
+
+/proc/bm_metadollar_global_burn(mob/initiator)
+	if(SSmetadollars)
+		SSmetadollars.round_earnings = list()
+	if(!fexists("data/player_saves"))
+		return
+	var/notice = "В этом раунде активирован протокол «Пепелище»: обнулены все метадолларовые балансы."
+	if(initiator)
+		notice += " Инициатор: [initiator.real_name] ([initiator.ckey])."
+	if(SSmetadollars)
+		SSmetadollars.metadollar_burn_round_notice = notice
+	var/list/done = list()
+	for(var/letterdir in flist("data/player_saves/"))
+		var/prefix = "data/player_saves/[letterdir]"
+		if(!fexists(prefix))
+			continue
+		for(var/sub in flist(prefix))
+			var/sav = "[prefix]/[sub]/preferences.sav"
+			if(!fexists(sav))
+				continue
+			var/ck = ckey(sub)
+			if(!ck || done[ck])
+				continue
+			done[ck] = TRUE
+			var/client/online = GLOB.directory[ck]
+			if(online?.prefs)
+				online.prefs.metadollars = 0
+				online.prefs.save_preferences(TRUE, TRUE)
+				continue
+			var/datum/preferences/P = new
+			P.load_path(ck)
+			if(!P.load_preferences(TRUE))
+				qdel(P)
+				continue
+			P.metadollars = 0
+			P.save_preferences(TRUE, TRUE)
+			qdel(P)
 
 /proc/bm_deliver_metadollar_purchases(mob/living/carbon/human/H, client/C)
 	if(!H || !C?.prefs)
@@ -132,4 +177,4 @@ SUBSYSTEM_DEF(metadollars)
 	if(did_any)
 		C.prefs.metadollar_pending_items.Cut()
 		C.prefs.save_preferences()
-		to_chat(H, span_notice("В рюкзаке оказались предметы, заказанные в метамаазине."))
+		to_chat(H, span_notice("В рюкзаке оказались предметы, заказанные в метамагазине."))
