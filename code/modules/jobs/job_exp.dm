@@ -237,6 +237,7 @@ GLOBAL_PROTECT(exp_to_update)
 						to_chat(src,"<span class='notice'>You got: [minutes] [trackedrole] EXP!</span>")
 			if(!rolefound)
 				play_records["Unknown"] += minutes
+			SSmetadollars?.on_living_tick(src, minutes)
 		else
 			if(holder && !holder.deadmined)
 				play_records[EXP_TYPE_ADMIN] += minutes

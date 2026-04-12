@@ -1,5 +1,6 @@
 /mob/dead/new_player
 	var/bm_lobby_ready = FALSE
+	var/bm_metashop_anim = 0
 	var/bm_bg_slot = 0
 	var/bm_assets_sent = FALSE  // asset cache уже отправлен этому клиенту
 	COOLDOWN_DECLARE(bm_ready_cd)
@@ -243,6 +244,9 @@ var _i=0;setInterval(function(){var s=_i%4;document.getElementById('d').textCont
 		parts += {"<a class='bm-btn' href='?src=[R];bm_lobby_action=character_directory'>БИБЛИОТЕКА ПЕРСОНАЖЕЙ</a>"}
 
 	parts += {"<a class='bm-btn' href='?src=[R];bm_lobby_action=observe'>БЫТЬ НАБЛЮДАТЕЛЕМ</a>"}
+	if(!bm_metashop_anim)
+		bm_metashop_anim = rand(1, 8)
+	parts += {"<a class='bm-btn bm-metashop bm-ms-[bm_metashop_anim]' href='?src=[R];bm_lobby_action=metashop'>МАГАЗИН</a>"}
 
 	parts += "<div class='bm-divider'></div>"
 
@@ -339,6 +343,15 @@ var _i=0;setInterval(function(){var s=_i%4;document.getElementById('d').textCont
 				client.prefs.save_preferences()
 				client << output(client.prefs.bm_lobby_show_admin_bg, "bm_lobby_browser:bm_update_admin_bg_indicator")
 				bm_push_background()
+			return
+
+		if("metashop")
+			_bm_play_click_sound()
+			if(!client?.prefs)
+				client << output("Нужна сохранённая учётная запись (не гость).", "bm_lobby_browser:bm_show_notice")
+				return
+			var/datum/metadollar_shop/shop = new /datum/metadollar_shop(client)
+			shop.ui_interact(src)
 			return
 
 		if("observe")
