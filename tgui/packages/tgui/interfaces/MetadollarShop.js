@@ -11,7 +11,7 @@ export const MetadollarShop = (props, context) => {
     smuggle = [],
     onlinePlayers = 0,
   } = data;
-  const theme = inteqMode ? 'inteq' : 'neutral';
+  const theme = inteqMode ? 'inteq' : 'ntos';
   const catalog = inteqMode ? smuggle : legit;
   return (
     <Window
@@ -19,95 +19,82 @@ export const MetadollarShop = (props, context) => {
       height={480}
       theme={theme}
       title="Метамагазин">
-      <Window.Content
-        scrollable
-        style={{
-          position: 'relative',
-          minHeight: '100%',
-        }}>
-        <Stack vertical fill>
-          <Stack.Item grow>
-            <Section
-              title="Баланс"
-              buttons={(
-                <Stack direction="row" align="center">
-                  <Stack.Item>
-                    <Box color="label">
-                      {balance} M$
-                    </Box>
-                  </Stack.Item>
-                  <Stack.Item>
-                    <Button
-                      icon="wallet"
-                      onClick={() => act('topup')}>
-                      ПОПОЛНИТЬ СЧЁТ
-                    </Button>
-                  </Stack.Item>
-                </Stack>
-              )}>
-              {inteqMode ? (
-                <Box>
-                  Подпольный каталог: особые заказы для следующей смены.
-                </Box>
-              ) : (
-                <Box>
-                  Официальный каталог: снаряжение в рюкзак при появлении на станции.
-                </Box>
-              )}
-            </Section>
-            <Section title="Товары">
-              <Stack vertical>
-                {catalog.map(entry => {
-                  const minP = entry.minPlayers || 0;
-                  const lowPop = minP > 0 && onlinePlayers < minP;
-                  const cantAfford = balance < entry.cost;
-                  return (
-                    <Stack.Item key={entry.id}>
-                      <Box mb={1}>
-                        <Box bold>{entry.name}</Box>
-                        <Box color="label" fontSize={0.9}>
-                          {entry.desc}
-                        </Box>
-                        {minP > 0 && (
-                          <Box color={lowPop ? 'bad' : 'label'} fontSize={0.85} mt={0.5}>
-                            Игроков онлайн: {onlinePlayers} / нужно ≥{minP}
-                          </Box>
-                        )}
-                      </Box>
-                      <Button
-                        fluid
-                        icon="cart-plus"
-                        color={inteqMode ? 'bad' : 'good'}
-                        disabled={cantAfford || lowPop}
-                        tooltip={lowPop
-                          ? `Нужно минимум ${minP} игроков на сервере (сейчас ${onlinePlayers})`
-                          : cantAfford
-                            ? 'Недостаточно метадолларов'
-                            : null}
-                        content={`Купить за ${entry.cost} M$`}
-                        onClick={() => act('buy', { id: entry.id })} />
-                    </Stack.Item>
-                  );
-                })}
+      <Window.Content scrollable fitted>
+        <Box m={1}>
+          <Section
+            title="Баланс"
+            buttons={(
+              <Stack direction="row" align="center">
+                <Stack.Item>
+                  <Box color="label">
+                    {balance} M$
+                  </Box>
+                </Stack.Item>
+                <Stack.Item>
+                  <Button
+                    icon="wallet"
+                    onClick={() => act('topup')}>
+                    ПОПОЛНИТЬ СЧЁТ
+                  </Button>
+                </Stack.Item>
               </Stack>
-            </Section>
-          </Stack.Item>
-        </Stack>
-        <Box
-          style={{
-            position: 'absolute',
-            left: '12px',
-            bottom: '8px',
-            zIndex: 5,
-          }}>
-          <Button
-            compact
-            tooltip={inteqMode
-              ? 'Вернуться к официальному каталогу'
-              : 'Подпольный вход (другой каталог)'}
-            icon={inteqMode ? 'building' : 'skull'}
-            color={inteqMode ? 'average' : 'bad'}
-            onClick={() => act('toggle_smuggle')} />
+            )}>
+            {inteqMode ? (
+              <Box>
+                Подпольный каталог: особые заказы для следующей смены.
+              </Box>
+            ) : (
+              <Box>
+                Официальный каталог: снаряжение в рюкзак при появлении на станции.
+              </Box>
+            )}
+          </Section>
+          <Section title="Товары">
+            <Stack vertical>
+              {catalog.map(entry => {
+                const minP = entry.minPlayers || 0;
+                const lowPop = minP > 0 && onlinePlayers < minP;
+                const cantAfford = balance < entry.cost;
+                return (
+                  <Stack.Item key={entry.id}>
+                    <Box mb={1}>
+                      <Box bold>{entry.name}</Box>
+                      <Box color="label" fontSize={0.9}>
+                        {entry.desc}
+                      </Box>
+                      {minP > 0 && (
+                        <Box color={lowPop ? 'bad' : 'label'} fontSize={0.85} mt={0.5}>
+                          Игроков онлайн: {onlinePlayers} / нужно ≥{minP}
+                        </Box>
+                      )}
+                    </Box>
+                    <Button
+                      fluid
+                      icon="cart-plus"
+                      color={inteqMode ? 'bad' : 'good'}
+                      disabled={cantAfford || lowPop}
+                      tooltip={lowPop
+                        ? `Нужно минимум ${minP} игроков на сервере (сейчас ${onlinePlayers})`
+                        : cantAfford
+                          ? 'Недостаточно метадолларов'
+                          : null}
+                      content={`Купить за ${entry.cost} M$`}
+                      onClick={() => act('buy', { id: entry.id })} />
+                  </Stack.Item>
+                );
+              })}
+            </Stack>
+          </Section>
+          <Box mt={1}>
+            <Button
+              compact
+              tooltip={inteqMode
+                ? 'Вернуться к официальному каталогу'
+                : 'Подпольный вход (другой каталог)'}
+              icon={inteqMode ? 'building' : 'skull'}
+              color={inteqMode ? 'average' : 'bad'}
+              onClick={() => act('toggle_smuggle')} />
+          </Box>
         </Box>
       </Window.Content>
     </Window>
