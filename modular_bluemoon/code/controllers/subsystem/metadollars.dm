@@ -32,9 +32,12 @@ SUBSYSTEM_DEF(metadollars)
 	return 1
 
 /datum/controller/subsystem/metadollars/proc/on_living_tick(client/C, minutes)
-	if(!C?.prefs || minutes <= 0)
+	if(!C?.ckey || !C.prefs || minutes <= 0)
 		return
 	if(!isliving(C.mob) || C.mob.stat == DEAD)
+		return
+	// Только персонаж под управлением этого клиента (не NPC / не чужое тело без привязки).
+	if(C.mob.key != C.ckey)
 		return
 	var/mult = metadollar_living_multiplier(C.mob)
 	var/old_living = 0
@@ -51,7 +54,7 @@ SUBSYSTEM_DEF(metadollars)
 	add_amount(C, granted, "living")
 
 /datum/controller/subsystem/metadollars/proc/add_amount(client/C, amount, category)
-	if(!C?.prefs || amount <= 0)
+	if(!istype(C, /client) || !C.ckey || !C.prefs || amount <= 0)
 		return
 	C.prefs.metadollars += amount
 	var/ck = C.ckey
@@ -63,7 +66,7 @@ SUBSYSTEM_DEF(metadollars)
 	C.prefs.save_preferences()
 	if(category == "living" && isliving(C.mob))
 		to_chat(C.mob, span_purple("Вы получили [amount] М$ за работу на ПАКТ."))
-		SEND_SOUND(C.mob, sound('sound/machines/terminal_success.ogg', 35))
+		SEND_SOUND(C.mob, sound('sound/machines/terminal_success.ogg', volume = 35))
 
 /// Сколько целей смены выполнено (для бонуса ЦК и отчёта).
 /datum/controller/subsystem/metadollars/proc/count_completed_station_goals()
