@@ -251,6 +251,14 @@ html, body {
 .bm-btn:hover::before { content:'\25BA'; opacity:1; }
 .bm-btn:active { color:#ff8; transform:translateX(2px); }
 
+/* Metashop: rare rainbow (server: BM_METASHOP_RAINBOW_CHANCE; bm_lobby.js: BM_METASHOP_RAINBOW_P) */
+.bm-metashop { font-weight: 700; }
+@keyframes bm-ms-rainbow {
+  0% { filter: hue-rotate(0deg); color: #8cf; }
+  100% { filter: hue-rotate(360deg); color: #fc8; }
+}
+.bm-ms-rainbow { animation: bm-ms-rainbow 5s linear infinite; }
+
 /* ===== КНОПКИ — СТИЛЬ BLUEMOON (неон) ===== */
 body.style-bluemoon #bm-sidebar {
   background: linear-gradient(

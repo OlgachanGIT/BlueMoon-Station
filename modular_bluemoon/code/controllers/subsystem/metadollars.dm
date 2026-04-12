@@ -65,12 +65,43 @@ SUBSYSTEM_DEF(metadollars)
 		to_chat(C.mob, span_purple("Вы получили [amount] М$ за работу на ПАКТ."))
 		SEND_SOUND(C.mob, sound('sound/machines/terminal_success.ogg', 35))
 
+/// Сколько целей смены выполнено (для бонуса ЦК и отчёта).
+/datum/controller/subsystem/metadollars/proc/count_completed_station_goals()
+	. = 0
+	if(!SSticker?.mode?.station_goals?.len)
+		return
+	for(var/datum/station_goal/G in SSticker.mode.station_goals)
+		if(G.check_completion())
+			.++
+
+/// М$ всем выжившим на ЦК за выполненные цели смены (0, если целей нет).
+/datum/controller/subsystem/metadollars/proc/cc_station_goals_metadollars(completed_goals)
+	if(completed_goals > 0)
+		return 2 * completed_goals
+	return 0
+
+/// Полная выплата за ЦК для моба: цели смены + надбавка за роль (как metadollar_living_multiplier: 2 — антаг/ком/СБ, 1 — остальные).
+/datum/controller/subsystem/metadollars/proc/cc_total_payout_for_mob(mob/M, completed_goals)
+	var/goals_part = cc_station_goals_metadollars(completed_goals)
+	var/role_part = isliving(M) ? metadollar_living_multiplier(M) : 1
+	return goals_part + role_part
+
+/// Потенциальная выплата за выполненные цели антагониста (2 М$ за цель), по данным разума.
+/datum/controller/subsystem/metadollars/proc/potential_antag_metadollars(datum/mind/M)
+	. = 0
+	if(!M)
+		return
+	for(var/datum/antagonist/A in GLOB.antagonists)
+		if(A.owner != M)
+			continue
+		if(!A.objectives.len)
+			continue
+		for(var/datum/objective/O in A.objectives)
+			if(O.check_completion())
+				. += 2
+
 /datum/controller/subsystem/metadollars/proc/apply_round_end_rewards()
-	var/completed_station_goals = 0
-	if(SSticker?.mode?.station_goals?.len)
-		for(var/datum/station_goal/G in SSticker.mode.station_goals)
-			if(G.check_completion())
-				completed_station_goals++
+	var/completed_station_goals = count_completed_station_goals()
 
 	for(var/ckey in GLOB.joined_player_list)
 		var/client/C = GLOB.directory[ckey]
@@ -80,8 +111,7 @@ SUBSYSTEM_DEF(metadollars)
 		if(!M?.mind)
 			continue
 		if(EMERGENCY_ESCAPED_OR_ENDGAMED && M.stat != DEAD && !isbrain(M) && M.onCentCom())
-			var/cc_bonus = completed_station_goals > 0 ? (2 * completed_station_goals) : 1
-			add_amount(C, cc_bonus, "cc")
+			add_amount(C, cc_total_payout_for_mob(M, completed_station_goals), "cc")
 
 	for(var/datum/antagonist/A in GLOB.antagonists)
 		if(!A.owner)
@@ -95,6 +125,50 @@ SUBSYSTEM_DEF(metadollars)
 			if(O.check_completion())
 				add_amount(C, 2, "antag")
 
+/// Блок HTML: почему игрок недополучил бонус ЦК / антага (после apply_round_end_rewards).
+/datum/controller/subsystem/metadollars/proc/metadollar_roundend_missed_html(client/C, mob/M, list/E)
+	if(!C?.prefs || !M?.mind || isnewplayer(M))
+		return ""
+	var/list/missed = list()
+	var/completed_goals = count_completed_station_goals()
+	var/cc_pay = cc_total_payout_for_mob(M, completed_goals)
+	var/goals_part = cc_station_goals_metadollars(completed_goals)
+	var/got_cc = E["cc"] || 0
+	var/esc_ok = EMERGENCY_ESCAPED_OR_ENDGAMED
+
+	if(esc_ok)
+		var/missed_cc = max(0, cc_pay - got_cc)
+		if(missed_cc > 0)
+			var/list/reasons = list()
+			if(!(C.ckey in GLOB.joined_player_list))
+				reasons += "вы не входили в список экипажа этого раунда"
+			if(M.stat == DEAD || isbrain(M))
+				reasons += "персонаж не жив или остался только мозг"
+			else if(!M.onCentCom())
+				reasons += "персонаж не на площадке Центрального Командования в конце раунда"
+			if(length(reasons))
+				missed += "Недополучено <b>[missed_cc] М$</b> за эвакуацию на ЦК (из <b>[cc_pay] М$</b> для вашей роли: цели смены + надбавка 1–2 М$). Причина: [reasons.Join("; ")]."
+			else
+				missed += "Недополучено <b>[missed_cc] М$</b> за эвакуацию на ЦК при том, что условия, казалось бы, выполнены — если это ошибка, сообщите администрации."
+	else if(!esc_ok)
+		if(completed_goals > 0)
+			var/cc_min = goals_part + 1
+			var/cc_max = goals_part + 2
+			missed += "Бонус за ЦК (цели смены + 1–2 М$ по роли: командование, СБ, антагонисты — 2; остальные — 1), всего от <b>[cc_min]</b> до <b>[cc_max] М$</b>, <b>не начислялся</b>: эвакуация не в режиме успешного побега (шаттл не ушёл как «побег» / не конец игры по эвакуации)."
+		else if(M.stat != DEAD && !isbrain(M) && M.onCentCom())
+			var/role_only = isliving(M) ? metadollar_living_multiplier(M) : 1
+			missed += "Бонус <b>[role_only] М$</b> за прибытие живым на ЦК (по роли: командование, СБ, антагонисты — 2; остальные — 1) <b>не начислён</b>: эвакуация не в режиме успешного побега, поэтому выплата не производилась."
+
+	var/potential_antag = potential_antag_metadollars(M.mind)
+	var/got_antag = E["antag"] || 0
+	var/missed_antag = max(0, potential_antag - got_antag)
+	if(missed_antag > 0)
+		missed += "Недополучено <b>[missed_antag] М$</b> за выполненные цели антагониста (ожидалось до <b>[potential_antag] М$</b>; начислено <b>[got_antag] М$</b>)."
+
+	if(!length(missed))
+		return ""
+	return "<div class='panel clockborder'><span class='header'>Метадоллары: недополучено</span><br><small>[missed.Join("<br>")]</small></div>"
+
 /datum/controller/subsystem/metadollars/proc/personal_roundend_html(client/C)
 	if(!C?.ckey)
 		return ""
@@ -102,18 +176,25 @@ SUBSYSTEM_DEF(metadollars)
 	if(metadollar_burn_round_notice)
 		chunks += "<div class='panel redborder'><span class='header'>Сжигание метадолларов</span><br>[html_encode(metadollar_burn_round_notice)]</div>"
 	var/list/E = round_earnings[C.ckey]
-	if(E && E["total"])
-		var/total = E["total"]
+	if(!E)
+		E = list()
+	var/total = E["total"] || 0
+	if(total > 0)
 		var/list/lines = list()
 		if(E["living"])
 			lines += "За время на станции: <b>[E["living"]]</b> М$"
 		if(E["cc"])
-			lines += "Эвакуация / цели смены: <b>[E["cc"]]</b> М$"
+			lines += "Эвакуация на ЦК (цели смены + роль): <b>[E["cc"]]</b> М$"
 		if(E["antag"])
 			lines += "Цели антагониста: <b>[E["antag"]]</b> М$"
 		if(E["voucher"])
 			lines += "Жетон обмена: <b>[E["voucher"]]</b> М$"
 		chunks += "<div class='panel stationborder'><span class='header'>Метадоллары за раунд</span><br>Всего начислено: <b>[total] М$</b>.<br><small>[lines.Join("<br>")]</small><br>Текущий баланс: <b>[C.prefs.metadollars] М$</b>.</div>"
+	var/missed_block = metadollar_roundend_missed_html(C, C.mob, E)
+	if(missed_block)
+		if(total <= 0 && C.prefs)
+			missed_block += "<br><small>Текущий баланс: <b>[C.prefs.metadollars] М$</b>.</small>"
+		chunks += missed_block
 	if(!length(chunks))
 		return ""
 	return chunks.Join("")

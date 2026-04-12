@@ -1,6 +1,7 @@
 /mob/dead/new_player
 	var/bm_lobby_ready = FALSE
-	var/bm_metashop_anim = 0
+	/// -1 ещё не брошено; 0 обычная кнопка; 1 редкая радуга (шанс BM_METASHOP_RAINBOW_CHANCE).
+	var/bm_metashop_anim = -1
 	var/bm_bg_slot = 0
 	var/bm_assets_sent = FALSE  // asset cache уже отправлен этому клиенту
 	COOLDOWN_DECLARE(bm_ready_cd)
@@ -244,9 +245,10 @@ var _i=0;setInterval(function(){var s=_i%4;document.getElementById('d').textCont
 		parts += {"<a class='bm-btn' href='?src=[R];bm_lobby_action=character_directory'>БИБЛИОТЕКА ПЕРСОНАЖЕЙ</a>"}
 
 	parts += {"<a class='bm-btn' href='?src=[R];bm_lobby_action=observe'>БЫТЬ НАБЛЮДАТЕЛЕМ</a>"}
-	if(!bm_metashop_anim)
-		bm_metashop_anim = rand(1, 8)
-	parts += {"<a class='bm-btn bm-metashop bm-ms-[bm_metashop_anim]' href='?src=[R];bm_lobby_action=metashop'>МАГАЗИН</a>"}
+	if(bm_metashop_anim < 0)
+		bm_metashop_anim = prob(BM_METASHOP_RAINBOW_CHANCE) ? 10 : 0
+	var/metashop_ms = bm_metashop_anim ? " bm-ms-rainbow" : ""
+	parts += {"<a class='bm-btn bm-metashop[metashop_ms]' href='?src=[R];bm_lobby_action=metashop'>МАГАЗИН</a>"}
 
 	parts += "<div class='bm-divider'></div>"
 
