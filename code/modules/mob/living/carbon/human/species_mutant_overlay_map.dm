@@ -17,6 +17,9 @@
 			if(!S || S.icon_state == "none")
 				continue
 
+			if(!S.relevant_layers)
+				continue
+
 			for(var/L in S.relevant_layers)
 				LAZYADD(relevant_layers["[L]"], S)
 			if(!S.mutant_part_string)
@@ -39,7 +42,9 @@
 		if(!layertext)
 			stack_trace("invalid layer '[layer]' found in build_mutant_bodypart_overlay_map().")
 			continue
-		var/layernum = text2num(layer)
+		var/layernum = isnum(layer) ? layer : text2num(layer)
+		if(!layernum)
+			continue
 		for(var/bodypart in relevant_layers[layer])
 			var/datum/sprite_accessory/S = bodypart
 			var/mutable_appearance/accessory_overlay = mutable_appearance(S.icon, layer = -layernum)
