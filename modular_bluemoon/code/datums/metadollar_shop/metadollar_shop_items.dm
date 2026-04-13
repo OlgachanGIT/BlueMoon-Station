@@ -61,11 +61,32 @@
 	spawn_type = /obj/item/clothing/glasses/sunglasses
 
 /datum/metadollar_shop_item/item/gift_anything_lootbox
-	name = "Лутбокс"
-	desc = "Коробка-сюрприз: используйте в руке (как подарок) — внутри окажется случайный предмет со станции."
-	cost = 25
+	name = "Коробка-сюрприз"
+	desc = "Внутри вас ждёт случайный предмет."
+	cost = 10
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/a_gift/anything
+
+/datum/metadollar_shop_item/item/ration_pack
+	name = "Случайный сухпаёк NT"
+	desc = "Запечатанный рацион: при доставке выпадает одно из меню 1–4 (как безопасные MRE)."
+	cost = 10
+	catalog = METADOLLAR_CATALOG_LEGIT
+	spawn_type = /obj/item/storage/box/mre/random_safe
+
+/datum/metadollar_shop_item/item/collectable_random_hat
+	name = "Случайная коллекционная шляпа"
+	desc = "Сувенир из серии collectable: при доставке в рюкзак выпадает абсолютно случайный вариант из всех подтипов."
+	cost = 10
+	catalog = METADOLLAR_CATALOG_LEGIT
+	spawn_type = /obj/item/clothing/head/collectable/random_metashop
+
+/datum/metadollar_shop_item/item/freak_command_case
+	name = "Командный кейс с сюрпризами"
+	desc = "Большой офицерский кейс: случайная еда, алкогольные напитки и шприцы с контрабандой."
+	cost = 25
+	catalog = METADOLLAR_CATALOG_SMUGGLE
+	spawn_type = /obj/item/storage/backpack/case/command/freak
 
 /datum/metadollar_shop_item/item/captain_spare_id
 	name = "Запасная ID-карта капитана"
@@ -138,13 +159,6 @@
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/choice_beacon/box/carpet
 
-/datum/metadollar_shop_item/item/ration_pack
-	name = "Сухпаёк NT (случайное меню)"
-	desc = "Запечатанный рацион: при доставке выпадает одно из меню 1–4 (как безопасные MRE)."
-	cost = 10
-	catalog = METADOLLAR_CATALOG_LEGIT
-	spawn_type = /obj/item/storage/box/mre/random_safe
-
 /datum/metadollar_shop_item/item/tennis_rainbow
 	name = "Радужная теннисная сфера"
 	desc = "Пищащий мячик-трёхшарик — игрушка и антистресс."
@@ -158,13 +172,6 @@
 	cost = 10
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/bedsheet/cosmos
-
-/datum/metadollar_shop_item/item/collectable_random_hat
-	name = "Случайная коллекционная шляпа"
-	desc = "Сувенир из серии collectable: при доставке в рюкзак выпадает абсолютно случайный вариант из всех подтипов."
-	cost = 10
-	catalog = METADOLLAR_CATALOG_LEGIT
-	spawn_type = /obj/item/clothing/head/collectable/random_metashop
 
 /datum/metadollar_shop_item/item/spacecash_1000
 	name = "Пачка кредитов (1000 кр.)"

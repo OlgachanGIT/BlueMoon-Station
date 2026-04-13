@@ -241,7 +241,19 @@ SUBSYSTEM_DEF(metadollars)
 		var/path = text2path(path_text)
 		if(!ispath(path, /obj/item))
 			continue
-		var/obj/item/I = new path(get_turf(H))
+		var/turf/T = get_turf(H)
+		var/list/before_on_turf = list()
+		for(var/obj/item/pre_existing in T)
+			before_on_turf[pre_existing] = TRUE
+		var/obj/item/I = new path(T)
+		if(QDELETED(I))
+			for(var/obj/item/candidate in T)
+				if(before_on_turf[candidate] || QDELETED(candidate))
+					continue
+				I = candidate
+				break
+		if(QDELETED(I) || !istype(I, /obj/item))
+			continue
 		did_any = TRUE
 		if(istype(backpack))
 			if(!SEND_SIGNAL(backpack, COMSIG_TRY_STORAGE_INSERT, I, null, TRUE, TRUE))
