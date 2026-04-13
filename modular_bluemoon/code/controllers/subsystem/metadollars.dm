@@ -56,7 +56,7 @@ SUBSYSTEM_DEF(metadollars)
 	round_earnings[ck]["total"] = (round_earnings[ck]["total"] || 0) + amount
 	C.prefs.save_preferences()
 	if(category == "living" && isliving(C.mob))
-		to_chat(C.mob, span_purple("Вы получили [amount] М$ за работу на ПАКТ."))
+		to_chat(C.mob, span_purple("Вы получили [amount] М$ за работу."))
 		SEND_SOUND(C.mob, sound('sound/machines/terminal_success.ogg', volume = 35))
 
 /// Сколько целей смены выполнено (для бонуса ЦК и отчёта).

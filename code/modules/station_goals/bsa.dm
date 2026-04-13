@@ -216,17 +216,16 @@
 		apc.charging = 1 // APC_CHARGING
 	return cell_take WATTS
 
-/// Pull stored energy from a SMES (SMESRATE matches /obj/machinery/power/smes).
 /obj/machinery/bsa/full/proc/draw_from_smes(obj/machinery/power/smes/smes, amount_watts)
 	if(!smes || amount_watts <= 0 || (smes.machine_stat & BROKEN))
 		return 0
 	if(smes.charge <= 0)
 		return 0
-	var/max_watts = round(smes.charge / SMESRATE)
+	var/max_watts = round(smes.charge / 0.05)
 	var/take_w = min(amount_watts, max_watts)
 	if(take_w <= 0)
 		return 0
-	smes.charge -= take_w * SMESRATE
+	smes.charge -= take_w * 0.05
 	return take_w
 
 /obj/machinery/bsa/full/proc/charge_capacitors()
@@ -309,7 +308,7 @@
 		total += min(our_apc.cell.charge, our_apc.cell.maxcharge) WATTS
 	for(var/obj/machinery/power/smes/smes_unit in our_area)
 		if(!(smes_unit.machine_stat & BROKEN))
-			total += round(smes_unit.charge / SMESRATE)
+			total += round(smes_unit.charge / 0.05)
 	for(var/obj/machinery/power/terminal/remote_term as anything in our_terminal.powernet.nodes)
 		if(!istype(remote_term.master, /obj/machinery/power/apc))
 			continue
