@@ -40,7 +40,7 @@
 	return TRUE
 
 /datum/metadollar_shop_item/item/metadollar_voucher
-	name = "Стопка обмена метадолларов"
+	name = "Стопка метадолларов"
 	desc = "После доставки в рюкзак: зачисление 50 М$ на лобби-счёт проведением стопки по КПК или по ID-карте; Alt+ЛКМ — отделить любую сумму (можно передать другому игроку)."
 	cost = 50
 	catalog = METADOLLAR_CATALOG_LEGIT
@@ -68,15 +68,15 @@
 	spawn_type = /obj/item/a_gift/anything
 
 /datum/metadollar_shop_item/item/captain_spare_id
-	name = "Запасная ID капитана"
-	desc = "Золотая карта с полным доступом капитана (как из сейфа на мостике). Осторожно: это заметная вещь."
+	name = "Запасная ID-карта капитана"
+	desc = "Золотая карта с полным доступом."
 	cost = 500
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/card/id/captains_spare
 
 /datum/metadollar_shop_item/item/traitor_token
 	name = "Жетон «Предатель»"
-	desc = "Пластиковая монета. Купить можно только при ≥50 игроках на сервере. Alt+ЛКМ по жетону, чтобы получить роль предателя."
+	desc = "Пластиковая монета. ALT+ЛКМ по жетону, чтобы получить роль предателя."
 	cost = 250
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	minimum_players = 50
@@ -162,7 +162,7 @@
 /datum/metadollar_shop_item/item/collectable_random_hat
 	name = "Случайная коллекционная шляпа"
 	desc = "Сувенир из серии collectable: при доставке в рюкзак выпадает абсолютно случайный вариант из всех подтипов."
-	cost = 25
+	cost = 10
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/clothing/head/collectable/random_metashop
 
@@ -183,21 +183,21 @@
 /datum/metadollar_shop_item/item/syndie_mask
 	name = "Маска Синдиката"
 	desc = "Тактическая маска в стиле Синдиката."
-	cost = 25
-	catalog = METADOLLAR_CATALOG_SMUGGLE
+	cost = 10
+	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/clothing/mask/gas/syndicate
 
 /datum/metadollar_shop_item/item/syndie_turtleneck
 	name = "Тактическая водолазка Синдиката"
 	desc = "Классические тёмные штаны и водолазка."
-	cost = 25
+	cost = 10
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/clothing/under/syndicate
 
 /datum/metadollar_shop_item/item/syndie_skirtleneck
 	name = "Тактическая юбка Синдиката"
 	desc = "Классические тёмные штаны и юбка."
-	cost = 25
+	cost = 10
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/clothing/under/syndicate/skirt
 
@@ -211,23 +211,16 @@
 /datum/metadollar_shop_item/item/foam_lmg
 	name = "Игрушечный пенный пулемёт"
 	desc = "Foam LMG — безопасный для станции."
-	cost = 100
+	cost = 50
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/gun/ballistic/automatic/l6_saw/toy/unrestricted/riot
 
 /datum/metadollar_shop_item/item/foam_lmg_mag
 	name = "Магазин пенного LMG"
 	desc = "Боезапас к игрушечному пулемёту."
-	cost = 25
+	cost = 10
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/ammo_box/magazine/toy/m762/riot
-
-/datum/metadollar_shop_item/item/jukebox
-	name = "Портативный джукбокс"
-	desc = "Музыка с собой — переносной проигрыватель."
-	cost = 100
-	catalog = METADOLLAR_CATALOG_LEGIT
-	spawn_type = /obj/item/jukebox
 
 #undef METADOLLAR_CATALOG_LEGIT
 #undef METADOLLAR_CATALOG_SMUGGLE
