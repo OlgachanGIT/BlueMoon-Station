@@ -11,7 +11,7 @@
 			new /datum/data/mining_equipment("Sonic Jackhammer",					/obj/item/pickaxe/drill/jackhammer,				4000,	"Mining Tools"),
 			new /datum/data/mining_equipment("KinkMate Refill Stock",				/obj/item/vending_refill/kink,					1200,	"Recreational"), //Kinkmate restock for ghostroles/lone miners. Circuit can be found in circuit printer.
 			new /datum/data/mining_equipment("5000 Point Transfer Card",			/obj/item/card/mining_point_card/fivethousand,	5000),
-			new /datum/data/mining_equipment("1 Метадоллар (купюра)",				/obj/item/stack/metadollar,						50000,	"Miscellanous"),
+			new /datum/data/mining_equipment("1 Metadollar",				/obj/item/stack/metadollar,						50000,	"Miscellanous"),
 			)
 	build_inventory() // Фикс нужен для корректного отображения иконок
 

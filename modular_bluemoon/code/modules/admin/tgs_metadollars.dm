@@ -11,14 +11,18 @@
 		return null
 	return list("prefs" = P, "offline" = TRUE)
 
+/// Returns TRUE if cleanup ok and (when save) disk write succeeded.
 /proc/bm_tgs_finish_prefs_edit(list/ctx, save = TRUE)
 	if(!ctx)
-		return
+		return FALSE
 	var/datum/preferences/P = ctx["prefs"]
-	if(save)
-		P.save_preferences(TRUE, TRUE)
+	if(save && !P.save_preferences(TRUE, TRUE))
+		if(ctx["offline"])
+			qdel(P)
+		return FALSE
 	if(ctx["offline"])
 		qdel(P)
+	return TRUE
 
 /datum/tgs_chat_command/metadollars
 	name = "metadollars"
@@ -45,7 +49,8 @@
 			var/old_bal = P.metadollars
 			P.metadollars = max(0, round(P.metadollars + amt))
 			var/new_bal = P.metadollars
-			bm_tgs_finish_prefs_edit(ctx, TRUE)
+			if(!bm_tgs_finish_prefs_edit(ctx, TRUE))
+				return new /datum/tgs_message_content("Не удалось сохранить префы на диск для `[key]` (проверьте data/player_saves и лог сервера). Баланс в памяти был бы [new_bal] М$.")
 			log_admin("TGS метадоллары: [sender.friendly_name] (id [sender.id]) ADD [amt] М$ → [key]: [old_bal] -> [new_bal].")
 			message_admins("TGS: [sender.friendly_name] начислил [amt] М$ игроку [key] (сейчас [new_bal] М$).")
 			return new /datum/tgs_message_content("Начислено [amt] М$ игроку `[key]`. Баланс: [old_bal] → [new_bal] М$.")
@@ -64,7 +69,8 @@
 			var/old_bal = P.metadollars
 			P.metadollars = max(0, round(P.metadollars - amt))
 			var/new_bal = P.metadollars
-			bm_tgs_finish_prefs_edit(ctx, TRUE)
+			if(!bm_tgs_finish_prefs_edit(ctx, TRUE))
+				return new /datum/tgs_message_content("Не удалось сохранить префы на диск для `[key]`. Баланс в памяти был бы [new_bal] М$.")
 			log_admin("TGS метадоллары: [sender.friendly_name] (id [sender.id]) REMOVE [amt] М$ у [key]: [old_bal] -> [new_bal].")
 			message_admins("TGS: [sender.friendly_name] снял [amt] М$ у [key] (сейчас [new_bal] М$).")
 			return new /datum/tgs_message_content("Снято [amt] М$ у `[key]`. Баланс: [old_bal] → [new_bal] М$.")
@@ -83,7 +89,8 @@
 			var/old_bal = P.metadollars
 			P.metadollars = max(0, round(amt))
 			var/new_bal = P.metadollars
-			bm_tgs_finish_prefs_edit(ctx, TRUE)
+			if(!bm_tgs_finish_prefs_edit(ctx, TRUE))
+				return new /datum/tgs_message_content("Не удалось сохранить префы на диск для `[key]`. Баланс в памяти был бы [new_bal] М$.")
 			log_admin("TGS метадоллары: [sender.friendly_name] (id [sender.id]) SET [key] = [new_bal] М$ (было [old_bal]).")
 			message_admins("TGS: [sender.friendly_name] выставил [key] баланс [new_bal] М$ (было [old_bal]).")
 			return new /datum/tgs_message_content("Баланс `[key]` установлен: [new_bal] М$ (было [old_bal]).")
@@ -97,7 +104,8 @@
 				return new /datum/tgs_message_content("Не удалось загрузить префы для `[key]` (нет savefile или неверный ckey).")
 			var/datum/preferences/P = ctx["prefs"]
 			var/bal = P.metadollars
-			bm_tgs_finish_prefs_edit(ctx, FALSE)
+			if(!bm_tgs_finish_prefs_edit(ctx, FALSE))
+				return new /datum/tgs_message_content("Внутренняя ошибка при закрытии префов для `[key]`.")
 			return new /datum/tgs_message_content("`[key]` — баланс: [bal] М$.")
 
 		else

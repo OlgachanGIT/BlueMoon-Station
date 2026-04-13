@@ -64,36 +64,8 @@
 	var/list/playlists = list()
 	var/list/favorite_paintings_md5 = list()
 
-/datum/preferences/save_preferences()
-	. = ..()
-	if(!istype(., /savefile))
-		return FALSE
-	WRITE_FILE(.["favorite_tracks"], favorite_tracks)
-	WRITE_FILE(.["playlists"], playlists)
-	WRITE_FILE(.["favorite_paintings_md5"], favorite_paintings_md5)
-	WRITE_FILE(.["metadollars"], metadollars)
-	WRITE_FILE(.["metadollar_minute_pool"], metadollar_minute_pool)
-	WRITE_FILE(.["metadollar_pending_items"], metadollar_pending_items)
-
-/datum/preferences/load_preferences()
-	. = ..()
-	if(!istype(., /savefile))
-		return FALSE
-	.["favorite_tracks"] >> favorite_tracks
-	favorite_tracks = SANITIZE_LIST(favorite_tracks)
-
-	.["favorite_paintings_md5"] >> favorite_paintings_md5
-	favorite_paintings_md5 = SANITIZE_LIST(favorite_paintings_md5)
-
-	.["playlists"] >> playlists
-	playlists = SANITIZE_LIST(playlists)
-
-	.["metadollars"] >> metadollars
-	metadollars = isnum(metadollars) ? max(0, round(metadollars)) : 0
-	.["metadollar_minute_pool"] >> metadollar_minute_pool
-	metadollar_minute_pool = isnum(metadollar_minute_pool) ? clamp(round(metadollar_minute_pool), 0, 500) : 0
-	.["metadollar_pending_items"] >> metadollar_pending_items
-	metadollar_pending_items = SANITIZE_LIST(metadollar_pending_items)
+// save_preferences / load_preferences для metadollars и пр. — в modular_sand (последний в цепочке),
+// иначе lobby_preferences.dm перезаписывает этот proc и поля не сохранялись на диск.
 
 /datum/preferences/update_preferences(current_version, savefile/S)
 	// Citadel added a new bitfield to toggles, we need to push our prefs forward starting from the last bit
