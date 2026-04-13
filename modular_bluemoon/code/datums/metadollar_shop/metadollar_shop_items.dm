@@ -103,56 +103,56 @@
 		to_chat(M, span_danger("Межгалактическое казначейство: все балансы метадолларов обнулены. Сгорело всё."))
 	return TRUE
 
-/datum/metadollar_shop_item/item/don_golden_horn
+/datum/metadollar_shop_item/item/golden_horn
 	name = "Золотой клаксон"
 	desc = "Роскошный велосипедный гудок для истинных ценителей комедии."
 	cost = 25
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/bikehorn/golden
 
-/datum/metadollar_shop_item/item/don_scream_mask
+/datum/metadollar_shop_item/item/scream_mask
 	name = "Маска крика"
 	desc = "Маска с особым эффектом на эмоции."
 	cost = 25
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/clothing/mask/screammask
 
-/datum/metadollar_shop_item/item/don_desk_beacon
+/datum/metadollar_shop_item/item/desk_beacon
 	name = "Маяк «Мебель»"
 	desc = "Вызывает доставку мебели на выбор."
 	cost = 10
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/choice_beacon/box/desk
 
-/datum/metadollar_shop_item/item/don_pet_beacon
+/datum/metadollar_shop_item/item/pet_beacon
 	name = "Маяк питомца"
 	desc = "Позволяет призвать компаньона-питомца."
 	cost = 25
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/choice_beacon/pet
 
-/datum/metadollar_shop_item/item/don_carpet_beacon
+/datum/metadollar_shop_item/item/carpet_beacon
 	name = "Маяк ковров"
 	desc = "Доставка наборов коврового покрытия."
 	cost = 10
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/choice_beacon/box/carpet
 
-/datum/metadollar_shop_item/item/don_ration_pack
+/datum/metadollar_shop_item/item/ration_pack
 	name = "Сухпаёк NT (случайное меню)"
 	desc = "Запечатанный рацион: при доставке выпадает одно из меню 1–4 (как безопасные MRE)."
 	cost = 10
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/storage/box/mre/random_safe
 
-/datum/metadollar_shop_item/item/don_tennis_rainbow
+/datum/metadollar_shop_item/item/tennis_rainbow
 	name = "Радужная теннисная сфера"
 	desc = "Пищащий мячик-трёхшарик — игрушка и антистресс."
 	cost = 10
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/toy/fluff/tennis_poly/tri/squeak/rainbow
 
-/datum/metadollar_shop_item/item/don_bedsheet_cosmos
+/datum/metadollar_shop_item/item/bedsheet_cosmos
 	name = "Космическая простыня"
 	desc = "Простыня с космическим принтом."
 	cost = 10
@@ -166,63 +166,63 @@
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/clothing/head/collectable/random_metashop
 
-/datum/metadollar_shop_item/item/don_spacecash_1000
+/datum/metadollar_shop_item/item/spacecash_1000
 	name = "Пачка кредитов (1000 кр.)"
 	desc = "Красивые станционные кредиты."
 	cost = 10
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/stack/spacecash/c1000
 
-/datum/metadollar_shop_item/item/don_chameleon_kit
+/datum/metadollar_shop_item/item/chameleon_kit
 	name = "Коробка хамелеона"
 	desc = "Синдикатовский набор маскировки."
 	cost = 50
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/storage/box/syndie_kit/chameleon
 
-/datum/metadollar_shop_item/item/don_syndie_mask
+/datum/metadollar_shop_item/item/syndie_mask
 	name = "Маска Синдиката"
 	desc = "Тактическая маска в стиле Синдиката."
 	cost = 25
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/clothing/mask/gas/syndicate
 
-/datum/metadollar_shop_item/item/don_syndie_turtleneck
+/datum/metadollar_shop_item/item/syndie_turtleneck
 	name = "Тактическая водолазка Синдиката"
 	desc = "Классические тёмные штаны и водолазка."
 	cost = 25
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/clothing/under/syndicate
 
-/datum/metadollar_shop_item/item/don_syndie_skirtleneck
+/datum/metadollar_shop_item/item/syndie_skirtleneck
 	name = "Тактическая юбка Синдиката"
 	desc = "Классические тёмные штаны и юбка."
 	cost = 25
 	catalog = METADOLLAR_CATALOG_LEGIT
 	spawn_type = /obj/item/clothing/under/syndicate/skirt
 
-/datum/metadollar_shop_item/item/don_summon_pie
+/datum/metadollar_shop_item/item/summon_pie
 	name = "Книга заклинания «Пирог»"
 	desc = "Учит простому заклинанию призыва пирога."
 	cost = 100
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/book/granter/spell/summon_pie
 
-/datum/metadollar_shop_item/item/don_foam_lmg
+/datum/metadollar_shop_item/item/foam_lmg
 	name = "Игрушечный пенный пулемёт"
 	desc = "Foam LMG — безопасный для станции."
 	cost = 100
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/gun/ballistic/automatic/l6_saw/toy/unrestricted/riot
 
-/datum/metadollar_shop_item/item/don_foam_lmg_mag
+/datum/metadollar_shop_item/item/foam_lmg_mag
 	name = "Магазин пенного LMG"
 	desc = "Боезапас к игрушечному пулемёту."
 	cost = 25
 	catalog = METADOLLAR_CATALOG_SMUGGLE
 	spawn_type = /obj/item/ammo_box/magazine/toy/m762/riot
 
-/datum/metadollar_shop_item/item/don_jukebox
+/datum/metadollar_shop_item/item/jukebox
 	name = "Портативный джукбокс"
 	desc = "Музыка с собой — переносной проигрыватель."
 	cost = 100
