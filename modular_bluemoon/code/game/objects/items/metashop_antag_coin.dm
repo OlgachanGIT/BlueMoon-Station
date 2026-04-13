@@ -1,5 +1,5 @@
 /obj/item/coin/antagtoken/metashop
-	name = "метамагазинный жетон"
+	name = "Token"
 	desc = "Пластиковая безделушка.."
 	icon_state = "coin_valid"
 	var/antag_type = null
@@ -34,6 +34,10 @@
 	if(H.mind.has_antag_datum(antag_type))
 		to_chat(H, span_warning(already_has_antag_message()))
 		return FALSE
+	var/extra_block = activation_extra_block_reason(H)
+	if(extra_block)
+		to_chat(H, span_warning(extra_block))
+		return FALSE
 	var/datum/antagonist/T = H.mind.add_antag_datum(antag_type)
 	if(!T)
 		to_chat(H, span_warning(role_unavailable_message()))
@@ -51,8 +55,29 @@
 
 /obj/item/coin/antagtoken/metashop/proc/on_activation_success(mob/living/carbon/human/H, datum/antagonist/T)
 
+/obj/item/coin/antagtoken/metashop/proc/activation_extra_block_reason(mob/living/carbon/human/H)
+	var/list/jobs = metashop_traitor_mode_restricted_jobs()
+	if(H.job in jobs)
+		return metashop_protected_roles_block_message()
+	return null
+
+/obj/item/coin/antagtoken/metashop/proc/metashop_protected_roles_block_message()
+	return "Жетон недоступен для командования и службы безопасности."
+
+/obj/item/coin/antagtoken/metashop/proc/metashop_traitor_mode_restricted_jobs()
+	var/datum/game_mode/traitor/checker = new
+	. = checker.restricted_jobs.Copy()
+	metashop_append_traitor_protected_jobs(., checker)
+	qdel(checker)
+
+/obj/item/coin/antagtoken/metashop/proc/metashop_append_traitor_protected_jobs(list/jobs, datum/game_mode/traitor/checker)
+	if(CONFIG_GET(flag/protect_roles_from_antagonist))
+		jobs += checker.protected_jobs
+	if(CONFIG_GET(flag/protect_assistant_from_antagonist))
+		jobs += "Assistant"
+
 /obj/item/coin/antagtoken/metashop/traitor
-	name = "Жетон Предателя"
+	name = "Traitor Radio"
 	desc = "Пластиковая безделушка с отметиной InteQ. Одноразовая."
 	antag_type = /datum/antagonist/traitor
 	icon = 'modular_bluemoon/krashly/icons/obj/inteq-uplink.dmi'
@@ -61,6 +86,11 @@
 /obj/item/coin/antagtoken/metashop/traitor/examine(mob/user)
 	. = ..()
 	. += span_notice("Активация: <b>Alt+ЛКМ</b> по предмету, чтобы получить роль предателя.")
+
+/obj/item/coin/antagtoken/metashop/traitor/activation_extra_block_reason(mob/living/carbon/human/H)
+	if(jobban_isbanned(H, ROLE_TRAITOR) || jobban_isbanned(H, ROLE_INTEQ))
+		return "Вам запрещена роль предателя."
+	return ..()
 
 /obj/item/coin/antagtoken/metashop/traitor/on_activation_success(mob/living/carbon/human/H, datum/antagonist/T)
 	to_chat(H, span_bolddanger("Вы чувствуете холодок по спине. Система отмечает вас как угрозу экипажу."))
