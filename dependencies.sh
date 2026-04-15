@@ -20,9 +20,8 @@ export SPACEMAN_DMM_VERSION=suite-1.11
 # Python version for mapmerge and other tools
 export PYTHON_VERSION=3.11.0
 
-# Auxmos git tag
-# v2.5.1: v2.5.6 causes illegal operation crashes + network sequence errors on this codebase
-export AUXMOS_VERSION=v2.5.1
+# Auxmos git tag (v2.5.4+ SIMD runtime detection; v2.5.6 null-air / visuals callback sanity — Putnam3145/auxmos PR #70)
+export AUXMOS_VERSION=v2.5.6
 
 # Extools git tag
 export EXTOOLS_VERSION=v0.0.7
