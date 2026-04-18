@@ -95,6 +95,66 @@ GLOBAL_LIST_INIT(jobban_panel_data, list(
 	)
 ))
 
+/datum/admins/proc/get_jobban_flat_roles()
+	. = list()
+	for(var/list/cat in GLOB.jobban_panel_data)
+		for(var/r in cat["roles"])
+			. += r
+
+/// Active JOB_PERMA / JOB_TEMP rows for this ckey (for panel checkboxes).
+/datum/admins/proc/get_active_job_bans_for_ckey(target_ckey)
+	. = list()
+	if(!target_ckey || !SSdbcore.Connect())
+		return
+	var/datum/db_query/q = SSdbcore.NewQuery({"
+		SELECT DISTINCT job FROM [format_table_name("ban")]
+		WHERE ckey = :ckey
+		AND (bantype = 'JOB_PERMABAN' OR (bantype = 'JOB_TEMPBAN' AND expiration_time > Now()))
+		AND (unbanned is null OR unbanned = false)
+		AND job IS NOT NULL AND job != ''
+	"}, list("ckey" = target_ckey))
+	if(!q.warn_execute())
+		qdel(q)
+		return
+	while(q.NextRow())
+		. += q.item[1]
+	qdel(q)
+
+/datum/admins/proc/build_jobban_checkbox_section(playerckey_for_state = null)
+	var/list/banned_roles = list()
+	if(playerckey_for_state)
+		banned_roles = get_active_job_bans_for_ckey(ckey(playerckey_for_state))
+	var/out = ""
+	out += "<div class='ban-role-toolbar'>"
+	out += "<button type='button' class='ban-btn' onclick='banpanel_select_all_except_other()'>Забанить всё, кроме Other</button>"
+	out += "<button type='button' class='ban-btn ban-btn-unban' onclick='banpanel_unban_all_except_other()'>Разбанить всё, кроме Other</button>"
+	out += "<span class='ban-panel-hint'> — бан: JOB PERMA/TEMP + <b>Add ban</b>; разбан: снять галочки + <b>Снять джоббаны</b>.</span>"
+	if(length(banned_roles))
+		out += "<br><span class='ban-panel-hint'>Активные джоббаны по Key уже отмечены. Снимите галочки и нажмите <b>Снять джоббаны</b> (как на WhiteMoon).</span>"
+	out += "</div>"
+	out += "<div class='ban-role-row'>"
+	var/idx = 0
+	for(var/list/cat in GLOB.jobban_panel_data)
+		var/cat_name = cat["name"]
+		var/ccls = ckey(cat_name)
+		var/is_other = (ccls == "other")
+		out += "<div class='banrole-column[is_other ? " ban-cat-other" : ""]'>"
+		out += "<div class='rolegroup [ccls]'>"
+		out += "<label class='cat-head'><input type='checkbox' data-cat='[ccls]' onclick='header_click_all_checkboxes(this)' /> <b>[html_encode(cat_name)]</b></label>"
+		out += "<div class='content'>"
+		for(var/r in cat["roles"])
+			idx++
+			var/is_banned = (r in banned_roles)
+			var/checked = is_banned ? " checked" : ""
+			var/banned_cls = is_banned ? " jr_label_banned" : ""
+			out += "<label class='jr_label[banned_cls]'><input type='checkbox' class='jr_cb [ccls]' name='jr_[idx]' value='[idx]'[checked] /> [html_encode(r)]</label>"
+			if(is_banned)
+				out += "<input type='hidden' name='was_jr_[idx]' value='1'>"
+		out += "</div></div></div>"
+	out += "</div>"
+	out += "<input type='hidden' name='jr_max' value='[idx]'>"
+	return out
+
 // notbannedlist is just a list of strings of the job titles you want to ban.
 /datum/admins/proc/Jobban(mob/M, list/notbannedlist)
 	if (!check_rights(R_BAN))
