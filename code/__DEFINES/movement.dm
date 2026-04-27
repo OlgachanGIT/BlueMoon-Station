@@ -57,7 +57,7 @@ GLOBAL_VAR_INIT(glide_size_multiplier, 1.0)
 // Space drift / newtonian tuning (WhiteMoon-style)
 #define DEFAULT_INERTIA_SPEED 4
 #define INERTIA_SPEED_COEF 0.4
-#define INERTIA_FORCE_CAP 2.5
+#define INERTIA_FORCE_CAP 15
 #define INERTIA_FORCE_SPACEMOVE_GRAB 0.4
 #define INERTIA_FORCE_SPACEMOVE_REDUCTION 0.2
 

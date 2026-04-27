@@ -325,9 +325,13 @@
 
 	return FALSE
 
-/// Only moves the object if it's under no gravity. Uses smooth drift when possible.
+/// Subtype hook (e.g. lattice); [Process_Spacemove] already handles lattice on /atom/movable — mobs override and use backups
+/atom/movable/proc/handle_spacemove_grabbing()
+	return FALSE
+
+/// Only moves the object if it's under no gravity. Uses smooth drift when possible. [inertia_dir] is a BYOND dir flag.
 /atom/movable/proc/newtonian_move(
-	direction,
+	inertia_dir,
 	instant = FALSE,
 	start_delay = 0,
 	drift_force = 1,
@@ -335,32 +339,40 @@
 	force_loop = TRUE,
 )
 	if(!isturf(loc))
-		inertia_dir = 0
+		src.inertia_dir = 0
 		if(drift_handler)
 			QDEL_IN(drift_handler, 0)
 		return FALSE
 
-	if(!direction)
-		inertia_dir = 0
+	if(!inertia_dir)
+		src.inertia_dir = 0
 		if(drift_handler)
 			QDEL_IN(drift_handler, 0)
 		return TRUE
 
-	if(Process_Spacemove(direction, TRUE))
-		inertia_dir = 0
+	if(Process_Spacemove(inertia_dir, TRUE))
+		src.inertia_dir = 0
 		if(drift_handler)
 			QDEL_IN(drift_handler, 0)
 		return FALSE
 
 	SSspacedrift.processing -= src
-	inertia_dir = direction
+	src.inertia_dir = inertia_dir
+	var/inertia_angle = dir2angle(inertia_dir)
 	var/capped = isnull(controlled_cap) ? drift_force : min(drift_force, controlled_cap)
+
+	if(!isnull(drift_handler) && !QDELETED(drift_handler))
+		if(drift_handler.newtonian_impulse(inertia_angle, start_delay, capped, controlled_cap, force_loop))
+			return TRUE
+		if(QDELETED(src))
+			return FALSE
+
 	// Defer: Destroy() must not clear a replacement drift_handler (see /datum/drift_handler/Destroy)
 	if(drift_handler)
 		var/datum/drift_handler/old_drift = drift_handler
 		QDEL_IN(old_drift, 0)
-	new /datum/drift_handler(src, dir2angle(direction), instant, start_delay, capped)
+	new /datum/drift_handler(src, inertia_angle, instant, start_delay, capped)
 	if(QDELETED(drift_handler))
-		inertia_dir = 0
+		src.inertia_dir = 0
 		return FALSE
 	return TRUE

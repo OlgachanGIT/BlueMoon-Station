@@ -11,19 +11,22 @@
 	if(!isturf(loc))
 		return FALSE
 
-	// Do we have a jetpack implant (and is it on)?
+	// Do we have a jetpack implant (and is it on)? Same as tank jetpack: drift tick is not "key thrust"
 	var/obj/item/organ/cyberimp/chest/thrusters/T = getorganslot(ORGAN_SLOT_THRUSTERS)
-	if(istype(T) && movement_dir && T.allow_thrust(0.01))
+	if(istype(T) && T.allow_thrust(0.01) && (continuous_move ? FALSE : movement_dir))
 		return TRUE
 
+	// *continuous_move* is the newtonian drift tick: [movement_dir] is drift, not keyinput — do not let jet (without stabilizers) "win" and kill inertia
 	var/obj/item/I = get_jetpack()
 	if(istype(I, /obj/item/tank/jetpack))
 		var/obj/item/tank/jetpack/J = I
-		if((movement_dir || J.stabilizers) && J.allow_thrust(0.01, src))
+		var/jetpack_helps = continuous_move ? J.stabilizers : (movement_dir || J.stabilizers)
+		if(jetpack_helps && J.allow_thrust(0.01, src))
 			return TRUE
 	else if(istype(I, /obj/item/mod/module/jetpack))
 		var/obj/item/mod/module/jetpack/J = I
-		if((movement_dir || J.stabilizers) && J.allow_thrust())
+		var/jetpack_helps = continuous_move ? J.stabilizers : (movement_dir || J.stabilizers)
+		if(jetpack_helps && J.allow_thrust())
 			return TRUE
 
 /mob/living/carbon/Moved()

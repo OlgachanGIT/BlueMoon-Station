@@ -848,13 +848,11 @@
 	. = ..()
 	saved_delay = delay
 
-/datum/move_loop/smooth_move/compare_loops(
-	datum/move_loop/loop_type, priority, flags, extra_info,
-	delay = 1, timeout = INFINITY, angle,
-)
-	if(!(loop_type == type && priority == src.priority && flags == src.flags && delay == src.delay && timeout == src.lifetime))
-		return FALSE
-	return angle == src.angle
+/datum/move_loop/smooth_move/compare_loops(datum/move_loop/loop_type, priority, flags, extra_info, delay, timeout, new_angle)
+	SHOULD_CALL_PARENT(FALSE)
+	if(loop_type == type && priority == src.priority && flags == src.flags && delay == src.delay && timeout == lifetime && new_angle == src.angle)
+		return TRUE
+	return FALSE
 
 /datum/move_loop/smooth_move/move()
 	var/atom/old_loc = moving.loc

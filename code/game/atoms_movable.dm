@@ -31,8 +31,8 @@
 	var/inertia_move_delay = 5
 	/// Set while Space Drift 2.0 (smooth newtonian loop) is active
 	var/datum/drift_handler/drift_handler
-	/// For drift rate limiting / SS alignment
-	var/last_drift_time = 0
+	/// Last time we used this atom as a push-off point (anti double-count same tick)
+	var/last_pushoff = 0
 	/// Scalar for impulse math (higher = harder to nudge)
 	var/inertia_force_weight = 1
 	/// Species / vehicle modifiers
@@ -547,7 +547,7 @@
 /atom/movable/proc/on_enter_storage(datum/component/storage/concrete/S)
 	// SEND_SIGNAL(src, COMSIG_STORAGE_ENTERED, master_storage)
 
-/atom/movable/proc/get_spacemove_backup()
+/atom/movable/proc/get_spacemove_backup(moving_direction = 0, continuous_move = FALSE, include_floors = FALSE)
 	var/atom/movable/dense_object_backup
 	for(var/A in orange(1, get_turf(src)))
 		if(isarea(A))
