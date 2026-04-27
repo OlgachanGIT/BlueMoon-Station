@@ -29,6 +29,14 @@
 	var/inertia_moving = 0
 	var/inertia_next_move = 0
 	var/inertia_move_delay = 5
+	/// Set while Space Drift 2.0 (smooth newtonian loop) is active
+	var/datum/drift_handler/drift_handler
+	/// For drift rate limiting / SS alignment
+	var/last_drift_time = 0
+	/// Scalar for impulse math (higher = harder to nudge)
+	var/inertia_force_weight = 1
+	/// Species / vehicle modifiers
+	var/inertia_move_multiplier = 1
 	/// Things we can pass through while moving. If any of this matches the thing we're trying to pass's [pass_flags_self], then we can pass through.
 	var/pass_flags = NONE
 	/// If false makes CanPass call CanPassThrough on this type instead of using default behaviour
@@ -124,6 +132,7 @@
 
 	invisibility = INVISIBILITY_ABSTRACT
 
+	QDEL_NULL(drift_handler)
 	if(inertia_dir)
 		inertia_dir = 0
 		inertia_last_loc = null
@@ -340,7 +349,7 @@
 	if(A == loc && pulling.density)
 		return FALSE
 	var/move_dir = get_dir(pulling.loc, A)
-	if(!Process_Spacemove(move_dir))
+	if(!Process_Spacemove(move_dir, FALSE))
 		return FALSE
 	pulling.Move(get_step(pulling.loc, move_dir), move_dir, glide_size)
 	return TRUE

@@ -5,8 +5,8 @@
 		log_combat(src, (O ? O : get_turf(src)), "slipped on the", null, ((lube & SLIDE) ? "(LUBE)" : null))
 	return loc.handle_slip(src, knockdown_amount, O, lube)
 
-/mob/living/carbon/Process_Spacemove(movement_dir = 0)
-	if(..())
+/mob/living/carbon/Process_Spacemove(movement_dir = 0, continuous_move = FALSE)
+	if(..(movement_dir, continuous_move))
 		return TRUE
 	if(!isturf(loc))
 		return FALSE

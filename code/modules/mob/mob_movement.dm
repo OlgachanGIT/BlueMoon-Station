@@ -215,10 +215,13 @@
 ///Process_Spacemove
 ///Called by /client/Move()
 ///For moving in space
-///return TRUE for movement 0 for none
-/mob/Process_Spacemove(movement_dir = 0)
-	if(HAS_TRAIT(src, TRAIT_SPACEWALK) || spacewalk || ..())
+/// return TRUE to allow voluntary movement, FALSE in zero-G to rely on smooth drift
+/mob/Process_Spacemove(movement_dir = 0, continuous_move = FALSE)
+	if(HAS_TRAIT(src, TRAIT_SPACEWALK) || spacewalk || ..(movement_dir, continuous_move))
 		return TRUE
+	// Drift ticks: "nearby mass" is handled by the smooth loop bumping, not a fake floor here
+	if(continuous_move)
+		return FALSE
 	var/atom/movable/backup = get_spacemove_backup()
 	if(backup)
 		if(istype(backup) && movement_dir && !backup.anchored)

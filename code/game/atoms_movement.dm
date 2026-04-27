@@ -300,8 +300,9 @@
  *
  * Arguments:
  * * movement_dir - 0 when stopping or any dir when trying to move
+ * * continuous_move - TRUE when checking from the newtonian drift loop (not client step intent)
  */
-/atom/movable/proc/Process_Spacemove(movement_dir = 0)
+/atom/movable/proc/Process_Spacemove(movement_dir = 0, continuous_move = FALSE)
 	if(has_gravity(src))
 		return TRUE
 
@@ -324,15 +325,42 @@
 
 	return FALSE
 
-/// Only moves the object if it's under no gravity
-/atom/movable/proc/newtonian_move(direction)
-	if(!isturf(loc) || Process_Spacemove(0))
+/// Only moves the object if it's under no gravity. Uses smooth drift when possible.
+/atom/movable/proc/newtonian_move(
+	direction,
+	instant = FALSE,
+	start_delay = 0,
+	drift_force = 1,
+	controlled_cap = null,
+	force_loop = TRUE,
+)
+	if(!isturf(loc))
 		inertia_dir = 0
+		if(drift_handler)
+			QDEL_IN(drift_handler, 0)
 		return FALSE
 
-	inertia_dir = direction
 	if(!direction)
+		inertia_dir = 0
+		if(drift_handler)
+			QDEL_IN(drift_handler, 0)
 		return TRUE
-	inertia_last_loc = loc
-	SSspacedrift.processing[src] = src
+
+	if(Process_Spacemove(direction, TRUE))
+		inertia_dir = 0
+		if(drift_handler)
+			QDEL_IN(drift_handler, 0)
+		return FALSE
+
+	SSspacedrift.processing -= src
+	inertia_dir = direction
+	var/capped = isnull(controlled_cap) ? drift_force : min(drift_force, controlled_cap)
+	// Defer: Destroy() must not clear a replacement drift_handler (see /datum/drift_handler/Destroy)
+	if(drift_handler)
+		var/datum/drift_handler/old_drift = drift_handler
+		QDEL_IN(old_drift, 0)
+	new /datum/drift_handler(src, dir2angle(direction), instant, start_delay, capped)
+	if(QDELETED(drift_handler))
+		inertia_dir = 0
+		return FALSE
 	return TRUE
