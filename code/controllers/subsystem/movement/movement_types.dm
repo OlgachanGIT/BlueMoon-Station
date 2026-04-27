@@ -108,6 +108,10 @@
 		qdel(src)
 		return
 
+	if(!controller || QDELETED(moving) || !moving)
+		qdel(src)
+		return
+
 	var/visual_delay = controller.visual_delay
 	var/success = move()
 

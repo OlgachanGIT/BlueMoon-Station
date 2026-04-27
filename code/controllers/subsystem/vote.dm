@@ -414,8 +414,13 @@ SUBSYSTEM_DEF(vote)
 				if(use_dynamic_light_roundtype_vote_window() && !roundtype_prime_runoff_ballot && . == ROUNDTYPE_EXTENDED)
 					vote_chained_from_roundtype = TRUE
 					var/runoff_vote_ds = prepare_prime_roundtype_runoff_lobby_time()
-					initiate_vote("roundtype", initiator ? initiator : "server", display = NONE, votesystem = PLURALITY_VOTING, forced = TRUE, \
-						vote_time = runoff_vote_ds, roundtype_runoff_second_ballot = TRUE)
+					// Must clear an active roundtype vote or initiate_vote() hits `if(!mode)` and returns FALSE, never
+					// building the runoff (Dynamic (Light) vs Extended). First vote outcome is not applied to GLOB until runoff finishes.
+					var/prior_initiator = initiator
+					reset()
+					if(!initiate_vote("roundtype", prior_initiator ? prior_initiator : "server", display = NONE, votesystem = PLURALITY_VOTING, forced = TRUE, \
+						vote_time = runoff_vote_ds, roundtype_runoff_second_ballot = TRUE))
+						vote_chained_from_roundtype = FALSE
 					return .
 				. = normalize_roundtype_vote_result(.)
 				if(. != ROUNDTYPE_EXTENDED && . != ROUNDTYPE_DYNAMIC_LIGHT)
