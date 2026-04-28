@@ -53,7 +53,10 @@ SUBSYSTEM_DEF(vote)
 /datum/controller/subsystem/vote/fire()	//called by master_controller
 	if(mode)
 //BLUEMOON ADD START
-		if(mode == "roundtype" && SSticker.timeLeft - ROUNDTYPE_VOTE_END_PENALTY <= 0)
+		// Prime-time Extended → Dynamic (Light) runoff must not hit this branch: while timeLeft is in the
+		// penalty window, result() would run every SS tick, often with no winner, then reset() wipes the
+		// runoff and players get a fresh Dynamic (Random) vs Extended vote (looks like recursion).
+		if(mode == "roundtype" && !roundtype_prime_runoff_ballot && SSticker.timeLeft - ROUNDTYPE_VOTE_END_PENALTY <= 0)
 			result()
 			if(!vote_chained_from_roundtype)
 				reset()
