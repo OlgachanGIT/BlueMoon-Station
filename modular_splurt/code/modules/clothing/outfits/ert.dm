@@ -9,8 +9,8 @@
 	belt = /obj/item/gun/ballistic/automatic/pistol/suppressed
 	head = /obj/item/clothing/head/helmet/cbrn/mopp/advance
 	backpack_contents = list(/obj/item/storage/box/survival/centcom,
-		/obj/item/storage/firstaid/tactical/ert_first,
-		/obj/item/storage/firstaid/tactical/ert_second,
+		/obj/item/storage/firstaid/brute,
+		/obj/item/storage/firstaid/fire,
 		/obj/item/gun/energy/modular_laser_rifle/carbine,
 		/obj/item/storage/box/ammo/m10mm)
 
@@ -25,8 +25,8 @@
 	belt = /obj/item/gun/ballistic/automatic/pistol/suppressed
 	head = /obj/item/clothing/head/helmet/cbrn/mopp/advance
 	backpack_contents = list(/obj/item/storage/box/survival/centcom,
-		/obj/item/storage/firstaid/tactical/ert_first,
-		/obj/item/storage/firstaid/tactical/ert_second,
+		/obj/item/storage/firstaid/brute,
+		/obj/item/storage/firstaid/fire,
 		/obj/item/gun/energy/modular_laser_rifle/carbine,
 		/obj/item/storage/box/ammo/m10mm)
 
@@ -57,7 +57,7 @@
 	belt = /obj/item/gun/ballistic/automatic/pistol/suppressed
 	head = /obj/item/clothing/head/helmet/cbrn/mopp/advance
 	backpack_contents = list(/obj/item/storage/box/survival/centcom,
-		/obj/item/storage/firstaid/tactical/ert_first,
-		/obj/item/storage/firstaid/tactical/ert_second,
+		/obj/item/storage/firstaid/brute,
+		/obj/item/storage/firstaid/fire,
 		/obj/item/gun/energy/modular_laser_rifle/carbine,
 		/obj/item/storage/box/ammo/m10mm)

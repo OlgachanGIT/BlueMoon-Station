@@ -6,7 +6,7 @@
 	spawning_list = list()
 	dynamic_loot_spawns = TRUE
 	spawning_flags = SHUTTLE_EVENT_HIT_SHUTTLE | SHUTTLE_EVENT_MISS_SHUTTLE
-	spawn_probability_per_process = 100
+	spawn_probability_per_process = 22
 	spawns_per_spawn = 2
 
 /datum/shuttle_event/simple_spawner/maintenance/get_type_to_spawn()
