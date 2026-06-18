@@ -986,6 +986,38 @@
 	else
 		icon_state = "[initial(icon_state)]"
 
+//одежда
+
+/obj/item/clothing/suit/armor/saggitarius
+	name = "order stealth suit"
+	desc = "Modified version of average amrmor suit. uses special sensors to make owner invisible"
+	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
+	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/skihellclothes.dmi'
+	icon_state = "saggitariussuit"
+	item_state = "saggitariussuit"
+	body_parts_covered = CHEST|GROIN|ARMS|LEGS
+	cold_protection = CHEST|GROIN|ARMS|LEGS
+
+/obj/item/clothing/head/helmet/saggitarius
+	name = "NVG Helmet"
+	desc = "Standard saggitarius helmet. Protects the head from impacts. Equipped with a night vision."
+	icon_state = "saggitariushelmett"
+	item_state = "saggitariushelmet"
+	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
+	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/skihellclothes.dmi'
+	darkness_view = 8
+	flash_protect = -1
+	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
+
+
+/obj/item/storage/backpack/relicuum
+	name = "relicuum backpack"
+	desc = "Strange backpack with antenna on it"
+	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
+	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/skihellclothes.dmi'
+	icon_state = "relicuumbag"
+	item_state = "relicuumbag"
+
 
 /obj/item/clothing/neck/tie/hecudogtag
 	name = "HECU Dogtag"
