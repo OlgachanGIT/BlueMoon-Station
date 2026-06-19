@@ -726,18 +726,18 @@
 /datum/round_event/blackmesa/lockdown/start()
 	lockdown_duration = rand(300, 600)
 	SSblackmesa_events.mesa_announce("ВНИМАНИЕ! АКТИВИРОВАНА СИСТЕМА АВАРИЙНОЙ БЛОКИРОВКИ! Все двери заблокированы на время экстренной ситуации!", "LOCKDOWN ACTIVATED", 'modular_bluemoon/sound/ambience/mesa/BMAS2.ogg')
-	
+
 	var/list/areas = get_mesa_areas()
 	if(!areas.len)
 		return
-	
+
 	for(var/area/A in areas)
 		for(var/obj/machinery/door/D in A.contents)
 			if(!D.locked)
 				D.locked = TRUE
 				D.update_icon()
 				locked_doors += D
-	
+
 	addtimer(CALLBACK(src, PROC_REF(end_lockdown)), lockdown_duration)
 
 /datum/round_event/blackmesa/lockdown/proc/end_lockdown()
@@ -745,7 +745,7 @@
 		if(!QDELETED(D))
 			D.locked = FALSE
 			D.update_icon()
-	
+
 	locked_doors.Cut()
 	SSblackmesa_events.mesa_announce("Система аварийной блокировки отключена. Все двери разблокированы.", "Lockdown Ended", 'modular_bluemoon/sound/ambience/mesa/BMAS1.ogg')
 

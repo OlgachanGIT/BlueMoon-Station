@@ -130,9 +130,9 @@
 /mob/living/simple_animal/hostile/syndicate/proc/order_injury_logic(amount)
 	if(amount > 0 && prob(25))
 		var/static/list/agony_sounds = list(
-			'modular_bluemoon/smiley/sounds/emotes/agony_male_5.ogg',
-			'modular_bluemoon/smiley/sounds/emotes/agony_male_6.ogg',
-			'modular_bluemoon/smiley/sounds/emotes/agony_male_8.ogg'
+			'modular_bluemoon/sound/emotes/agony_male_5.ogg',
+			'modular_bluemoon/sound/emotes/agony_male_6.ogg',
+			'modular_bluemoon/sound/emotes/agony_male_8.ogg'
 		)
 		playsound(src, pick(agony_sounds), 50, 0)
 
@@ -248,8 +248,7 @@
 	if(amount > 0)
 		if(prob(25))
 			var/static/list/sounds = list(
-				'modular_bluemoon/smiley/sounds/emotes/agony_male_5.ogg',
-				'modular_bluemoon/SmiLeY/sounds/trip_blast.wav'
+				'modular_bluemoon/sound/emotes/agony_male_8.ogg'
 			)
 			playsound(src, pick(sounds), 50, 0)
 
@@ -428,7 +427,7 @@
 	projectilesound = 'modular_bluemoon/sound/weapons/acr_fire.ogg'
 	rapid = 2
 	aggro_vision_range = 10
-	projectiletype = /obj/item/projectile/bullet/incendiary/m2a100
+	projectiletype = /obj/item/ammo_casing/energy/laser/m2a100
 	casingtype = FALSE
 	death_sound = 'modular_bluemoon/sound/creatures/skihell/death.ogg'
 	deathmessage = "gets discombobulated and fucking dies."
