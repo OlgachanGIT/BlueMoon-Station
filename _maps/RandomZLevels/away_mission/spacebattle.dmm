@@ -3019,11 +3019,6 @@
 /obj/structure/fans/tiny/invisible,
 /turf/open/floor/plating/airless,
 /area/awaymission/spacebattle/cruiser)
-"kc" = (
-/obj/structure/rack,
-/obj/item/gun/energy/laser/scatter,
-/turf/open/floor/engine,
-/area/awaymission/spacebattle/cruiser)
 "kd" = (
 /turf/open/floor/engine/vacuum,
 /area/awaymission/spacebattle/cruiser)
@@ -3087,7 +3082,6 @@
 /area/awaymission/spacebattle/cruiser)
 "kp" = (
 /obj/structure/rack,
-/obj/item/gun/energy/xray,
 /turf/open/floor/engine,
 /area/awaymission/spacebattle/cruiser)
 "kq" = (
@@ -3528,7 +3522,7 @@
 /obj/structure/table,
 /obj/machinery/door/window/northleft{
 	name = "First-Aid Supplies";
-
+	red_alert_access = 1;
 	req_access_txt = "5"
 	},
 /obj/item/storage/firstaid/brute,
@@ -5155,12 +5149,6 @@
 /obj/structure/window/reinforced,
 /turf/open/floor/plating/airless,
 /area/space/nearstation)
-"yL" = (
-/obj/item/gun/ballistic/automatic/m46a1{
-	pixel_y = 4
-	},
-/turf/open/floor/engine,
-/area/awaymission/spacebattle/cruiser)
 "yS" = (
 /obj/structure/lattice/catwalk,
 /turf/open/space/basic,
@@ -6550,10 +6538,6 @@
 /obj/effect/mob_spawn/human/corpse/inteq_dead,
 /turf/open/floor/plasteel/dark,
 /area/space/nearstation)
-"Jt" = (
-/obj/vehicle/sealed/mecha/combat/gygax/dark,
-/turf/open/floor/engine,
-/area/awaymission/spacebattle/cruiser)
 "Jx" = (
 /mob/living/simple_animal/hostile/syndicate/space/stormtrooper,
 /turf/open/floor/plasteel/rockvault/alien,
@@ -29283,7 +29267,7 @@ ht
 jD
 jA
 tM
-kc
+kp
 kf
 el
 ht
@@ -30053,7 +30037,7 @@ Ph
 bM
 bM
 DS
-yL
+el
 el
 el
 kp
@@ -30311,7 +30295,7 @@ wX
 bM
 xy
 el
-yL
+el
 el
 hO
 ht
@@ -30825,7 +30809,7 @@ eQ
 bM
 jX
 js
-js
+kp
 kg
 el
 ht
@@ -34151,10 +34135,10 @@ dm
 cc
 cc
 gR
-Jt
+nf
 dL
 Ep
-nf
+el
 el
 el
 el

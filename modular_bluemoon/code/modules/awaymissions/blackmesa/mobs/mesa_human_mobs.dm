@@ -26,7 +26,7 @@
 	attack_verb_simple = "punch"
 	attack_sound = 'sound/weapons/punch1.ogg'
 	combat_mode = TRUE
-	loot = list(/obj/effect/gibspawner/human, /obj/item/melee/baton)
+	loot = list(/obj/effect/gibspawner/human, /obj/item/melee/baton, /obj/item/clothing/neck/tie/hecudogtag)
 	atmos_requirements = list("min_oxy" = 5, "max_oxy" = 0, "min_tox" = 0, "max_tox" = 1, "min_co2" = 0, "max_co2" = 5, "min_n2" = 0, "max_n2" = 0)
 	unsuitable_atmos_damage = 7.5
 	faction = list(FACTION_HECU)
@@ -48,6 +48,9 @@
 	)
 
 
+/mob/living/simple_animal/hostile/blackmesa/hecu/Initialize(mapload)
+	. = ..()
+
 /mob/living/simple_animal/hostile/blackmesa/hecu/ranged
 	ranged = TRUE
 	retreat_distance = 5
@@ -56,7 +59,7 @@
 	icon_living = "hecu_ranged"
 	casingtype = /obj/item/ammo_casing/c10mm
 	projectilesound = 'sound/weapons/gun/pistol/shot.ogg'
-	loot = list(/obj/effect/gibspawner/human, /obj/item/ammo_box/magazine/pistolm9mm)
+	loot = list(/obj/effect/gibspawner/human, /obj/item/ammo_box/magazine/pistolm9mm, /obj/item/clothing/neck/tie/hecudogtag)
 	dodging = TRUE
 	rapid_melee = 1
 
@@ -66,7 +69,7 @@
 	icon_living = "hecu_ranged_smg"
 	casingtype = /obj/item/ammo_casing/c10mm
 	projectilesound = 'sound/weapons/gun/smg/shot.ogg'
-	loot = list(/obj/effect/gibspawner/human, /obj/item/ammo_box/magazine/mp5)
+	loot = list(/obj/effect/gibspawner/human, /obj/item/ammo_box/magazine/mp5, /obj/item/clothing/neck/tie/hecudogtag)
 
 /mob/living/simple_animal/hostile/blackmesa/sec
 	name = "Security Guard"
@@ -209,6 +212,9 @@
 	)
 
 
+/mob/living/simple_animal/hostile/blackmesa/blackops/Initialize(mapload)
+	. = ..()
+
 /mob/living/simple_animal/hostile/blackmesa/blackops/ranged
 	ranged = TRUE
 	rapid = 2
@@ -233,4 +239,4 @@
 	faction = list(FACTION_HECU)
 	spawn_mecha_type = /obj/vehicle/sealed/mecha/combat/five_stars
 	speak = list("<b>HEY! WE'RE GONNA KICK YOUR ASS!!!</b>")
-	loot = list(/obj/item/gun/ballistic/automatic/mp5/underbarrel, /obj/item/gun/ballistic/revolver/mateba, /obj/item/ammo_box/a357)
+	loot = list(/obj/item/gun/ballistic/automatic/mp5/underbarrel, /obj/item/gun/ballistic/revolver/mateba, /obj/item/ammo_box/a357, /obj/item/clothing/neck/tie/hecudogtag)

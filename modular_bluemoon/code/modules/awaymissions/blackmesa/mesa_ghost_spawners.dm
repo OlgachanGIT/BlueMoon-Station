@@ -12,7 +12,7 @@
 	flavour_text = "Ты старший научный научный сотрудник сектора H. Недавно тебя повысили в должности, перенаправив в этот сектор, но что-то пошло не так. Исходя из оповещений BMAS, По всему сектору начались портальные штормы. По этому вы, засев в одном из кабинетов, ждёте помощи."
 	important_info = "(ПРИ ИСПОЛЬЗОВАНИИ АКТУАЛИЗАТОРА СТРОГО ЗАПРЕЩЕНО ВЫБИРАТЬ ЛЮБУЮ ДРУГУЮ РАСУ КРОМЕ ЧЕЛОВЕКА. ПРИ НАРУШЕНИЯХ ИЛИ ОШИБКАХ ПРОСЬБА ОБРАТИТСЯ К АДМИНИСТРАЦИИ) Не пытайся исследовать комплекс до прибытия экспедиционной группы. В случае, когда прошло 20 минут от начала раунда, а исследователи так и не пришли, ты можешь постепенно продвигаться по комплексу."
 	category = "offstation"
-	faction = list(FACTION_BLACKMESA)
+	faction = FACTION_BLACKMESA
 	antagonist_type = /datum/antagonist/ghost_role/black_mesa
 	color = "#9a74ac"
 
@@ -144,6 +144,7 @@
 	death = FALSE
 	density = TRUE
 	category = "offstation"
+	faction = FACTION_HECU
 	antagonist_type = /datum/antagonist/ghost_role/hecu
 
 /obj/effect/mob_spawn/human/black_mesa/hecu/special(mob/living/carbon/human/spawned_human)
@@ -152,6 +153,9 @@
 	spawned_human.grant_language(/datum/language/old_codes, source = LANGUAGE_MIND)
 	spawned_human.grant_language(/datum/language/signlanguage, source = LANGUAGE_MIND)
 	spawned_human.remove_language(/datum/language/common)
+
+/obj/effect/mob_spawn/human/black_mesa/hecu/blackops/special(mob/living/carbon/human/spawned_human)
+	. = ..()
 
 /obj/effect/mob_spawn/human/black_mesa/hecu/breacher
 	name = "HECU breacher"
@@ -171,6 +175,11 @@
 	. = ..()
 	spawned_human.remove_language(/datum/language/common)
 
+/obj/effect/mob_spawn/human/black_mesa/hecu/machinegunner
+	name = "HECU machinegunner"
+	outfit = /datum/outfit/hecu_machingunner
+	short_desc = "Ты являешься профессиональным пулемётчиком небольшого отряда поддержки HECU."
+
 /datum/outfit/hecu
 	name = "HECU grunt"
 	uniform = /obj/item/clothing/under/rank/security/officer/urban_camo
@@ -180,6 +189,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	r_hand = /obj/item/choice_beacon/mesagrunt
@@ -199,6 +209,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu/engi
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	r_hand = /obj/item/gun/ballistic/automatic/mp5
@@ -225,6 +236,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/bandolier
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	r_hand = /obj/item/choice_beacon/mesabreacher
@@ -246,6 +258,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	r_hand = /obj/item/choice_beacon/mesamedic
@@ -269,17 +282,19 @@
 	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
 	belt = /obj/item/storage/belt/military/russianweb
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/grenade/smokebomb
 	r_pocket = /obj/item/binoculars
-	r_hand = /obj/item/gun/ballistic/automatic/mp5
+	l_hand = /obj/item/gun/ballistic/automatic/m16a4/mesa
+	r_hand = /obj/item/choice_beacon/mesaleader
 	back = /obj/item/storage/backpack/rucksack/green
 	backpack_contents = list(
 		/obj/item/storage/box/survival/radio,
 		/obj/item/storage/firstaid/emergency,
 		/obj/item/kitchen/knife/combat,
 		/obj/item/book/granter/martial/cqc,
-		/obj/item/gun/ballistic/automatic/pistol/deagle,
-		/obj/item/ammo_box/magazine/m50,
+		/obj/item/ammo_box/magazine/m16,
+		/obj/item/ammo_box/magazine/m16,
 	)
 
 
@@ -288,7 +303,7 @@
 	new /obj/item/crowbar/power(src)
 	new /obj/item/weldingtool/experimental(src)
 	new /obj/item/multitool/tricorder(src)
-	new /obj/item/stack/cable_coil(src, 30, TRUE, pick("red","yellow","orange"))
+	new /obj/item/stack/cable_coil(src,30,pick("red","yellow","orange"))
 	new /obj/item/extinguisher/mini(src)
 
 /obj/effect/mob_spawn/human/black_mesa/hecu/lost
@@ -301,6 +316,7 @@
 	death = FALSE
 	density = TRUE
 	category = "offstation"
+	faction = FACTION_HECU
 	antagonist_type = /datum/antagonist/ghost_role/losthecu
 
 /obj/effect/mob_spawn/human/black_mesa/hecu/lost/special(mob/living/carbon/human/spawned_human)
@@ -318,6 +334,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	r_hand = /obj/item/gun/ballistic/automatic/m16a4/mesa
@@ -354,12 +371,34 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	back = /obj/item/storage/backpack/hecu
 	backpack_contents = list(
 		/obj/item/storage/box/survival/radio,
 		/obj/item/storage/firstaid/emergency,
+	)
+
+/datum/outfit/hecu_machingunner
+	name = "HECU machine gunner"
+	uniform = /obj/item/clothing/under/rank/security/officer/urban_camo
+	head = /obj/item/clothing/head/machinegunner
+	suit = /obj/item/clothing/suit/armor/hecu
+	gloves = /obj/item/clothing/gloves/tackler/combat/insulated
+	belt = /obj/item/storage/belt/bandolier/durathread
+	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
+	l_pocket = /obj/item/grenade/smokebomb
+	r_pocket = /obj/item/binoculars
+	l_hand = /obj/item/gun/ballistic/automatic/m249
+	back = /obj/item/storage/backpack/rucksack/green
+	backpack_contents = list(
+		/obj/item/storage/box/survival/radio,
+		/obj/item/storage/firstaid/emergency,
+		/obj/item/kitchen/knife/combat,
+		/obj/item/ammo_box/magazine/m249,
+		/obj/item/ammo_box/magazine/m249,
 	)
 
 //Чёрные оперативники
@@ -379,13 +418,6 @@
 	category = "offstation"
 	antagonist_type = /datum/antagonist/ghost_role/black_mesa
 
-/obj/effect/mob_spawn/human/black_mesa/hecu/special(mob/living/carbon/human/spawned_human)
-	. = ..()
-	spawned_human.grant_language(/datum/language/modular_sand/solcommon, source = LANGUAGE_MIND)
-	spawned_human.grant_language(/datum/language/old_codes, source = LANGUAGE_MIND)
-	spawned_human.grant_language(/datum/language/signlanguage, source = LANGUAGE_MIND)
-	spawned_human.remove_language(/datum/language/common)
-
 /datum/outfit/blackops
 	name = "male black operative"
 	uniform = /obj/item/clothing/under/syndicate/combat
@@ -395,6 +427,7 @@
 	gloves = /obj/item/clothing/gloves/combat
 	belt = /obj/item/storage/belt/military/assault/hecu/black/blackops
 	shoes = /obj/item/clothing/shoes/combat
+	neck = /obj/item/clothing/neck/tie/hecudogtag
 	l_pocket = /obj/item/reagent_containers/food/drinks/flask
 	r_pocket = /obj/item/flashlight/flare
 	back = /obj/item/gun/ballistic/automatic/m16a4
