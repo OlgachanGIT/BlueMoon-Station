@@ -3,8 +3,9 @@
 /turf/open/space,
 /area/space)
 "ab" = (
-/obj/machinery/door/airlock/hatch,
-/turf/open/floor/plasteel/sepia,
+/turf/closed/indestructible{
+	icon_state = "iron0"
+	},
 /area/awaymission/challenge/start)
 "ai" = (
 /obj/item/flashlight{
