@@ -44,7 +44,7 @@
 			EVENT_CATEGORY_JANITORIAL = "bath",
 			EVENT_CATEGORY_SPACE = "meteor",
 			EVENT_CATEGORY_WIZARD = "hat-wizard",
-			EVENT_CATEGORY_SPAWNERS = "dungeon",
+			EVENT_CATEGORY_SECTOR_H = "hand-sparkles"
 		)
 	var/list/data = list()
 

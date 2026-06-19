@@ -7,6 +7,7 @@ Unused icons for new areas are "awaycontent1" ~ "awaycontent30"
 /area/awaymission
 	name = "Strange Location"
 	icon_state = "away"
+	area_flags = VALID_TERRITORY | NOTELEPORT
 	has_gravity = STANDARD_GRAVITY
 	// ambience_index = AMBIENCE_AWAY
 	ambientsounds = AWAY_MISSION

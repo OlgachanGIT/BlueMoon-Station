@@ -4,6 +4,13 @@
 	var/alert_cooldown = 3 SECONDS
 	var/alert_cooldown_time
 
+/mob/living/simple_animal/hostile/boss/benrey/CanAttack(atom/the_target)
+	if(isliving(the_target))
+		var/mob/living/L = the_target
+		if(L.has_status_effect(/datum/status_effect/stabilized/lightpink))
+			return TRUE
+	. = ..()
+	return .
 
 /mob/living/simple_animal/hostile/boss/benrey/Aggro()
 	if(alert_sounds)
@@ -42,6 +49,13 @@
 	var/list/copies = list()
 	footstep_type = FOOTSTEP_MOB_SHOE
 	alert_sounds = list('modular_bluemoon/sound/creatures/mesa/benrey/benreylaugh.ogg','modular_bluemoon/sound/creatures/mesa/benrey/youdie.ogg')
+
+/mob/living/simple_animal/hostile/boss/benrey/Initialize(mapload)
+	. = ..()
+	RegisterSignal(src, COMSIG_ATOM_INTERCEPT_TELEPORT, PROC_REF(block_teleport))
+
+/mob/living/simple_animal/hostile/boss/benrey/proc/block_teleport(datum/source, channel, turf/origin, turf/destination)
+	return TRUE
 
 
 /datum/action/boss/benrey_summon_sketelons
