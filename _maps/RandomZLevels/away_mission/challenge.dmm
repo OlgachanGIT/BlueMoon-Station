@@ -3,101 +3,121 @@
 /turf/open/space,
 /area/space)
 "ab" = (
-/turf/closed/indestructible{
-	icon_state = "iron0"
+/obj/machinery/door/airlock/centcom{
+	name = "Airlock";
+	req_access_txt = "109"
 	},
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/start)
 "ai" = (
 /obj/item/flashlight{
 	icon_state = "flashlight-on";
 	on = 1
 	},
-/turf/open/floor/carpet,
+/turf/open/floor/circuit,
 /area/awaymission/challenge/start)
 "ak" = (
 /obj/effect/decal/remains/human,
-/turf/open/floor/carpet,
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/start)
 "al" = (
-/obj/effect/landmark/awaystart,
-/turf/open/floor/carpet,
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/start)
 "am" = (
 /obj/item/clothing/head/helmet/space/syndicate,
 /obj/item/clothing/suit/space/syndicate,
-/turf/open/floor/carpet,
+/turf/open/floor/circuit,
 /area/awaymission/challenge/start)
 "ao" = (
 /obj/item/clothing/suit/space/syndicate/orange,
 /obj/item/clothing/head/helmet/space/syndicate/orange,
-/turf/open/floor/carpet,
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/start)
 "ap" = (
 /obj/item/gun/energy/laser/retro,
-/turf/open/floor/carpet,
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/start)
 "aq" = (
 /obj/item/stack/rods,
-/turf/open/floor/carpet,
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/start)
 "ar" = (
 /obj/effect/decal/cleanable/oil,
-/turf/open/floor/carpet,
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/start)
 "as" = (
 /obj/effect/decal/remains/robot,
-/turf/open/floor/carpet,
+/turf/open/floor/circuit,
 /area/awaymission/challenge/start)
 "at" = (
 /obj/structure/girder,
-/turf/open/floor/carpet,
+/obj/machinery/light/cold{
+	dir = 8;
+	pixel_x = 0;
+	pixel_y = 1
+	},
+/turf/open/floor/circuit,
 /area/awaymission/challenge/start)
 "au" = (
-/turf/open/floor/carpet,
+/turf/open/floor/circuit,
 /area/awaymission/challenge/start)
 "av" = (
 /obj/item/storage/firstaid/regular,
-/turf/open/floor/carpet,
+/turf/open/floor/circuit,
 /area/awaymission/challenge/start)
 "aw" = (
 /obj/item/stack/rods,
 /obj/effect/decal/cleanable/blood/splatter,
-/turf/open/floor/carpet,
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/start)
 "ax" = (
 /obj/item/stack/sheet/metal/fifty,
-/turf/open/floor/carpet,
+/turf/open/floor/circuit,
 /area/awaymission/challenge/start)
 "ay" = (
 /obj/effect/decal/cleanable/blood,
-/turf/open/floor/carpet,
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/start)
 "az" = (
 /obj/item/clothing/suit/space/syndicate/contract,
 /obj/item/clothing/head/helmet/space/syndicate/contract,
-/turf/open/floor/carpet,
+/turf/open/floor/circuit,
 /area/awaymission/challenge/start)
 "aA" = (
-/turf/closed/indestructible{
-	icon_state = "iron0"
-	},
+/turf/closed/indestructible/riveted,
 /area/awaymission/challenge/main)
 "aC" = (
 /turf/open/floor/plating,
 /area/awaymission/challenge/main)
 "aD" = (
 /obj/structure/fans/tiny,
-/turf/open/floor/carpet,
+/obj/machinery/door/airlock/centcom{
+	name = "Airlock";
+	req_access_txt = "109"
+	},
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/main)
 "aE" = (
-/turf/closed/wall,
-/area/awaymission/challenge/main)
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 10
+	},
+/obj/machinery/light/cold{
+	dir = 8;
+	pixel_x = 0;
+	pixel_y = 1
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 10
+	},
+/obj/structure/rack/shelf,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
 "aF" = (
 /turf/open/floor/plating/airless,
 /area/awaymission/challenge/main)
 "aG" = (
 /mob/living/simple_animal/hostile/syndicate/melee/anthro,
-/turf/open/floor/carpet,
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/start)
 "aH" = (
 /turf/open/floor/plasteel/airless,
@@ -326,14 +346,18 @@
 	},
 /area/awaymission/challenge/main)
 "bP" = (
-/turf/closed/indestructible{
-	icon_state = "iron0"
-	},
+/turf/closed/indestructible/riveted,
 /area/awaymission/challenge/end)
 "bQ" = (
-/obj/item/gun/energy/e_gun/nuclear/pin,
-/turf/open/floor/plasteel/white/side,
-/area/awaymission/challenge/main)
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/obj/structure/barricade/sandbags,
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 8
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
 "bR" = (
 /obj/structure/table/reinforced,
 /obj/machinery/light{
@@ -369,6 +393,7 @@
 	dir = 1
 	},
 /obj/structure/filingcabinet,
+/obj/item/documents/syndicate/red,
 /turf/open/floor/carpet,
 /area/awaymission/challenge/end)
 "bX" = (
@@ -395,7 +420,6 @@
 	},
 /obj/structure/rack,
 /obj/item/gun/ballistic/revolver/syndicate,
-/obj/item/ammo_box/a357,
 /obj/item/ammo_box/a357,
 /turf/open/floor/wood,
 /area/awaymission/challenge/end)
@@ -447,7 +471,6 @@
 /obj/machinery/recharger{
 	pixel_y = 4
 	},
-/obj/item/documents/syndicate/red,
 /turf/open/floor/carpet,
 /area/awaymission/challenge/end)
 "cj" = (
@@ -456,8 +479,6 @@
 "ck" = (
 /obj/structure/rack,
 /obj/item/clothing/head/helmet/infiltrator,
-/obj/item/clothing/head/helmet/infiltrator,
-/obj/item/clothing/suit/armor/vest/infiltrator,
 /obj/item/clothing/suit/armor/vest/infiltrator,
 /turf/open/floor/wood,
 /area/awaymission/challenge/end)
@@ -549,9 +570,7 @@
 /area/awaymission/challenge/end)
 "cA" = (
 /obj/structure/sign/warning/securearea,
-/turf/closed/indestructible{
-	icon_state = "iron0"
-	},
+/turf/closed/indestructible/riveted,
 /area/awaymission/challenge/end)
 "cB" = (
 /obj/machinery/door/airlock/centcom{
@@ -615,19 +634,29 @@
 "cS" = (
 /obj/item/clothing/suit/space/syndicate/black/med,
 /obj/item/clothing/head/helmet/space/syndicate/black/med,
-/turf/open/floor/carpet,
+/turf/open/floor/circuit,
 /area/awaymission/challenge/start)
 "cW" = (
 /obj/machinery/gateway/away,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/challenge/end)
+"da" = (
+/obj/structure/girder,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
 "db" = (
 /obj/structure/window/reinforced/fulltile/indestructable,
 /turf/open/floor/circuit,
 /area/awaymission/challenge/end)
 "dc" = (
 /obj/item/stack/sheet/glass/fifty,
-/turf/open/floor/carpet,
+/obj/machinery/light/cold{
+	dir = 4
+	},
+/turf/open/floor/circuit,
 /area/awaymission/challenge/start)
 "de" = (
 /obj/effect/spawner/structure/window/hollow/reinforced/end,
@@ -672,8 +701,8 @@
 /turf/open/floor/circuit,
 /area/awaymission/challenge/end)
 "dn" = (
-/turf/open/space/basic,
-/area/space)
+/turf/closed/indestructible/riveted,
+/area/awaymission/challenge/start)
 "do" = (
 /obj/machinery/light,
 /turf/open/floor/circuit,
@@ -686,6 +715,20 @@
 /obj/structure/closet/l3closet,
 /turf/open/floor/circuit,
 /area/awaymission/challenge/end)
+"dD" = (
+/obj/structure/urbanismmachines{
+	icon_state = "boxcart";
+	name = "Boxes"
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"dI" = (
+/obj/structure/flora/rock/pile/icy,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 5
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
 "go" = (
 /obj/machinery/computer/security/telescreen{
 	desc = "Used for watching evil areas.";
@@ -694,8 +737,12 @@
 	pixel_y = 30
 	},
 /obj/structure/table/reinforced,
-/obj/item/gun/ballistic/automatic/l6_saw/unrestricted,
-/obj/item/ammo_box/magazine/mm712x82,
+/obj/item/gun/ballistic/automatic/m16a4,
+/obj/item/ammo_box/magazine/m16,
+/obj/item/ammo_box/magazine/m16{
+	pixel_x = -10;
+	pixel_y = 0
+	},
 /turf/open/floor/plasteel/dark,
 /area/awaymission/challenge/end)
 "hB" = (
@@ -709,17 +756,215 @@
 	},
 /turf/open/floor/plating/airless,
 /area/awaymission/challenge/main)
+"iL" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/machinery/computer,
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 1
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"iY" = (
+/obj/effect/landmark/awaystart,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"jF" = (
+/obj/structure/girder,
+/obj/machinery/light/cold{
+	dir = 4
+	},
+/turf/open/floor/circuit,
+/area/awaymission/challenge/start)
+"jV" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 1
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"lm" = (
+/obj/effect/landmark/awaystart,
+/obj/structure/flora/rock/pile/icy,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 1
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"lq" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 9
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"lN" = (
+/obj/structure/plasticflaps/opaque,
+/turf/open/floor/plating,
+/area/awaymission/challenge/start)
+"mA" = (
+/obj/effect/decal/cleanable/oil,
+/obj/machinery/light/cold{
+	dir = 8;
+	pixel_x = 0;
+	pixel_y = 1
+	},
+/turf/open/floor/circuit,
+/area/awaymission/challenge/start)
+"ra" = (
+/obj/structure/bed,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 6
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"rB" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 6
+	},
+/obj/machinery/light/cold{
+	dir = 4
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 6
+	},
+/obj/structure/rack/shelf,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"rN" = (
+/obj/machinery/light/cold,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 10
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"ud" = (
+/obj/structure/girder,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 5
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"uC" = (
+/obj/structure/flora/rock/pile/icy,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"vf" = (
+/obj/structure/girder,
+/turf/open/floor/circuit,
+/area/awaymission/challenge/start)
+"wn" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/structure/barricade/sandbags,
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 4
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"yW" = (
+/obj/structure/frame/machine,
+/turf/open/floor/circuit,
+/area/awaymission/challenge/start)
 "zn" = (
 /turf/open/space/basic,
 /area/awaymission/challenge/end)
+"zD" = (
+/obj/structure/girder,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 10
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"zL" = (
+/obj/structure/barricade/sandbags,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"Al" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/trimline/dark/filled/line,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"BB" = (
+/obj/structure/flora/rock/pile/icy,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"Cn" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/trimline/dark/filled/line,
+/obj/structure/frame/machine,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"Cw" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/effect/turf_decal/trimline/dark/filled/line,
+/obj/structure/rack/shelf,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
 "Db" = (
 /mob/living/simple_animal/hostile/syndicate/ranged/shotgun/space/stormtrooper/anthro/fox,
 /turf/open/floor/wood,
 /area/awaymission/challenge/end)
+"ED" = (
+/obj/machinery/light/cold{
+	dir = 8;
+	pixel_x = 0;
+	pixel_y = 1
+	},
+/turf/open/floor/circuit,
+/area/awaymission/challenge/start)
 "Hr" = (
 /mob/living/simple_animal/hostile/syndicate/ranged/smg/anthro,
 /turf/open/floor/circuit,
 /area/awaymission/challenge/end)
+"IR" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 5
+	},
+/obj/machinery/light/cold{
+	dir = 4
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 5
+	},
+/obj/structure/rack/shelf,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"Jv" = (
+/obj/machinery/light/cold,
+/obj/structure/bed,
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 6
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"Ky" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/obj/machinery/light/cold{
+	pixel_x = -15;
+	pixel_y = 0
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line,
+/obj/structure/frame/machine,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"KF" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"Lh" = (
+/obj/structure/rack/shelf,
+/turf/open/floor/circuit,
+/area/awaymission/challenge/start)
 "Lm" = (
 /obj/effect/spawner/structure/window/hollow/reinforced/end{
 	dir = 4
@@ -731,6 +976,13 @@
 	},
 /turf/open/floor/plating/airless,
 /area/awaymission/challenge/main)
+"Mh" = (
+/obj/machinery/light/cold{
+	dir = 4
+	},
+/obj/structure/rack/shelf,
+/turf/open/floor/circuit,
+/area/awaymission/challenge/start)
 "Mx" = (
 /obj/machinery/porta_turret{
 	dir = 8;
@@ -739,6 +991,15 @@
 	},
 /turf/open/floor/plating/airless,
 /area/awaymission/challenge/main)
+"Oz" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 8
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
 "OT" = (
 /mob/living/simple_animal/hostile/syndicate/ranged/shotgun/space/stormtrooper/anthro/fox,
 /turf/open/floor/plasteel/dark,
@@ -765,12 +1026,76 @@
 /area/awaymission/challenge/end)
 "QE" = (
 /mob/living/simple_animal/hostile/syndicate/ranged/anthro,
-/turf/open/floor/carpet,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"QM" = (
+/obj/machinery/light/cold{
+	dir = 4
+	},
+/obj/structure/urbanismmachines{
+	icon_state = "boxcart";
+	name = "Boxes"
+	},
+/turf/open/floor/circuit,
+/area/awaymission/challenge/start)
+"Ss" = (
+/obj/structure/urbanismmachines{
+	icon_state = "boxcart";
+	name = "Boxes"
+	},
+/turf/open/floor/circuit,
+/area/awaymission/challenge/start)
+"SL" = (
+/turf/closed/indestructible/fakedoor,
+/area/awaymission/challenge/start)
+"TG" = (
+/obj/effect/decal/cleanable/oil,
+/turf/open/floor/circuit,
+/area/awaymission/challenge/start)
+"Vo" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 4
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"Wv" = (
+/obj/item/gun/energy/e_gun/nuclear/pin,
+/turf/open/floor/plasteel/airless,
+/area/awaymission/challenge/main)
+"Ym" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 9
+	},
+/obj/machinery/light/cold{
+	dir = 8;
+	pixel_x = 0;
+	pixel_y = 1
+	},
+/obj/effect/turf_decal/trimline/dark/filled/line{
+	dir = 9
+	},
+/obj/structure/rack/shelf,
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
+"YU" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 4
+	},
+/turf/open/floor/plasteel/sepia,
 /area/awaymission/challenge/start)
 "Zw" = (
 /mob/living/simple_animal/hostile/syndicate/melee/space/anthro/lizard,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/challenge/end)
+"ZU" = (
+/obj/effect/turf_decal/siding/wideplating_new/dark{
+	dir = 8
+	},
+/turf/open/floor/plasteel/sepia,
+/area/awaymission/challenge/start)
 
 (1,1,1) = {"
 aa
@@ -26066,15 +26391,15 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
 aa
 aa
 aA
@@ -26312,26 +26637,26 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+ED
+Ss
+TG
+au
+yW
+au
+ED
+dn
 aa
 aa
 aA
@@ -26569,26 +26894,26 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+lN
+lN
+lN
+lN
+lN
+lN
+lN
+lN
+lN
+lN
+lN
+au
+al
+al
+dD
+al
+dD
+yW
+dn
 aa
 aa
 aA
@@ -26826,25 +27151,25 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+lN
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+au
+al
+al
+al
+ar
+al
+yW
 aA
 aA
 aA
@@ -26882,7 +27207,7 @@ aA
 aA
 bP
 go
-OT
+cd
 cd
 cd
 cx
@@ -27083,25 +27408,25 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+lN
+dn
+al
+al
+al
+al
+al
+al
+al
+al
+dn
+au
+al
+dD
+al
+al
+al
+au
 aA
 Mx
 aF
@@ -27339,26 +27664,26 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
+dn
+dn
+lN
 dn
 dn
 dn
 dn
+SL
 dn
 dn
+SL
 dn
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+vf
+au
+au
+au
+au
+au
+vf
 aA
 aF
 aF
@@ -27596,26 +27921,26 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
+dn
+lq
+ZU
+ZU
+zD
+dn
+Ym
+bQ
+bQ
+bQ
+Oz
+aE
 dn
 dn
 dn
-dn
-dn
-dn
+ab
 dn
 ab
-ab
-ab
-ab
-ab
-ab
-ab
-ab
+dn
+dn
 aA
 aF
 aF
@@ -27853,26 +28178,26 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
 dn
+da
+ar
+iY
+KF
+SL
+jV
+al
+al
+al
+al
+Cw
 dn
-dn
-dn
-dn
-dn
-dn
-ab
 at
 au
+vf
 au
 au
 au
-au
-ar
+mA
 aA
 Mx
 aF
@@ -27881,7 +28206,7 @@ aH
 aH
 aH
 aR
-hB
+Mx
 ba
 aH
 aH
@@ -28110,24 +28435,24 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
 dn
+dI
+YU
+YU
+Jv
 dn
-dn
-dn
-dn
-dn
-dn
+iL
+ar
+al
+ar
+al
+Al
 ab
 au
 al
-au
+al
 ao
-au
+al
 aG
 au
 aA
@@ -28138,7 +28463,7 @@ aU
 aH
 aH
 aR
-Lm
+Mx
 ba
 aH
 aH
@@ -28367,27 +28692,27 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
+dn
+dn
+lN
 dn
 dn
 dn
+jV
+al
+zL
+al
+al
+Al
 dn
-dn
-dn
-dn
-ab
 au
 ak
 al
-au
-au
+al
+al
 aw
 au
-aE
+aA
 aH
 aJ
 aR
@@ -28625,31 +28950,31 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
 dn
+lN
+lN
+lN
+lN
+jV
+al
+zL
+al
+QE
+Al
 dn
-dn
-dn
-dn
-dn
-dn
-ab
 au
 al
-au
-au
-at
-au
-au
+zL
+al
+al
+al
+al
 aD
 aH
 aK
 aR
 aH
-aH
+Wv
 aH
 aH
 aH
@@ -28679,7 +29004,7 @@ bG
 bG
 bG
 bG
-bQ
+bG
 bU
 cf
 co
@@ -28882,24 +29207,24 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-ab
-au
+dn
+lN
+lN
+lN
+lN
+jV
+ar
+al
+al
+al
+Ky
+dn
 au
 al
+zL
 ap
-au
-au
+al
+al
 ay
 aD
 aH
@@ -29138,27 +29463,27 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-ab
+dn
+dn
+lN
+dn
+dn
+dn
+jV
+al
+al
+al
+al
+Cn
+dn
 cS
 al
-au
+zL
 aq
-at
-au
+al
+al
 az
-aE
+aA
 aH
 aM
 aR
@@ -29395,24 +29720,24 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+lq
+ZU
+uC
+rN
+dn
+iL
+al
+al
+al
+al
+Al
 ab
 ai
-au
+al
 al
 ar
-au
+al
 QE
 ax
 aA
@@ -29423,7 +29748,7 @@ aU
 aH
 aH
 aR
-hB
+Mx
 ba
 aH
 aH
@@ -29652,20 +29977,20 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-ab
-au
+dn
+lm
+al
+al
+KF
+SL
+jV
+al
+al
+al
+al
+Cw
+dn
+jF
 am
 au
 as
@@ -29680,7 +30005,7 @@ aH
 aH
 aH
 aR
-Lm
+Mx
 ba
 aH
 aH
@@ -29909,26 +30234,26 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+ud
+YU
+BB
+ra
+dn
+IR
+Vo
+Vo
+wn
+wn
+rB
+dn
+dn
+dn
 ab
+dn
 ab
-ab
-ab
-ab
-ab
-ab
-ab
+dn
+dn
 aA
 aF
 aF
@@ -30166,26 +30491,26 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+SL
+dn
+dn
+SL
+dn
+dn
+vf
+au
+au
+TG
+au
+au
+vf
 aA
 aF
 aF
@@ -30424,25 +30749,25 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+lN
+dn
+al
+al
+al
+al
+al
+al
+al
+al
+dn
+Ss
+al
+al
+al
+al
+al
+au
 aA
 Mx
 aF
@@ -30681,25 +31006,25 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+lN
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+au
+al
+al
+al
+al
+al
+yW
 aA
 aA
 aA
@@ -30938,26 +31263,26 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+lN
+lN
+lN
+lN
+lN
+lN
+lN
+lN
+lN
+lN
+lN
+au
+ar
+al
+al
+dD
+al
+Lh
+dn
 aa
 aa
 aA
@@ -31195,26 +31520,26 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+QM
+yW
+yW
+Ss
+au
+yW
+Mh
+dn
 aa
 aa
 aA
@@ -31256,7 +31581,7 @@ ct
 cw
 bP
 cn
-OT
+cd
 cd
 cn
 cL
@@ -31463,15 +31788,15 @@ aa
 aa
 aa
 aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
-aa
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
+dn
 aa
 aa
 aA

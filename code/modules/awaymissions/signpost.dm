@@ -57,6 +57,19 @@
 	desc = "In the darkest times, we will find our way home."
 	resistance_flags = INDESTRUCTIBLE
 
+/obj/structure/signpost/salvation/mesa
+
+/obj/structure/signpost/salvation/mesa/interact(mob/user)
+	var/area/A = get_area(src)
+	if(!istype(A, /area/awaymission/ihategordon))
+		to_chat(user, "<span class='warning'>The signpost remains inert. It seems it wasn't meant for this place.</span>")
+		return
+	if(user.mind)
+		if(user.mind.has_antag_datum(/datum/antagonist/ghost_role/black_mesa) || user.mind.has_antag_datum(/datum/antagonist/ghost_role/hecu))
+			to_chat(user, "<span class='warning'>You feel a strange force pushing you away. You cannot leave this place.</span>")
+			return
+	return ..()
+
 /obj/structure/signpost/exit
 	name = "exit"
 	desc = "Make sure to bring all your belongings with you when you \
