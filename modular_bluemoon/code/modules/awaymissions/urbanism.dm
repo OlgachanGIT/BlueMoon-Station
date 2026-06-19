@@ -5,6 +5,9 @@
 	icon_state = "rockyash"
 	smooth = SMOOTH_MORE|SMOOTH_BORDER
 	canSmoothWith = list (/turf/closed)
+	var/resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
+	explosion_block = 50
+	wave_explosion_block = INFINITY
 
 /turf/closed/mineral/mesarock/rust_heretic_act()
 	return
@@ -14,6 +17,9 @@
 
 /turf/closed/mineral/mesarock/acid_act(acidpwr, acid_volume, acid_id)
 	return FALSE
+
+/turf/closed/mineral/mesarock/acid_melt()
+	return
 
 /turf/closed/mineral/mesarock/Melt()
 	to_be_destroyed = FALSE
@@ -26,6 +32,21 @@
 	return
 
 /turf/closed/mineral/mesarock/attack_hand(mob/user)
+	return
+
+/turf/closed/mineral/mesarock/gets_drilled()
+	return
+
+/turf/closed/mineral/mesarock/attack_animal(mob/living/simple_animal/user, list/modifiers)
+	return
+
+/turf/closed/mineral/mesarock/attack_alien(mob/living/carbon/alien/user, list/modifiers)
+	return
+
+/turf/closed/mineral/mesarock/attack_hulk(mob/living/carbon/human/H)
+	return FALSE
+
+/turf/closed/mineral/mesarock/ex_act(severity, target, origin)
 	return
 
 /obj/machinery/power/floodlight/urbanismlight
@@ -78,21 +99,6 @@
 	icon_state = "redbarrel"
 	reagent_id = /datum/reagent/fuel
 	tank_volume = 300
-
-/obj/structure/reagent_dispensers/urbanismbarrel/radium
-	name = "Radium barrel"
-	desc = "Barrel filled with radium. Very dangerous."
-	icon_state = "radiumbarrel"
-	reagent_id = /datum/reagent/radium
-	tank_volume = 300
-	var/rad_strength = 1000
-
-/obj/structure/reagent_dispensers/urbanismbarrel/radium/Initialize(mapload)
-	. = ..()
-	var/datum/component/radioactive/Comp
-	AddComponent(/datum/component/radioactive, 0, src, 0, TRUE)
-	Comp = GetComponent(/datum/component/radioactive)
-	Comp.set_strength(rad_strength)
 
 /obj/structure/barricade/urbanism
 	name = "Barricade"
@@ -205,10 +211,9 @@
 	armor = list(MELEE = 50, BULLET =40, LASER = 50, ENERGY = 60, BOMB = 50, BIO = 10, RAD = 0, FIRE = 50, ACID = 50)
 	light_range = FALSE
 	light_color = FALSE
-	max_integrity = 9999999
+	max_integrity = FALSE
 
 /obj/structure/urbanismmachines
-
 	name = "old machine"
 	desc = "some kind of old (and sometimes broken) machine"
 	icon = 'modular_bluemoon/icons/obj/urbanism/urbanism.dmi'
@@ -218,13 +223,11 @@
 	armor = list(MELEE = 30, BULLET =50, LASER = 30, ENERGY = 20, BOMB = 70, BIO = 15, RAD = 10, FIRE = 40, ACID = 30)
 
 /obj/structure/urbanismmachines/server
-
 	name = "old server"
 	icon = 'modular_bluemoon/icons/obj/urbanism/urbanism_structure32x64.dmi'
 	icon_state = "server"
 
 /obj/structure/urbanismmounted
-
 	name = "Mounted kind of machine"
 	desc = "here's many terminals and generators... Be careful"
 	icon = 'modular_bluemoon/icons/obj/urbanism/urbanism.dmi'
@@ -232,7 +235,6 @@
 	anchored = TRUE
 	density = FALSE
 	armor = list(MELEE = 30, BULLET =50, LASER = 30, ENERGY = 20, BOMB = 70, BIO = 15, RAD = 10, FIRE = 40, ACID = 30)
-
 
 /obj/structure/urbanismbillboard
 	name = "Big billboard"
@@ -244,7 +246,7 @@
 	armor = list(MELEE = 80, BULLET =80, LASER = 70, ENERGY = 60, BOMB = 80, BIO = 10, RAD = 0, FIRE = 50, ACID = 50)
 	light_range = FALSE
 	light_color = FALSE
-	max_integrity = 9999999
+	max_integrity = FALSE
 	layer = SPACEVINE_LAYER
 
 
@@ -290,3 +292,177 @@
 	name = "Призрак лидера отряда HECU"
 	desc = "Он точно потерялся... И он точно перепутал гейт Blackmesa с ihategordon. Появится ли blackmesa и тут? Что значит призрак этого парня? Зачем вы читаете его описание?"
 	icon_state = "Hecughost"
+
+
+/obj/structure/urbanismeffect
+	icon = 'modular_bluemoon/icons/obj/urbanism/urbanismmisc.dmi'
+	icon_state = "red_big"
+	anchored = TRUE
+	density = FALSE
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
+	move_resist = INFINITY
+	obj_flags = 0
+
+	vis_flags = VIS_INHERIT_PLANE
+
+/obj/structure/urbanismeffect/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
+	return
+
+/obj/structure/urbanismeffect/fire_act(exposed_temperature, exposed_volume)
+	return
+
+/obj/structure/urbanismeffect/acid_act()
+	return
+
+/obj/structure/urbanismeffect/blob_act(obj/structure/blob/B)
+	return
+
+/obj/structure/urbanismeffect/attack_hulk(mob/living/carbon/human/user, does_attack_animation = 0)
+	return FALSE
+
+/obj/structure/urbanismeffect/experience_pressure_difference()
+	return
+
+/obj/structure/urbanismeffect/singularity_act()
+	return FALSE
+
+/obj/structure/urbanismeffect/ex_act(severity, target, origin)
+	return
+
+/obj/structure/urbanismeffect/ConveyorMove()
+	return
+
+/obj/structure/urbanismeffect/abstract
+
+//заебала эта хуета с сломанными стейтами блять.
+/obj/structure/flora/grass/snowgrass
+	name = "snowy grass"
+	desc = "A patch of overgrown grass."
+	icon = 'icons/obj/flora/snowflora.dmi'
+	icon_state = "snowgrass"
+
+/obj/structure/urbanismhuge
+	name = "huge construction"
+	desc = "Oh my god, what a huge construction is this?"
+	icon = 'modular_bluemoon/icons/obj/urbanism/hugeshit.dmi'
+	icon_state = "huge1"
+	anchored = TRUE
+	density = TRUE
+	armor = list(MELEE = 100, BULLET =100, LASER = 100, ENERGY = 60, BOMB = 80, BIO = 10, RAD = 0, FIRE = 50, ACID = 50)
+	light_range = FALSE
+	light_color = FALSE
+	max_integrity = FALSE
+	layer = SPACEVINE_LAYER
+
+
+/obj/structure/urbanismmachinery
+	name = "heavy machinery"
+	desc = "Huge piece of machinery, probably used in construction works."
+	icon = 'modular_bluemoon/icons/obj/urbanism/communication.dmi'
+	icon_state = "communication"
+	anchored = TRUE
+	density = TRUE
+	armor = list(MELEE = 100, BULLET =100, LASER = 100, ENERGY = 60, BOMB = 80, BIO = 10, RAD = 0, FIRE = 50, ACID = 50)
+	light_range = FALSE
+	light_color = FALSE
+	max_integrity = FALSE
+	layer = SPACEVINE_LAYER
+
+/obj/structure/urbanismfabricator
+	name = "heavy machinery"
+	desc = "Huge piece of machinery, probably used in construction works."
+	icon = 'modular_bluemoon/icons/obj/urbanism/urbanismmachinery.dmi'
+	icon_state = "hugem1"
+	anchored = TRUE
+	density = TRUE
+	armor = list(MELEE = 100, BULLET =100, LASER = 100, ENERGY = 60, BOMB = 80, BIO = 10, RAD = 0, FIRE = 50, ACID = 50)
+	light_range = FALSE
+	light_color = FALSE
+	max_integrity = FALSE
+	layer = SPACEVINE_LAYER
+
+/obj/machinery/negotiations_radio
+	name = "negotiations radio"
+	desc = "An old radio."
+	icon = 'modular_bluemoon/icons/obj/urbanism/urbanism.dmi'
+	icon_state = "radiohecu"
+	anchored = TRUE
+	density = TRUE
+	var/list/negotiation_sounds = list(
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter1.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter2.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter3.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter4.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter6.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter7.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter8.ogg',
+		'modular_bluemoon/sound/creatures/mesa/hecuchatter/chatter9.ogg'
+	)
+	var/next_play_time = 0
+
+/obj/machinery/negotiations_radio/Initialize()
+	. = ..()
+	START_PROCESSING(SSobj, src)
+
+/obj/machinery/negotiations_radio/process()
+	if(world.time >= next_play_time)
+		icon_state = "radiohecu_talking"
+		var/sound_to_play = pick(negotiation_sounds)
+		playsound(src, sound_to_play, 70, FALSE, 7, 3)
+		addtimer(CALLBACK(src, .proc/reset_icon), 2 SECONDS)
+		next_play_time = world.time + rand(10 SECONDS, 25 SECONDS)
+
+/obj/machinery/negotiations_radio/proc/reset_icon()
+	icon_state = initial(icon_state)
+
+/obj/machinery/negotiations_radio/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	return ..()
+
+/obj/structure/microwaveexplosive
+	name = "suspicious microwave"
+	desc = "This microwave looks... off. Better not touch it."
+	icon = 'icons/obj/kitchen.dmi'
+	icon_state = "mw"
+	density = TRUE
+	anchored = TRUE
+
+/obj/structure/microwaveexplosive/attack_hand(mob/user)
+	. = ..()
+
+	playsound(src, 'modular_bluemoon/sound/creatures/mesa/madsci/microwaveboom.ogg', 100, FALSE)
+
+
+	for(var/obj/structure/mad_scientist/scientist in range(5, src))
+		playsound(scientist, 'modular_bluemoon/sound/creatures/mesa/madsci/microwavefuck.ogg', 150, FALSE)
+
+	explosion(src, 0, 0, 1, 1, flame_range =1)
+
+	new /obj/effect/hotspot(get_turf(src))
+
+	icon_state = "mwbloodyo"
+	new /obj/structure/urbanismeffect(get_turf(src))
+
+/obj/structure/mad_scientist
+	name = "mad scientist"
+	desc = "A deranged scientist who seems to be working on something dangerous."
+	icon = 'modular_bluemoon/icons/mob/mesa_mobs.dmi'
+	icon_state = "madscientist"
+	density = TRUE
+	anchored = TRUE
+
+/obj/structure/mad_scientist/attack_hand(mob/user)
+	. = ..()
+
+	// Play mad scientist sound
+	playsound(src, 'modular_bluemoon/sound/creatures/mesa/madsci/scimad.ogg', 100, FALSE)
+
+//Super idol 的笑容 都沒你的甜
+//八月正午的陽光 都沒你耀眼
+//熱愛105度的你
+//滴滴清純的蒸餾水
+
+/obj/structure/fence/nocut
+	name = "reinforced fence"
+	desc = "A chain link fence reinforced to prevent cutting."
+	cuttable = FALSE

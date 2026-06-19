@@ -23,6 +23,10 @@
 /obj/item/gun/ballistic/automatic/pistol/hl9mm/update_icon_state()
 	icon_state = "[initial(icon_state)][chambered ? "" : "-e"]"
 
+/obj/item/gun/ballistic/automatic/pistol/hl9mm/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
 /obj/item/gun/ballistic/automatic/sniper_rifle/m4oa1
 	name = "m40a1 sniper rifle"
 	desc = "Довольно старая, но верная и мощная снайперская винтовка прямиком из далёкого прошлого"
@@ -53,6 +57,10 @@
 		icon_state = "m4oa1"
 	else
 		icon_state = "m4oa1_mag"
+
+/obj/item/gun/ballistic/automatic/sniper_rifle/m4oa1/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
 
 /obj/item/ammo_box/magazine/sniper_rounds/m4oa1
 	name = "m4oa1 magazine"
@@ -85,7 +93,7 @@
 	spread = 9
 	burst_size = 3
 	burst_shot_delay = 2
-	fire_delay = 2.5 ///Это пиздец!
+	fire_delay = 1.5 ///Это пиздец!
 	can_bayonet = FALSE
 	automatic_burst_overlay = FALSE
 
@@ -94,6 +102,10 @@
 		icon_state = "mp5"
 	else
 		icon_state = "mp5nomag"
+
+/obj/item/gun/ballistic/automatic/mp5/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 100, 0, 0)
 
 /obj/item/ammo_box/magazine/mp5
 	name = "MP5 magazine (10mm Auto)"
@@ -126,6 +138,10 @@
 	mag_type = /obj/item/ammo_box/magazine/internal/shot/m870
 	weapon_weight = WEAPON_HEAVY
 
+/obj/item/gun/ballistic/shotgun/m870/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
 /obj/item/ammo_box/magazine/internal/shot/m870
 	name = "shotgun internal magazine"
 	ammo_type = /obj/item/ammo_casing/shotgun/buckshot
@@ -152,6 +168,7 @@
 /obj/item/gun/ballistic/shotgun/spas/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
 	..()
 	src.pump(user)
+	playsound(user, fire_sound, 80, 0, 0)
 
 /obj/item/ammo_box/magazine/internal/shot/spas
 	name = "shotgun internal magazine"
@@ -205,7 +222,7 @@
 			select = 0
 			burst_size = 1
 			to_chat(user, "<span class='notice'>You switch to semi-auto.</span>")
-	playsound(user, 'sound/weapons/empty.ogg', 100, 1)
+	playsound(user, 'sound/weapons/empty.ogg', 100, 0)
 	update_icon()
 	return
 
@@ -220,7 +237,7 @@
 	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
 	icon_state = "m16hl"
 	burst_size = 1
-	fire_delay = 3
+	fire_delay = 2
 	spread = 11
 	fire_sound = 'modular_bluemoon/sound/weapons/mesa/m16.ogg'
 
@@ -229,6 +246,10 @@
 		icon_state = "m16hl"
 	else
 		icon_state = "m16hl-e"
+
+/obj/item/gun/ballistic/automatic/m16a4/mesa/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
 
 /obj/item/gun/ballistic/automatic/mp7
 	name = "\improper mp7"
@@ -250,6 +271,10 @@
 		icon_state = "mp7"
 	else
 		icon_state = "mp7nomag"
+
+/obj/item/gun/ballistic/automatic/mp7/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
 
 /obj/item/ammo_box/magazine/mp7
 	name = "MP7 magazine"
@@ -304,6 +329,10 @@
 	else
 		icon_state = "scar_mag"
 
+/obj/item/gun/ballistic/automatic/scar/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
 /obj/item/ammo_box/magazine/scar
 	name = " HC SCAR magazine"
 	desc = "A standart magazine for HC SCAR"
@@ -356,6 +385,10 @@
 		icon_state = "p90"
 	else
 		icon_state = "p90_mag"
+
+/obj/item/gun/ballistic/automatic/p90/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
 
 /obj/item/ammo_box/magazine/p90
 	name = "p90 magazine"
@@ -597,3 +630,376 @@
 /obj/item/storage/box/basedmedic/medbeam/PopulateContents()
 	new /obj/item/gun/medbeam(src)
 	new /obj/item/storage/firstaid/tactical(src)
+
+//leader
+
+/obj/item/choice_beacon/mesaleader
+	name = "leader type choice beacon"
+	desc = "Secret USA army technology. Select your primary weapon."
+
+/obj/item/choice_beacon/mesaleader/generate_display_names()
+	var/static/list/leader_item_list
+	if(!leader_item_list)
+		leader_item_list = list()
+		var/list/templist = typesof(/obj/item/storage/box/basedleader)
+		for(var/V in templist)
+			var/atom/A = V
+			leader_item_list[initial(A.name)] = A
+	return leader_item_list
+
+/obj/item/storage/box/basedleader
+	name = "RSH-12 revolver kit"
+
+/obj/item/storage/box/basedleader/PopulateContents()
+	new /obj/item/gun/ballistic/revolver/hlrsh12(src)
+	new /obj/item/ammo_box/hlrsh12(src)
+	new /obj/item/ammo_box/hlrsh12(src)
+
+/obj/item/storage/box/basedleader/deagle
+	name = "Desert Eagle handgun kit"
+
+/obj/item/storage/box/basedleader/deagle/PopulateContents()
+	new /obj/item/gun/ballistic/automatic/pistol/deagle/hl(src)
+	new /obj/item/ammo_box/magazine/m50(src)
+	new /obj/item/ammo_box/magazine/m50(src)
+	new /obj/item/ammo_box/magazine/m50(src)
+
+/obj/item/storage/box/basedleader/hl357
+	name = ".357 pyton revolver kit"
+
+/obj/item/storage/box/basedleader/hl357/PopulateContents()
+	new /obj/item/gun/ballistic/revolver/mateba/hl357(src)
+	new /obj/item/ammo_box/a357(src)
+	new /obj/item/ammo_box/a357(src)
+
+//skihell
+
+/obj/item/shield/police
+	name = "special police shield"
+	desc = "A gigantic shield made of robust materials"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile.dmi'
+	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/weapons_lefthand.dmi'
+	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/weapons_righthand.dmi'
+	icon_state = "policeshield"
+	item_state = "policeshield"
+	w_class = WEIGHT_CLASS_HUGE
+	armor = list(MELEE = 60, BULLET = 70, LASER = 50, ENERGY = 0, BOMB = 40, BIO = 0, RAD = 0, FIRE = 80, ACID = 70)
+	slot_flags = ITEM_SLOT_BACK
+	block_chance = 80
+	shieldbash_knockback = 5
+	force = 15
+	throw_range = 1
+	throw_speed = 2
+	attack_verb = list("bashed","pounded","slammed")
+	item_flags = SLOWS_WHILE_IN_HAND
+	w_class = WEIGHT_CLASS_GIGANTIC
+	var/durability = 30
+
+/obj/item/shield/police/on_shield_block(mob/living/owner, atom/object, damage, attack_text, attack_type, armour_penetration, mob/attacker, def_zone, final_block_chance)
+	durability--
+	if(durability <= 0)
+		if(owner)
+			owner.visible_message("<span class='warning'>[src] breaks apart!</span>")
+			playsound(owner, 'sound/effects/bang.ogg', 50, 1)
+		qdel(src)
+		return TRUE
+
+	var/static/list/shield_sounds = list(
+		'modular_bluemoon/sound/weapons/shield/ric1.ogg',
+		'modular_bluemoon/sound/weapons/shield/ric2.ogg',
+		'modular_bluemoon/sound/weapons/shield/ric3.ogg',
+		'modular_bluemoon/sound/weapons/shield/ric5.ogg'
+	)
+	playsound(owner, pick(shield_sounds), 50, 1)
+	return ..()
+
+
+/obj/item/gun/ballistic/automatic/pistol/ski9mm
+	name = "SKI-SPIRIT 9mm pistol"
+	desc = "Модифицированная версия beretta 92 FS получившая своё название после утери около сотни экземпляров прямо в комплексе Skistation"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile.dmi'
+	icon_state = "ski9mm"
+	w_class = WEIGHT_CLASS_NORMAL
+	mag_type = /obj/item/ammo_box/magazine/pistolm9mm
+	can_suppress = FALSE
+	burst_size = 3
+	spread = 5
+	fire_delay = 0.5
+	fire_select_modes = list(SELECT_SEMI_AUTOMATIC)
+	fire_sound = 'modular_bluemoon/sound/weapons/ski9mm.ogg'
+
+
+/obj/item/gun/ballistic/automatic/pistol/ski9mm/update_icon_state()
+	icon_state = "[initial(icon_state)][chambered ? "" : "-e"]"
+
+/obj/item/gun/ballistic/automatic/pistol/ski9mm/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
+/obj/item/gun/ballistic/automatic/ak47/skiak
+	name = "\improper AK-54-BOREAS rifle"
+	desc = "Одного магазина АК-54-БОРЕЙ хватит на убийство РОВНО трёх сибирских медведей. Думайте - Плакат `во все оружии`"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_lefthand.dmi'
+	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_righthand.dmi'
+	icon_state = "skiak"
+	item_state = "saiga"
+	fire_sound = 'modular_bluemoon/sound/weapons/skiak.ogg'
+
+/obj/item/gun/ballistic/automatic/ak47/skiak/update_icon_state()
+	if(magazine)
+		icon_state = "skiak"
+	else
+		icon_state = "skiak_mag"
+
+/obj/item/gun/ballistic/automatic/ak47/skiak/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
+/obj/item/gun/ballistic/automatic/shotgun/aa12/saiga
+	name = "\improper Saiga-SNOWGRAVE"
+	desc = "Продвинутая версия оригинальной Сайги со сломанным исскуственным интелектом на борту... Вы слышали этот крик?"
+	icon_state = "saiga"
+	item_state = "saiga"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_lefthand.dmi'
+	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_righthand.dmi'
+	recoil = 3
+	spread = 10
+	fire_delay = 4
+	mag_type = /obj/item/ammo_box/magazine/aa12/saiga
+	fire_sound = 'modular_bluemoon/sound/weapons/saiga.ogg'
+
+/obj/item/gun/ballistic/automatic/shotgun/aa12/saiga/update_icon_state()
+	if(magazine)
+		icon_state = "saiga"
+	else
+		icon_state = "saiga_mag"
+
+/obj/item/gun/ballistic/automatic/shotgun/aa12/saiga/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	..()
+	playsound(user, fire_sound, 80, 0, 0)
+
+
+/obj/item/ammo_box/magazine/aa12/saiga
+	name = "saiga drum magazine (12g buckshot)"
+	icon_state = "saiga"
+	icon = 'modular_bluemoon/icons/obj/ammo.dmi'
+	w_class = WEIGHT_CLASS_NORMAL
+	ammo_type = /obj/item/ammo_casing/shotgun/buckshot
+	caliber = "shotgun"
+	max_ammo = 20
+
+/obj/item/ammo_box/magazine/aa12/saiga/update_icon()
+	. = ..()
+	if(ammo_count())
+		icon_state = "[initial(icon_state)]-ammo"
+	else
+		icon_state = "[initial(icon_state)]"
+
+
+/obj/item/gun/ballistic/automatic/shotgun/aa12/saiga/empty_alarm()
+	if(!chambered && !get_ammo() && !alarmed)
+		var/list/sounds = list(
+			'modular_bluemoon/sound/creatures/skihell/cover.ogg',
+			'modular_bluemoon/sound/creatures/skihell/fuck.ogg',
+			'modular_bluemoon/sound/creatures/skihell/shit.ogg'
+		)
+		playsound(src, pick(sounds), 70, 0)
+		update_icon()
+		alarmed = 1
+	return
+
+/obj/item/gun/ballistic/revolver/hlrsh12
+	name = "RSH-12 revolver"
+	desc = "Противник даже слова сказать не успеет. Это прототип РШ12 который можно зарядить картечью. С этого дерьма даже стрелять опасно!"
+	icon_state = "rs12"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	fire_sound = 'modular_bluemoon/sound/weapons/rsh.ogg'
+	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/hlrsh12
+	recoil = 6
+	fire_delay = 4
+
+/obj/item/gun/ballistic/revolver/hlrsh12/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	var/result = ..(user, pointblank, pbtarget, message, 35)
+	if(isliving(user))
+		user.apply_damage(4, BURN, BODY_ZONE_PRECISE_L_HAND)
+		user.apply_damage(4, BURN, BODY_ZONE_PRECISE_R_HAND)
+		user.adjustStaminaLoss(20)
+		if(prob(30))
+			user.adjustEarDamage(0, 20)
+	return result
+
+/obj/item/ammo_box/magazine/internal/cylinder/hlrsh12
+	name = "RS-12 revolver cylinder"
+	ammo_type = /obj/item/ammo_casing/hlrsh12
+	caliber = list("rs12", "shotgun")
+	max_ammo = 6
+	multiload = 0
+
+/obj/item/ammo_casing/hlrsh12
+	name = "RS-12 bullet casing"
+	desc = "An RS-12 bullet casing."
+	caliber = "rs12"
+	projectile_type = /obj/item/projectile/bullet/hlrsh12
+
+/obj/item/projectile/bullet/hlrsh12
+	name = "RS-12 bullet"
+	damage = 70
+	armour_penetration = 6
+	wound_bonus = -8
+	bare_wound_bonus = 8
+	stamina = 55
+
+/obj/item/ammo_box/hlrsh12
+	name = "speedloader (RS-12)"
+	desc = "A speedloader for RS-12 revolvers. Reloads quickly with pre-loaded ammunition."
+	icon_state = "357"
+	ammo_type = /obj/item/ammo_casing/hlrsh12
+	caliber = "rs12"
+	max_ammo = 6
+	speedloader = TRUE
+	multiple_sprites = 1
+
+/obj/item/gun/ballistic/automatic/pistol/deagle/hl
+	name = "Desert Eagle handgun"
+	desc = "Карманная артиллерия прямо у вас в руках. пустынный орёл способен пробивать бронежилеты большинства стандартных образцов, что делает его идеальным выбором для лидеров отрядов HECU"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	icon_state = "hldeagle"
+	w_class = WEIGHT_CLASS_NORMAL
+	can_suppress = FALSE
+	burst_size = 1
+	spread = 5
+	fire_delay = 6
+	can_flashlight = 0
+	unique_reskin = FALSE
+
+/obj/item/gun/ballistic/automatic/pistol/deagle/hl/update_overlays()
+	. = ..()
+	if(magazine)
+		. += "hldeagle"
+
+/obj/item/gun/ballistic/automatic/pistol/deagle/hl/update_icon_state()
+	icon_state = "[initial(icon_state)][chambered ? "" : "_mag"]"
+
+/obj/item/gun/ballistic/revolver/mateba/hl357
+	name = "\improper .357 revolver"
+	desc = "Достаточно неплохого калибра револьвер, специально выбранный для быстрого устранения... Крупной дичи"
+	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	icon_state = "hl357"
+	mag_type = /obj/item/ammo_box/magazine/internal/cylinder/rev357
+/obj/item/ammo_box/magazine/internal/cylinder/rev357
+	name = "revolver cylinder (.357)"
+	desc = "A revolver cylinder chambered for .357 Magnum rounds."
+	caliber = list("357")
+	ammo_type = /obj/item/ammo_casing/a357
+	max_ammo = 6
+
+/obj/item/gun/ballistic/automatic/m249
+	name = "M249 SAW"
+	desc = "FN M249 Squad Automatic Weapon - лёгкий пулемёт, предназначенный для обеспечения огневой поддержки отделения. Обычно используется с 100-патронной лентой."
+	icon = 'modular_bluemoon/icons/obj/guns/Machineguns.dmi'
+	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/left48x32.dmi'
+	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/right48x32.dmi'
+	icon_state = "m249"
+	item_state = "m249"
+	fire_sound = 'modular_bluemoon/sound/weapons/m249.ogg'
+	mag_type = /obj/item/ammo_box/magazine/m249
+	w_class = WEIGHT_CLASS_BULKY
+	weapon_weight = WEAPON_HEAVY
+	recoil = 1
+	spread = 6
+	burst_size = 3
+	burst_shot_delay = 1
+	fire_delay = 1.5
+	can_suppress = FALSE
+	can_bayonet = FALSE
+	slot_flags = ITEM_SLOT_BACK
+	automatic_burst_overlay = FALSE
+	var/cover_open = FALSE
+	slowdown = 1.0
+
+/obj/item/gun/ballistic/automatic/m249/examine(mob/user)
+	. = ..()
+	if(cover_open && magazine)
+		. += "<span class='notice'>It seems like you could use an <b>empty hand</b> to remove the magazine.</span>"
+
+/obj/item/gun/ballistic/automatic/m249/attack_self(mob/user)
+	cover_open = !cover_open
+	to_chat(user, "<span class='notice'>You [cover_open ? "open" : "close"] [src]'s cover.</span>")
+	if(cover_open)
+		playsound(user, 'sound/weapons/sawopen.ogg', 60, 1)
+	else
+		playsound(user, 'sound/weapons/sawclose.ogg', 60, 1)
+	update_icon()
+
+/obj/item/gun/ballistic/automatic/m249/update_icon_state()
+	var/ammo_state = ""
+	if(!magazine)
+		ammo_state = "_nomag_empty"
+	else if(get_ammo(0) <= 0)
+		ammo_state = "_empty"
+	icon_state = "m249[cover_open ? "_panel" : ""][ammo_state]"
+
+/obj/item/gun/ballistic/automatic/m249/afterattack(atom/target as mob|obj|turf, mob/living/user as mob|obj, flag, params)
+	if(cover_open)
+		to_chat(user, "<span class='warning'>[src]'s cover is open! Close it before firing!</span>")
+	else
+		. = ..()
+		update_icon()
+
+/obj/item/gun/ballistic/automatic/m249/on_attack_hand(mob/user, act_intent = user.a_intent, unarmed_attack_flags)
+	if(loc != user)
+		..()
+		return
+	if(!cover_open || (cover_open && !magazine))
+		..()
+	else if(cover_open && magazine)
+		magazine.update_icon()
+		magazine.forceMove(drop_location())
+		user.put_in_hands(magazine)
+		magazine = null
+		update_icon()
+		to_chat(user, "<span class='notice'>You remove the magazine from [src].</span>")
+		playsound(user, 'sound/weapons/magout.ogg', 60, 1)
+
+/obj/item/gun/ballistic/automatic/m249/attackby(obj/item/A, mob/user, params)
+	if(!cover_open && istype(A, mag_type))
+		to_chat(user, "<span class='warning'>[src]'s cover is closed! You can't insert a new mag.</span>")
+		return
+	..()
+	update_icon()
+
+/obj/item/ammo_box/magazine/m249
+	name = "M249 ammo belt (5.56mm)"
+	desc = "100-патронная лента для M249 SAW. Содержит стандартные 5.56x45mm НАТО патроны."
+	icon = 'modular_bluemoon/icons/obj/ammo.dmi'
+	icon_state = "m249"
+	ammo_type = /obj/item/ammo_casing/a556
+	max_ammo = 100
+	caliber = "5.56"
+
+/obj/item/ammo_box/magazine/m249/update_icon()
+	. = ..()
+	if(ammo_count())
+		icon_state = "[initial(icon_state)]-ammo"
+	else
+		icon_state = "[initial(icon_state)]"
+
+
+/obj/item/clothing/neck/tie/hecudogtag
+	name = "HECU Dogtag"
+	desc = "Военные жетоны солдата HECU. На них выбиты имя, фамилия и группа крови."
+	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
+	mob_overlay_icon = 'modular_bluemoon/fluffs/icons/mob/clothing/accessories.dmi'
+	icon_state = "dogtag"
+	item_state = "dogtag"
+
+/obj/item/clothing/head/machinegunner
+	name = "machinegunner bandana"
+	desc = "A fine bandana with nanotech lining, perfect for a heavy weapons specialist."
+	icon_state = "machinegunner"
+	item_state = "machinegunner"
+	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
+	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/hats.dmi'
+	alternate_worn_layer = null

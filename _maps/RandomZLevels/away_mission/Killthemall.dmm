@@ -746,6 +746,9 @@
 /obj/structure/salvage/protolathe,
 /turf/open/floor/catwalk_floor,
 /area/awaymission/Killthemall/Level)
+"na" = (
+/turf/closed/indestructible/necropolis,
+/area/awaymission/Killthemall/Boss)
 "nh" = (
 /obj/machinery/sleeper/syndie/fullupgrade,
 /turf/open/floor/plasteel/cult,
@@ -962,6 +965,10 @@
 	pixel_x = -10
 	},
 /obj/item/clothing/suit/toggle/labcoat/mad/techcoat,
+/obj/item/bonesetter{
+	pixel_x = 10;
+	pixel_y = -1
+	},
 /turf/open/floor/plasteel/kitchen,
 /area/awaymission/Killthemall/Level)
 "qA" = (
@@ -2144,6 +2151,10 @@
 /obj/structure/flora/ausbushes/lavendergrass,
 /turf/open/misc/grass,
 /area/awaymission/Killthemall/Level)
+"Iv" = (
+/obj/effect/baseturf_helper/black_mesa,
+/turf/open/indestructible,
+/area/awaymission/Killthemall/Boss)
 "Iy" = (
 /obj/structure/flora/ausbushes/sparsegrass,
 /obj/structure/flora/ausbushes/grassybush,
@@ -4306,7 +4317,7 @@ xO
 qe
 qe
 XO
-mO
+XO
 XO
 iv
 XO
@@ -5083,7 +5094,7 @@ XO
 XO
 sS
 XO
-mO
+XO
 qe
 qe
 xO
@@ -48286,9 +48297,9 @@ RZ
 RZ
 RZ
 RZ
-RZ
-RZ
-RZ
+kd
+kd
+kd
 RZ
 RZ
 RZ
@@ -49566,6 +49577,9 @@ ab
 xO
 kd
 RZ
+kd
+kd
+kd
 RZ
 RZ
 RZ
@@ -49573,12 +49587,9 @@ RZ
 RZ
 RZ
 RZ
-RZ
-RZ
-RZ
-RZ
-RZ
-RZ
+kd
+kd
+kd
 RZ
 kd
 xO
@@ -50587,9 +50598,9 @@ ab
 ab
 ab
 ab
-ab
-ab
-ab
+na
+na
+na
 ab
 xO
 kd
@@ -50844,9 +50855,9 @@ ab
 ab
 ab
 ab
-ab
-ab
-ab
+na
+Iv
+na
 Ri
 xO
 kd
@@ -51101,9 +51112,9 @@ ab
 ab
 ab
 ab
-ab
-ab
-ab
+na
+na
+na
 ab
 xO
 kd
@@ -52652,15 +52663,15 @@ kd
 RZ
 RZ
 RZ
+kd
+kd
+kd
+kd
 RZ
-RZ
-RZ
-RZ
-RZ
-RZ
-RZ
-RZ
-RZ
+kd
+kd
+kd
+kd
 RZ
 RZ
 RZ
@@ -53420,6 +53431,7 @@ ab
 ab
 xO
 kd
+kd
 RZ
 RZ
 RZ
@@ -53433,8 +53445,7 @@ RZ
 RZ
 RZ
 RZ
-RZ
-RZ
+kd
 kd
 xO
 ab
@@ -55481,11 +55492,11 @@ RZ
 nq
 RZ
 RZ
-RZ
-RZ
-RZ
-RZ
-RZ
+kd
+kd
+kd
+kd
+kd
 RZ
 RZ
 nq
