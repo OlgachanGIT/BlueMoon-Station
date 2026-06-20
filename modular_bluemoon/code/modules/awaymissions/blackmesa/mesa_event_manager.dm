@@ -18,14 +18,7 @@ SUBSYSTEM_DEF(blackmesa_events)
 
 /datum/controller/subsystem/blackmesa_events/fire(resumed = FALSE)
 	// Mission load check
-	var/found = FALSE
-	for(var/area_type in GLOB.areas_by_type)
-		if(ispath(area_type, /area/awaymission/ihategordon))
-			var/area/A = GLOB.areas_by_type[area_type]
-			if(A && A.contents.len)
-				found = TRUE
-				break
-	if(!found)
+	if(!get_areas(/area/awaymission/ihategordon, TRUE).len)
 		return
 
 	// Day/Night Cycle
@@ -41,14 +34,18 @@ SUBSYSTEM_DEF(blackmesa_events)
 	for(var/datum/round_event_control/E in event_controls)
 		if(E.max_occurrences > 0 && E.occurrences >= E.max_occurrences)
 			continue
-		// We don't check for player count here as away mission events are small scale
 		possible_events += E
 
 	if(!length(possible_events))
 		return
 
-	var/datum/round_event_control/selected = pick(possible_events)
-	selected.runEvent(random = TRUE)
+	var/list/event_weights = list()
+	for(var/datum/round_event_control/E in possible_events)
+		event_weights[E] = E.weight
+
+	var/datum/round_event_control/selected = pickweight(event_weights)
+	if(selected)
+		selected.runEvent(random = TRUE)
 
 /datum/controller/subsystem/blackmesa_events/proc/cycle_day_night()
 	day_phase = (day_phase + 1) % 4
@@ -80,7 +77,7 @@ SUBSYSTEM_DEF(blackmesa_events)
 /datum/controller/subsystem/blackmesa_events/proc/update_mesa_lights(color)
 	for(var/obj/machinery/power/floodlight/urbanismlight/mesaoutside/L in GLOB.machines)
 		L.light_color = color
-		L.update_light()
+		L.set_light(L.light_range, L.light_power, color)
 
 /datum/controller/subsystem/blackmesa_events/proc/mesa_announce(text, title = "", sound = null)
 	if(!text)
