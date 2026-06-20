@@ -36,41 +36,38 @@
 /datum/round_event/blackmesa/setup()
 	. = ..()
 	// Check if ihategordon is even loaded
-	var/found = FALSE
-	for(var/area/A in GLOB.areas_by_type)
-		if(istype(A, /area/awaymission/ihategordon))
-			found = TRUE
-			break
-	if(!found)
+	if(!get_areas(/area/awaymission/ihategordon, TRUE).len)
 		return EVENT_CANCELLED
 
 /datum/round_event/blackmesa/proc/get_mesa_areas()
+	var/list/source_areas = get_areas(/area/awaymission/ihategordon, TRUE)
 	var/list/areas = list()
-	for(var/area_type in GLOB.areas_by_type)
-		if(ispath(area_type, /area/awaymission/ihategordon))
-			var/area/A = GLOB.areas_by_type[area_type]
-			if(!A || !A.contents.len)
-				continue
-			var/valid = TRUE
-			for(var/EA in excluded_areas)
-				if(ispath(area_type, EA))
-					valid = FALSE
-					break
-			if(valid)
-				areas += A
+
+	for(var/area/A in source_areas)
+		if(!A || !A.contents.len)
+			continue
+		var/valid = TRUE
+		for(var/EA in excluded_areas)
+			if(ispath(A.type, EA))
+				valid = FALSE
+				break
+		if(valid)
+			areas += A
 	return areas
 
 /datum/round_event/blackmesa/proc/get_random_mesa_turf()
 	var/list/areas = get_mesa_areas()
 	if(!areas.len)
 		return null
+	var/list/turfs = list()
+	for(var/area/A in areas)
+		turfs += get_area_turfs(A)
+	if(!turfs.len)
+		return null
 	for(var/i in 1 to 30)
-		var/area/A = pick(areas)
-		var/list/turfs = get_area_turfs(A)
-		if(turfs.len)
-			var/turf/T = pick(turfs)
-			if(T && istype(T, /turf/open) && !is_blocked_turf(T))
-				return T
+		var/turf/T = pick(turfs)
+		if(T && istype(T, /turf/open) && !is_blocked_turf(T))
+			return T
 	return null
 
 /datum/round_event/blackmesa/proc/get_player_mesa_turf(ignore_hecu = FALSE, radius_min = 5, radius_max = 12)
@@ -118,7 +115,7 @@
 	name = "Black Mesa: Power Outage"
 	typepath = /datum/round_event/blackmesa/power_outage
 	description = "Causes a temporary power failure in Sector H."
-	weight = 0
+	weight = 5
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
 
@@ -155,21 +152,21 @@
 /datum/round_event_control/blackmesa/portal_storm
 	name = "Black Mesa: Portal Storm (Light)"
 	typepath = /datum/round_event/blackmesa/portal_storm/light
-	weight = 0
+	weight = 6
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/portal_storm/medium
 	name = "Black Mesa: Portal Storm (Medium)"
 	typepath = /datum/round_event/blackmesa/portal_storm/medium
-	weight = 0
+	weight = 6
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/portal_storm/dangerous
 	name = "Black Mesa: Portal Storm (Dangerous)"
 	typepath = /datum/round_event/blackmesa/portal_storm/dangerous
-	weight = 0
+	weight = 6
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
 
@@ -243,7 +240,7 @@
 /datum/round_event_control/blackmesa/supply_drop
 	name = "Black Mesa: HECU Supply Drop"
 	typepath = /datum/round_event/blackmesa/supply_drop
-	weight = 0
+	weight = 4
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
 
@@ -312,7 +309,7 @@
 /datum/round_event_control/blackmesa/sandstorm
 	name = "Black Mesa: Sandstorm"
 	typepath = /datum/round_event/blackmesa/sandstorm
-	weight = 0
+	weight = 3
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
 
@@ -327,7 +324,7 @@
 /datum/round_event_control/blackmesa/rain
 	name = "Black Mesa: Rain"
 	typepath = /datum/round_event/blackmesa/rain
-	weight = 0
+	weight = 2
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
 
@@ -347,21 +344,21 @@
 /datum/round_event_control/blackmesa/blackops_incursion
 	name = "Black Mesa: Black Ops Incursion (Light)"
 	typepath = /datum/round_event/blackmesa/blackops_incursion/light
-	weight = 0
+	weight = 7
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/blackops_incursion/medium
 	name = "Black Mesa: Black Ops Incursion (Medium)"
 	typepath = /datum/round_event/blackmesa/blackops_incursion/medium
-	weight = 0
+	weight = 7
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/blackops_incursion/dangerous
 	name = "Black Mesa: Black Ops Incursion (Dangerous)"
 	typepath = /datum/round_event/blackmesa/blackops_incursion/dangerous
-	weight = 0
+	weight = 7
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
 
@@ -424,21 +421,21 @@
 /datum/round_event_control/blackmesa/hecu_reinforcements
 	name = "Black Mesa: HECU Reinforcements (Light)"
 	typepath = /datum/round_event/blackmesa/hecu_reinforcements/light
-	weight = 0
+	weight = 8
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/hecu_reinforcements/medium
 	name = "Black Mesa: HECU Reinforcements (Medium)"
 	typepath = /datum/round_event/blackmesa/hecu_reinforcements/medium
-	weight = 0
+	weight = 8
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/hecu_reinforcements/dangerous
 	name = "Black Mesa: HECU Reinforcements (Dangerous)"
 	typepath = /datum/round_event/blackmesa/hecu_reinforcements/dangerous
-	weight = 0
+	weight = 8
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
 
@@ -507,7 +504,7 @@
 /datum/round_event_control/blackmesa/hecu_ghost_squad
 	name = "Black Mesa: HECU Ghost Squad"
 	typepath = /datum/round_event/blackmesa/hecu_ghost_squad
-	weight = 0
+	weight = 5
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
 
@@ -575,21 +572,21 @@
 /datum/round_event_control/blackmesa/bombardment
 	name = "Black Mesa: Orbital Bombardment (Light)"
 	typepath = /datum/round_event/blackmesa/bombardment/light
-	weight = 0
+	weight = 5
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/bombardment/medium
 	name = "Black Mesa: Orbital Bombardment (Medium)"
 	typepath = /datum/round_event/blackmesa/bombardment/medium
-	weight = 0
+	weight = 5
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
 
 /datum/round_event_control/blackmesa/bombardment/dangerous
 	name = "Black Mesa: Orbital Bombardment (Dangerous)"
 	typepath = /datum/round_event/blackmesa/bombardment/dangerous
-	weight = 0
+	weight = 5
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
 
@@ -676,7 +673,7 @@
 /datum/round_event_control/blackmesa/medical_drop
 	name = "Black Mesa: HECU Medical Drop"
 	typepath = /datum/round_event/blackmesa/medical_drop
-	weight = 0
+	weight = 3
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
 
@@ -715,7 +712,7 @@
 	name = "Black Mesa: Lockdown"
 	typepath = /datum/round_event/blackmesa/lockdown
 	description = "Triggers a facility lockdown, bolting all doors."
-	weight = 0
+	weight = 4
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
 
