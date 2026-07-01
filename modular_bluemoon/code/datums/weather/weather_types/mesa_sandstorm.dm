@@ -69,9 +69,9 @@
 	weather_message = "<span class='notice'>Начинается дождь, омывая пустынную землю.</span>"
 	end_message = "<span class='notice'>Дождь прекращается, оставляя за собой лишь лужи и туман.</span>"
 
-	weather_overlay = "regular_rain"
-	telegraph_overlay = "regular_rain"
-	end_overlay = "regular_rain"
+	weather_overlay = "rain_high"
+	telegraph_overlay = "rain_high"
+	end_overlay = "rain_high"
 
 	overlay_plane = -5
 

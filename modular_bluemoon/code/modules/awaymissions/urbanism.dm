@@ -287,6 +287,51 @@
 	anchored = TRUE
 	density = FALSE
 	armor = list(MELEE = 50, BULLET =40, LASER = 50, ENERGY = 60, BOMB = 50, BIO = 10, RAD = 0, FIRE = 50, ACID = 50)
+	var/loot_amount = 2
+	var/scavenge_time = 5 SECONDS
+	var/can_use_hands = TRUE
+	var/looted = FALSE
+	var/list/loot = list(
+		/obj/item/ammo_box/magazine/p90 = 10,
+		/obj/item/ammo_box/magazine/mp5 = 10,
+		/obj/item/grenade/frag = 5,
+		/obj/item/ammo_box/magazine/scar = 8,
+		/obj/item/ammo_box/magazine/fal/r10 = 8,
+		/obj/item/clothing/shoes/jackboots = 15,
+		/obj/item/storage/firstaid/regular = 5,
+		/obj/item/ammo_box/magazine/m50 = 7,
+		/obj/item/ammo_box/magazine/pistolm9mm = 12,
+		/obj/item/clothing/gloves/combat = 10,
+		/obj/item/gun/ballistic/automatic/pistol/hl9mm = 3
+	)
+
+/obj/structure/deadmesa/examine(mob/user)
+	. = ..()
+
+/obj/structure/deadmesa/attack_hand(mob/user)
+	if(!user)
+		return
+	if(looted)
+		to_chat(user, span_warning("Этот труп уже обыскан."))
+		return
+	. = ..()
+	if(!looted)
+		looted = TRUE
+		desc = "Horrific consequences of Resonance Cascade. Этот труп уже обыскан."
+
+/obj/structure/deadmesa/ComponentInitialize()
+	. = ..()
+	if(loot)
+		AddElement(/datum/element/scavenging, loot_amount, loot, null, scavenge_time, can_use_hands, null, null, FALSE, NO_LOOT_RESTRICTION, 1)
+
+/obj/structure/deadmesa/attackby(obj/item/I, mob/user, params)
+	if(looted)
+		to_chat(user, span_warning("Этот труп уже обыскан."))
+		return
+	. = ..()
+	if(!looted)
+		looted = TRUE
+		desc = "Horrific consequences of Resonance Cascade. Этот труп уже обыскан."
 
 /obj/structure/deadmesa/hecughost
 	name = "Призрак лидера отряда HECU"
@@ -482,3 +527,267 @@
 	AddComponent(/datum/component/radioactive, 0, src, 0, TRUE)
 	Comp = GetComponent(/datum/component/radioactive)
 	Comp.set_strength(rad_strength)
+
+// =============================================================================
+// URBANISM GENERATOR SYSTEM
+// Special generator that can be activated by players to spawn loot or open doors
+// =============================================================================
+
+/obj/structure/urbanism_generator
+	name = "generator"
+	desc = "A strange generator. Activate it with an empty hand."
+	icon = 'modular_bluemoon/icons/obj/urbanism/urbanism.dmi'
+	icon_state = "generator_off"
+	anchored = TRUE
+	density = TRUE
+	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
+	max_integrity = 9999999
+
+	// Activation settings
+	var/activation_time = 5 SECONDS
+	var/active_duration = 60 SECONDS
+	var/damage_threshold = 50 // Damage needed to interrupt activation
+
+	// State tracking
+	var/activating = FALSE
+	var/active = FALSE
+	var/activation_start_time = 0
+	var/damage_taken = 0
+
+	// Mob wave settings
+	var/spawn_mobs = FALSE
+	var/list/mob_types = list()
+	var/mob_spawn_interval = 10 SECONDS
+	var/max_mobs_per_wave = 5
+
+	// Reward settings
+	var/reward_type = null
+	var/blastdoor_id = null
+
+/obj/structure/urbanism_generator/Initialize(mapload)
+	. = ..()
+	START_PROCESSING(SSobj, src)
+
+/obj/structure/urbanism_generator/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	return ..()
+
+/obj/structure/urbanism_generator/process()
+	if(!active)
+		return
+
+	if(world.time >= activation_start_time + active_duration)
+		finish_activation()
+		return
+
+	// Spawn mobs during activation
+	if(spawn_mobs && mob_types && mob_types.len)
+		if(world.time % mob_spawn_interval == 0)
+			spawn_mob_wave()
+
+/obj/structure/urbanism_generator/attack_hand(mob/user)
+	if(!user)
+		return
+
+	if(active)
+		to_chat(user, span_warning("Генератор уже активирован!"))
+		return
+
+	if(activating)
+		to_chat(user, span_warning("Генератор уже запускается!"))
+		return
+
+	// Check if user has empty hands
+	if(user.get_active_held_item())
+		to_chat(user, span_warning("Вам нужны пустые руки для активации генератора."))
+		return
+
+	start_activation(user)
+
+/obj/structure/urbanism_generator/proc/start_activation(mob/user)
+	if(!src || !user)
+		return
+
+	activating = TRUE
+	to_chat(user, span_notice("Вы начинаете активировать генератор..."))
+
+	// Play activation sound placeholder
+	playsound(src, 'sound/machines/chime.ogg', 50, TRUE)
+
+	if(do_after(user, activation_time, target = src))
+		if(QDELETED(src) || QDELETED(user))
+			activating = FALSE
+			return
+
+		begin_active_phase()
+	else
+		activating = FALSE
+		to_chat(user, span_warning("Активация прервана!"))
+
+/obj/structure/urbanism_generator/proc/begin_active_phase()
+	if(!src)
+		return
+
+	activating = FALSE
+	active = TRUE
+	activation_start_time = world.time
+	damage_taken = 0
+
+	icon_state = "generator_on"
+	visible_message(span_boldnotice("Генератор активирован!"))
+
+	// Play active sound
+	playsound(src, 'sound/machines/terminal_on.ogg', 50, TRUE)
+
+/obj/structure/urbanism_generator/proc/finish_activation()
+	if(!src)
+		return
+
+	active = FALSE
+	icon_state = "generator_off"
+	visible_message(span_boldnotice("Генератор завершил работу!"))
+
+	// Give reward
+	if(reward_type)
+		spawn_reward()
+
+	// Open blastdoor
+	if(blastdoor_id)
+		open_blastdoor()
+
+/obj/structure/urbanism_generator/proc/spawn_reward()
+	if(!src || !reward_type)
+		return
+
+	var/turf/T = get_turf(src)
+	if(!T)
+		return
+
+	new reward_type(T)
+	visible_message(span_notice("Из генератора выпал предмет!"))
+
+/obj/structure/urbanism_generator/proc/open_blastdoor()
+	if(!src || !blastdoor_id)
+		return
+
+	// Find and open blastdoor with matching ID
+	for(var/obj/machinery/door/poddoor/BD in GLOB.machines)
+		if(!BD)
+			continue
+		if(BD.id == blastdoor_id)
+			BD.open()
+			visible_message(span_notice("Дверь [blastdoor_id] открылась!"))
+			return
+
+/obj/structure/urbanism_generator/proc/spawn_mob_wave()
+	if(!src)
+		return
+
+	var/turf/T = get_turf(src)
+	if(!T)
+		return
+
+	var/mobs_to_spawn = rand(1, max_mobs_per_wave)
+
+	for(var/i = 1 to mobs_to_spawn)
+		var/mob_type = pick(mob_types)
+		if(!mob_type)
+			continue
+
+		var/turf/spawn_turf = get_step(T, pick(GLOB.cardinals))
+		if(!spawn_turf || spawn_turf.density || spawn_turf.is_blocked_turf())
+			continue
+
+		var/mob/living/M = new mob_type(spawn_turf)
+		if(M)
+			new /obj/effect/temp_visual/dir_setting/ninja/phase(spawn_turf)
+			playsound(spawn_turf, 'sound/magic/Teleport_app.ogg', 50, TRUE)
+
+/obj/structure/urbanism_generator/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
+	if(!src)
+		return
+
+	if(!active)
+		return ..()
+
+	damage_taken += damage_amount
+
+	if(damage_taken >= damage_threshold)
+		interrupt_activation()
+
+	return ..()
+
+/obj/structure/urbanism_generator/proc/interrupt_activation()
+	if(!src)
+		return
+
+	active = FALSE
+	activating = FALSE
+	icon_state = "generator_off"
+	damage_taken = 0
+
+	visible_message(span_danger("Генератор был повреждён и остановлен!"))
+	playsound(src, 'sound/machines/buzz-sigh.ogg', 50, TRUE)
+
+// =============================================================================
+// GENERATOR WITH REWARD
+// Spawns a loot item after activation
+// =============================================================================
+
+/obj/structure/urbanism_generator/reward
+	name = "supply generator"
+	desc = "A generator that dispenses supplies when activated."
+	reward_type = /obj/item/storage/firstaid/regular
+	spawn_mobs = TRUE
+	mob_types = list(
+		/mob/living/simple_animal/hostile/infected,
+		/mob/living/simple_animal/hostile/infected/bruiser
+	)
+
+/obj/structure/urbanism_generator/reward/weapon
+	name = "weapon generator"
+	reward_type = /obj/item/gun/ballistic/automatic/pistol/hl9mm
+
+/obj/structure/urbanism_generator/reward/medical
+	name = "medical generator"
+	reward_type = /obj/item/storage/firstaid/regular
+
+// =============================================================================
+// GENERATOR AS BUTTON
+// Opens blastdoor after activation, no reward
+// =============================================================================
+
+/obj/structure/urbanism_generator/button
+	name = "door generator"
+	desc = "A generator that opens a blastdoor when activated."
+	blastdoor_id = "urbanism_door_1"
+	reward_type = null
+	spawn_mobs = TRUE
+	mob_types = list(
+		/mob/living/simple_animal/hostile/infected,
+		/mob/living/simple_animal/hostile/infected/bruiser
+	)
+
+/obj/structure/urbanism_generator/button/alt
+	name = "secondary door generator"
+	blastdoor_id = "urbanism_door_2"
+
+/turf/closed/wall/r_wall/blackmesa
+	name = "indestructible reinforced wall"
+	desc = "An extremely reinforced wall that cannot be dismantled by any means."
+	var/resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
+
+/turf/closed/wall/r_wall/blackmesa/try_decon(obj/item/W, mob/user, turf/T)
+	return FALSE
+
+/turf/closed/wall/r_wall/blackmesa/try_destroy(obj/item/I, mob/user, turf/T)
+	return FALSE
+
+/turf/closed/wall/r_wall/blackmesa/dismantle_wall(devastated = 0, explode = 0)
+	return
+
+/turf/closed/wall/r_wall/blackmesa/attack_animal(mob/living/simple_animal/M)
+	return
+
+/turf/closed/wall/r_wall/blackmesa/attack_hulk(mob/living/carbon/human/H)
+	return FALSE

@@ -237,19 +237,70 @@
 	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
 	icon_state = "m16hl"
 	burst_size = 1
-	fire_delay = 2
+	fire_delay = 1 //ATATATATATATATATA!!!
 	spread = 11
 	fire_sound = 'modular_bluemoon/sound/weapons/mesa/m16.ogg'
+	mag_type = /obj/item/ammo_box/magazine/m16/mesa
+	obj_flags = UNIQUE_RENAME
+	unique_reskin = list(
+		"Default" = list("icon_state" = "m16hl"),
+		"Alternative" = list("icon_state" = "m16hl_alt")
+	)
 
-/obj/item/gun/ballistic/automatic/m16a4/mesa/update_icon_state()
-	if(magazine)
-		icon_state = "m16hl"
-	else
-		icon_state = "m16hl-e"
+/obj/item/gun/ballistic/automatic/m16a4/mesa/Initialize(mapload)
+	gun_light = new /obj/item/flashlight/seclite(src)
+	return ..()
 
 /obj/item/gun/ballistic/automatic/m16a4/mesa/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
-	..()
-	playsound(user, fire_sound, 80, 0, 0)
+	if(!user)
+		return
+	. = ..(user, pointblank, pbtarget, message, stam_cost)
+
+//  пульки
+
+/obj/item/ammo_box/magazine/m16/mesa
+	icon = 'modular_bluemoon/phenyamomota/icon/obj/guns/ammo.dmi'
+	icon_state = "m16e"
+	ammo_type = /obj/item/ammo_casing/a556
+	caliber = "a556hl"
+	max_ammo = 50
+
+/obj/item/ammo_box/magazine/m16/mesa/update_icon()
+	. = ..()
+	if(ammo_count())
+		icon_state = "[initial(icon_state)]"
+	else
+		icon_state = "[initial(icon_state)]-0"
+
+/obj/item/ammo_casing/a556hl
+	name = "5.56mm bullet casing"
+	desc = "A 5.56mm bullet casing."
+	caliber = "a556"
+	projectile_type = /obj/item/projectile/bullet/a556
+
+
+/obj/item/projectile/bullet/a556hl
+	damage = 15
+	armour_penetration = 10
+	wound_bonus = 0.5
+
+/obj/item/projectile/bullet/a556hl/on_hit(atom/target, blocked = FALSE)
+	. = ..()
+	if(!target)
+		return
+	if(istype(target, /mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = target
+		if(!SA)
+			return
+		SA.apply_damage(15, BRUTE)
+
+//пули. Хз зачем решил их обозначить так.
+
+/obj/item/gun/ballistic/automatic/m16a4/mesa/update_icon_state()
+	if(current_skin)
+		icon_state = "[unique_reskin[current_skin]["icon_state"]][magazine ? "" : "-e"]"
+	else
+		icon_state = "[initial(icon_state)][magazine ? "" : "-e"]"
 
 /obj/item/gun/ballistic/automatic/mp7
 	name = "\improper mp7"
@@ -275,6 +326,9 @@
 /obj/item/gun/ballistic/automatic/mp7/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
 	..()
 	playsound(user, fire_sound, 80, 0, 0)
+
+
+// тоже пули
 
 /obj/item/ammo_box/magazine/mp7
 	name = "MP7 magazine"
@@ -306,6 +360,7 @@
 	armour_penetration = 3
 	wound_bonus = -3
 	bare_wound_bonus = 1
+// конец пулек
 
 /obj/item/gun/ballistic/automatic/scar
 	name = "\improper HC scar"
@@ -897,7 +952,7 @@
 
 /obj/item/gun/ballistic/automatic/m249
 	name = "M249 SAW"
-	desc = "FN M249 Squad Automatic Weapon - лёгкий пулемёт, предназначенный для обеспечения огневой поддержки отделения. Обычно используется с 100-патронной лентой."
+	desc = "FN M249 Squad Automatic Weapon - лёгкий пулемёт, предназначенный для обеспечения огневой поддержки отделения. Обычно используется с 100-патронной лентой. Имеет сошки для улучшения точности при стрельбе лёжа."
 	icon = 'modular_bluemoon/icons/obj/guns/Machineguns.dmi'
 	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/left48x32.dmi'
 	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/right48x32.dmi'
@@ -910,19 +965,44 @@
 	recoil = 1
 	spread = 6
 	burst_size = 3
-	burst_shot_delay = 1
+	burst_shot_delay = 3
 	fire_delay = 1.5
 	can_suppress = FALSE
 	can_bayonet = FALSE
 	slot_flags = ITEM_SLOT_BACK
 	automatic_burst_overlay = FALSE
+	actions_types = list(/datum/action/item_action/deploy_bipod)
 	var/cover_open = FALSE
 	slowdown = 1.0
+	item_flags = SLOWS_WHILE_IN_HAND
+
+	var/bipod_deployed = FALSE
+	var/heat_accumulated = 0
+	var/max_heat = 20
+	var/overheated = FALSE
+	var/overheat_cooldown_end = 0
+	var/last_fire_time = 0
+	var/initial_spread = 6
+	var/bipod_spread = 1
+	var/no_bipod_spread = 15
+	var/stamina_drain_per_shot = 5
+	var/heat_cooldown_rate = 1.5
+	var/heat_gain_per_shot = 1
+	var/last_bipod_turf = null
+
 
 /obj/item/gun/ballistic/automatic/m249/examine(mob/user)
 	. = ..()
 	if(cover_open && magazine)
 		. += "<span class='notice'>It seems like you could use an <b>empty hand</b> to remove the magazine.</span>"
+	if(bipod_deployed)
+		. += "<span class='notice'>Сошки разложены. Разброс минимален, стамина не тратится.</span>"
+	else
+		. += "<span class='notice'>Сошки сложены. Высокий разброс, тратится стамина при стрельбе.</span>"
+	if(overheated)
+		. += "<span class='warning'>Пулемёт перегрет! Ожидайте остывания.</span>"
+	else if(heat_accumulated > 0)
+		. += "<span class='warning'>Нагрев: [round(heat_accumulated, 0.1)]/[max_heat]</span>"
 
 /obj/item/gun/ballistic/automatic/m249/attack_self(mob/user)
 	cover_open = !cover_open
@@ -932,6 +1012,71 @@
 	else
 		playsound(user, 'sound/weapons/sawclose.ogg', 60, 1)
 	update_icon()
+
+/obj/item/gun/ballistic/automatic/m249/ui_action_click(mob/user, actiontype)
+	if(istype(actiontype, /datum/action/item_action/deploy_bipod))
+		toggle_bipod(user)
+	else
+		..()
+
+/obj/item/gun/ballistic/automatic/m249/can_shoot()
+	if(overheated)
+		var/mob/living/user = loc
+		if(user && ismob(user))
+			to_chat(user, "<span class='warning'>[src] перегрет! Подождите пока остынет.</span>")
+		return FALSE
+	return get_ammo()
+
+/obj/item/gun/ballistic/automatic/m249/proc/toggle_bipod(mob/living/user)
+	if(!user)
+		return
+	if(bipod_deployed)
+		collapse_bipod(user)
+	else
+		deploy_bipod(user)
+
+/obj/item/gun/ballistic/automatic/m249/proc/deploy_bipod(mob/living/user)
+	if(!user)
+		return
+	if(user.mobility_flags & MOBILITY_STAND)
+		to_chat(user, "<span class='warning'>Вы должны лежать, чтобы разложить сошки!</span>")
+		return
+	bipod_deployed = TRUE
+	spread = bipod_spread
+	last_bipod_turf = get_turf(user)
+	to_chat(user, "<span class='notice'>Вы разложили сошки [src]. Разброс уменьшен.</span>")
+	playsound(user, 'sound/weapons/sawopen.ogg', 50, 1)
+	update_icon()
+
+/obj/item/gun/ballistic/automatic/m249/proc/collapse_bipod(mob/living/user)
+	if(!user)
+		return
+	bipod_deployed = FALSE
+	spread = no_bipod_spread
+	last_bipod_turf = null
+	if(user)
+		to_chat(user, "<span class='notice'>Вы сложили сошки [src].</span>")
+	playsound(user, 'sound/weapons/sawclose.ogg', 50, 1)
+	update_icon()
+
+/obj/item/gun/ballistic/automatic/m249/proc/check_bipod_stability()
+	if(!bipod_deployed)
+		return
+	var/mob/living/user = loc
+	if(!user || !ismob(user))
+		collapse_bipod()
+		return
+	if(user.mobility_flags & MOBILITY_STAND)
+		collapse_bipod(user)
+		if(user)
+			to_chat(user, "<span class='warning'>Вы встали и сошки сложились!</span>")
+		return
+	var/current_turf = get_turf(user)
+	if(current_turf != last_bipod_turf)
+		collapse_bipod(user)
+		if(user)
+			to_chat(user, "<span class='warning'>Вы переместились и сошки сложились!</span>")
+		return
 
 /obj/item/gun/ballistic/automatic/m249/update_icon_state()
 	var/ammo_state = ""
@@ -944,9 +1089,13 @@
 /obj/item/gun/ballistic/automatic/m249/afterattack(atom/target as mob|obj|turf, mob/living/user as mob|obj, flag, params)
 	if(cover_open)
 		to_chat(user, "<span class='warning'>[src]'s cover is open! Close it before firing!</span>")
-	else
-		. = ..()
-		update_icon()
+		return
+	if(overheated)
+		to_chat(user, "<span class='warning'>[src] перегрет! Подождите пока остынет.</span>")
+		return
+	check_bipod_stability()
+	. = ..()
+	update_icon()
 
 /obj/item/gun/ballistic/automatic/m249/on_attack_hand(mob/user, act_intent = user.a_intent, unarmed_attack_flags)
 	if(loc != user)
@@ -970,6 +1119,96 @@
 	..()
 	update_icon()
 
+/obj/item/gun/ballistic/automatic/m249/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	if(!user)
+		return
+	if(overheated)
+		to_chat(user, "<span class='warning'>[src] перегрет! Подождите пока остынет.</span>")
+		return
+	process_heat_cooldown()
+	if(heat_accumulated >= max_heat)
+		overheated = TRUE
+		overheat_cooldown_end = world.time + 50
+		user.balloon_alert(user, "Пулемёт сильно нагрелся и заклинил!")
+		playsound(src, 'sound/effects/smoke.ogg', 50, 1)
+		return
+	heat_accumulated += heat_gain_per_shot
+	last_fire_time = world.time
+	if(heat_accumulated >= 10 && heat_accumulated < 11)
+		user.balloon_alert(user, "Дуло пулемёта начинает дымиться!")
+	if(heat_accumulated >= 20 && heat_accumulated < 21)
+		user.balloon_alert(user, "Пулемёт сильно нагревается!")
+	if(!bipod_deployed)
+		user.adjustStaminaLoss(stamina_drain_per_shot)
+	. = ..(user, pointblank, pbtarget, message, stam_cost)
+
+/obj/item/gun/ballistic/automatic/m249/proc/process_heat_cooldown()
+	if(heat_accumulated <= 0)
+		return
+	if(overheated && world.time >= overheat_cooldown_end)
+		overheated = FALSE
+		heat_accumulated = 0
+		if(loc && ismob(loc))
+			var/mob/living/user = loc
+			user.balloon_alert(user, "Пулемёт остыл!")
+		return
+	var/time_since_last_fire = world.time - last_fire_time
+	if(time_since_last_fire >= 20)
+		var/cooling_amount = heat_cooldown_rate * (time_since_last_fire / 10)
+		heat_accumulated = max(0, heat_accumulated - cooling_amount)
+		if(heat_accumulated <= 0 && !overheated)
+			heat_accumulated = 0
+
+/obj/item/gun/ballistic/automatic/m249/Initialize(mapload)
+	. = ..()
+	spread = no_bipod_spread
+	START_PROCESSING(SSobj, src)
+
+/obj/item/gun/ballistic/automatic/m249/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	return ..()
+
+/obj/item/gun/ballistic/automatic/m249/process()
+	process_heat_cooldown()
+	check_bipod_stability()
+
+/obj/item/gun/ballistic/automatic/m249/pickup(mob/user)
+	. = ..()
+	if(bipod_deployed)
+		collapse_bipod(user)
+	if(istype(user, /mob/living))
+		RegisterSignal(user, COMSIG_MOVABLE_MOVED, PROC_REF(on_mob_move))
+		RegisterSignal(user, COMSIG_LIVING_RESTING, PROC_REF(on_mob_rest))
+
+/obj/item/gun/ballistic/automatic/m249/dropped(mob/user)
+	. = ..()
+	if(bipod_deployed)
+		collapse_bipod(user)
+	if(istype(user, /mob/living))
+		UnregisterSignal(user, COMSIG_MOVABLE_MOVED)
+		UnregisterSignal(user, COMSIG_LIVING_RESTING)
+
+/obj/item/gun/ballistic/automatic/m249/proc/on_mob_move(atom/old_loc, dir)
+	SIGNAL_HANDLER
+	if(!bipod_deployed)
+		return
+	var/mob/living/user = loc
+	if(!user)
+		return
+	collapse_bipod(user)
+	to_chat(user, "<span class='warning'>Вы переместились и сошки сложились!</span>")
+
+/obj/item/gun/ballistic/automatic/m249/proc/on_mob_rest(mob/living/source, new_resting)
+	SIGNAL_HANDLER
+	if(!bipod_deployed)
+		return
+	var/mob/living/user = loc
+	if(!user || !ismob(user))
+		return
+	if(!new_resting)
+		collapse_bipod(user)
+		to_chat(user, "<span class='warning'>Вы встали и сошки сложились!</span>")
+
 /obj/item/ammo_box/magazine/m249
 	name = "M249 ammo belt (5.56mm)"
 	desc = "100-патронная лента для M249 SAW. Содержит стандартные 5.56x45mm НАТО патроны."
@@ -986,6 +1225,14 @@
 	else
 		icon_state = "[initial(icon_state)]"
 
+/datum/action/item_action/deploy_bipod
+	name = "Разложить/Сложить сошки"
+	desc = "Разложить сошки для улучшения точности (только лёжа)"
+	icon_icon = 'icons/mob/actions/actions_items.dmi'
+	button_icon_state = "activate"
+	background_icon_state = "storage_gather_switch"
+	required_mobility_flags = NONE
+	check_flags = AB_CHECK_RESTRAINED|AB_CHECK_STUN|AB_CHECK_CONSCIOUS
 
 /obj/item/clothing/neck/tie/hecudogtag
 	name = "HECU Dogtag"
