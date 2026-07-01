@@ -1,3 +1,13 @@
+GLOBAL_VAR_INIT(zombie_director, null)
+
+// =============================================================================
+// FORWARD DECLARATIONS (ПРОТОТИПЫ)
+// =============================================================================
+/datum/ai_director/zombie_mission
+
+// =============================================================================
+// MAIN SUBSYSTEM
+// =============================================================================
 SUBSYSTEM_DEF(blackmesa_events)
 	name = "Black Mesa Events"
 	runlevels = RUNLEVEL_GAME
@@ -5,6 +15,7 @@ SUBSYSTEM_DEF(blackmesa_events)
 	var/list/event_controls = list()
 	var/day_phase = 0 // 0=Evening, 1=Night, 2=Morning, 3=Day
 	var/phase_timer = 2 // Change every 2 fires (10 minutes)
+	var/zombie_director_ref
 
 /datum/controller/subsystem/blackmesa_events/Initialize(time, zlevel)
 	for(var/type in typesof(/datum/round_event_control/blackmesa))
@@ -14,11 +25,16 @@ SUBSYSTEM_DEF(blackmesa_events)
 		if(!E.typepath)
 			continue
 		event_controls += E
+
+
+	initialize_zombie_director()
+	zombie_director_ref = GLOB.zombie_director
 	return ..()
 
 /datum/controller/subsystem/blackmesa_events/fire(resumed = FALSE)
 	// Mission load check
-	if(!get_areas(/area/awaymission/ihategordon, TRUE).len)
+	var/list/mission_areas = get_areas(/area/awaymission/ihategordon, TRUE)
+	if(!mission_areas.len)
 		return
 
 	// Day/Night Cycle
@@ -30,10 +46,22 @@ SUBSYSTEM_DEF(blackmesa_events)
 	if(!length(event_controls))
 		return
 
+	// Get current difficulty level from zombie director
+	var/current_difficulty = 0
+	if(GLOB.zombie_director)
+		var/datum/ai_director/zombie_mission/D = GLOB.zombie_director
+		if(D)
+			current_difficulty = D.difficulty_level
+
 	var/list/possible_events = list()
 	for(var/datum/round_event_control/E in event_controls)
 		if(E.max_occurrences > 0 && E.occurrences >= E.max_occurrences)
 			continue
+		// Check if event meets difficulty requirement
+		if(istype(E, /datum/round_event_control/blackmesa))
+			var/datum/round_event_control/blackmesa/BE = E
+			if(BE.min_difficulty_level > current_difficulty)
+				continue
 		possible_events += E
 
 	if(!length(possible_events))
@@ -96,3 +124,8 @@ SUBSYSTEM_DEF(blackmesa_events)
 			to_chat(M, announcement)
 			if(s && M.client && (M.client.prefs.toggles & SOUND_ANNOUNCEMENTS))
 				SEND_SOUND(M, s)
+
+/datum/controller/subsystem/blackmesa_events/proc/initialize_zombie_director()
+	if(!GLOB.zombie_director)
+		GLOB.zombie_director = new /datum/ai_director/zombie_mission()
+

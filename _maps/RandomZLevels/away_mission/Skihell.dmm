@@ -69,7 +69,7 @@
 /turf/open/floor/carpet/green,
 /area/awaymission/skihell/center)
 "acX" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating{
 	icon_state = "platingdmg2"
 	},
@@ -244,7 +244,7 @@
 	},
 /area/awaymission/skihell/center)
 "aig" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /obj/structure/barricade/wooden/crude/snow,
 /turf/open/floor/plating,
 /area/awaymission/skihell/entrance)
@@ -614,7 +614,7 @@
 	},
 /area/awaymission/skihell/rock)
 "ays" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/snowed/smoothed,
 /area/awaymission/skihell/trainway)
 "ayX" = (
@@ -3586,7 +3586,7 @@
 	},
 /area/awaymission/skihell/rock)
 "cFY" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /obj/structure/barricade/wooden/crude/snow,
 /turf/open/floor/plating/asteroid/snow{
 	slowdown = 0
@@ -3731,7 +3731,6 @@
 /obj/effect/turf_decal/trimline/dark/filled/line{
 	dir = 9
 	},
-/obj/item/clothing/suit/armor/saggitarius,
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/train)
 "cLz" = (
@@ -4416,7 +4415,7 @@
 /area/awaymission/skihell/entrance)
 "djE" = (
 /obj/structure/lattice,
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /obj/effect/turf_decal/weather/snow/corner{
 	dir = 10
 	},
@@ -7188,7 +7187,7 @@
 /obj/effect/turf_decal/siding/wideplating_new/dark{
 	dir = 8
 	},
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/center)
 "fwu" = (
@@ -7405,7 +7404,7 @@
 	},
 /area/awaymission/skihell/rock)
 "fEj" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/asteroid/snow{
 	slowdown = 0
 	},
@@ -8465,7 +8464,7 @@
 	},
 /area/awaymission/skihell/center)
 "gqb" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /obj/effect/turf_decal/weather/snow/corner{
 	dir = 1
 	},
@@ -8895,7 +8894,7 @@
 /obj/structure/railing{
 	dir = 8
 	},
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/snowed/smoothed,
 /area/awaymission/skihell/center)
 "gKz" = (
@@ -11457,7 +11456,7 @@
 	},
 /area/awaymission/skihell/rock)
 "iOq" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /obj/structure/barricade/wooden/crude/snow,
 /turf/open/floor/plating,
 /area/awaymission/skihell)
@@ -12333,7 +12332,7 @@
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
 "jth" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating,
 /area/awaymission/skihell/rock)
 "jtq" = (
@@ -12780,7 +12779,7 @@
 	},
 /area/awaymission/skihell/rock)
 "jMx" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating,
 /area/awaymission/skihell)
 "jNz" = (
@@ -15099,7 +15098,7 @@
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
 "lJs" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/snowed/smoothed,
 /area/awaymission/skihell/rock)
 "lKZ" = (
@@ -16762,7 +16761,7 @@
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
 "mXe" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /obj/effect/turf_decal/weather/snow/corner,
 /turf/open/floor/plating/asteroid/snow{
 	floor_variance = 0;
@@ -16811,7 +16810,7 @@
 /obj/structure/railing{
 	dir = 8
 	},
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/asteroid/snow{
 	slowdown = 0
 	},
@@ -16942,7 +16941,7 @@
 /area/awaymission/skihell/trainway)
 "nio" = (
 /obj/structure/lattice,
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/asteroid/snow{
 	floor_variance = 0;
 	icon_state = "snow_dug";
@@ -17860,7 +17859,7 @@
 /obj/effect/turf_decal/trimline/dark_red/warning{
 	dir = 4
 	},
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/layeniaredder{
 	icon_state = "concrete2";
 	name = "concrete"
@@ -17997,7 +17996,7 @@
 	},
 /area/awaymission/skihell/entrance)
 "okt" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/center)
 "olu" = (
@@ -19056,7 +19055,7 @@
 	},
 /area/awaymission/skihell/center)
 "pbc" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating,
 /area/awaymission/skihell/center)
 "pbf" = (
@@ -19714,7 +19713,7 @@
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/train)
 "pEY" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/asteroid/snow{
 	slowdown = 0
 	},
@@ -19824,7 +19823,7 @@
 /area/awaymission/skihell/center)
 "pJc" = (
 /obj/structure/lattice,
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/snowed/smoothed,
 /area/awaymission/skihell/center)
 "pJp" = (
@@ -19861,7 +19860,7 @@
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
 "pMh" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating,
 /area/awaymission/skihell/trainway)
 "pMp" = (
@@ -22478,16 +22477,6 @@
 	},
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
-"rTs" = (
-/obj/effect/turf_decal/siding/wideplating_new/dark{
-	dir = 8
-	},
-/obj/effect/turf_decal/trimline/dark/filled/line{
-	dir = 8
-	},
-/obj/item/clothing/suit/armor/saggitarius,
-/turf/open/floor/plasteel/sepia,
-/area/awaymission/skihell/center)
 "rTu" = (
 /obj/structure/lattice,
 /obj/structure/urbanismbigcrate/alt,
@@ -22552,7 +22541,7 @@
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell)
 "rVs" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating{
 	icon_state = "platingdmg3"
 	},
@@ -23680,7 +23669,7 @@
 /turf/open/floor/carpet/royalblack,
 /area/awaymission/skihell/trainway)
 "sJU" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating,
 /area/awaymission/skihell/entrance)
 "sKd" = (
@@ -24471,7 +24460,7 @@
 /turf/open/floor/plasteel/sepia,
 /area/awaymission/skihell/center)
 "tpB" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /obj/effect/turf_decal/weather/snow/corner{
 	dir = 5
 	},
@@ -24581,7 +24570,7 @@
 /turf/open/floor/carpet/green,
 /area/awaymission/skihell/center)
 "ttB" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/layeniaredder{
 	icon_state = "concrete2";
 	name = "concrete"
@@ -25685,7 +25674,7 @@
 /obj/structure/railing{
 	dir = 1
 	},
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/asteroid/snow{
 	slowdown = 0
 	},
@@ -26162,7 +26151,7 @@
 	pixel_x = 0;
 	pixel_y = -1
 	},
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/asteroid/snow{
 	slowdown = 0
 	},
@@ -26202,11 +26191,6 @@
 /obj/structure/urbanismbigcrate/alt,
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/trainway)
-"uJp" = (
-/obj/structure/rack/shelf,
-/obj/item/clothing/head/helmet/saggitarius,
-/turf/open/floor/plasteel/dark,
-/area/awaymission/skihell/center)
 "uJs" = (
 /obj/structure/chair/sofa/right/brown{
 	dir = 1
@@ -26366,7 +26350,7 @@
 /turf/open/floor/plating,
 /area/awaymission/skihell)
 "uQe" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/asteroid/snow{
 	slowdown = 0
 	},
@@ -26689,7 +26673,7 @@
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
 "vcw" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/asteroid/snow{
 	slowdown = 0
 	},
@@ -27254,7 +27238,7 @@
 /turf/closed/wall/r_wall,
 /area/awaymission/skihell/rock)
 "vvF" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/snowed/smoothed,
 /area/awaymission/skihell/center)
 "vwL" = (
@@ -28246,7 +28230,7 @@
 /turf/open/floor/plasteel/dark,
 /area/awaymission/skihell/center)
 "wrg" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /turf/open/floor/plating/layeniaredder{
 	icon_state = "concrete2";
 	name = "concrete"
@@ -29595,7 +29579,7 @@
 	},
 /area/awaymission/skihell/rock)
 "xyw" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /obj/effect/turf_decal/weather/snow/corner,
 /turf/open/floor/plating/asteroid/snow{
 	floor_variance = 0;
@@ -29860,7 +29844,7 @@
 	},
 /area/awaymission/skihell/center)
 "xLG" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /obj/effect/turf_decal/weather/snow/corner{
 	dir = 10
 	},
@@ -30333,7 +30317,7 @@
 /turf/open/floor/plasteel/checker,
 /area/awaymission/skihell)
 "xZN" = (
-/obj/structure/girder/reinforced,
+/obj/structure/girder,
 /obj/structure/barricade/wooden/crude/snow,
 /turf/open/floor/plating,
 /area/awaymission/skihell/rock)
@@ -36076,9 +36060,9 @@ fGN
 fGN
 fGN
 fGN
+lkg
 fGN
-fGN
-fGN
+lkg
 fGN
 fGN
 fGN
@@ -36328,9 +36312,9 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
-lyA
+lkg
+lkg
+lkg
 lyA
 fGN
 fGN
@@ -36580,9 +36564,9 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
-lyA
+lkg
+lkg
+lkg
 lyA
 lyA
 lyA
@@ -36832,9 +36816,9 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
-lyA
+lkg
+lkg
+lkg
 lyA
 lyA
 lyA
@@ -37084,9 +37068,9 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
-lyA
+lkg
+lkg
+lkg
 lyA
 fGN
 fGN
@@ -37336,11 +37320,11 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
-lyA
-lyA
-fGN
+lkg
+lkg
+lkg
+lkg
+lkg
 lkg
 lkg
 lkg
@@ -37588,11 +37572,11 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
-lyA
-lyA
-fGN
+lkg
+lkg
+lkg
+lkg
+lkg
 lkg
 lkg
 lkg
@@ -37840,11 +37824,11 @@ lyA
 lyA
 lyA
 lyA
-lyA
-lyA
-lyA
-lyA
-fGN
+lkg
+lkg
+lkg
+lkg
+lkg
 lkg
 lkg
 lkg
@@ -39049,7 +39033,7 @@ cmJ
 oUJ
 iSb
 fuw
-uJp
+dga
 dga
 dga
 nHr
@@ -49898,7 +49882,7 @@ iZG
 iZG
 eSg
 eSg
-rTs
+iZG
 oDf
 lXP
 opY

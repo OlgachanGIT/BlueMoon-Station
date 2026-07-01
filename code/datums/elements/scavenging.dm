@@ -61,13 +61,16 @@
 	UnregisterSignal(target, list(COMSIG_ATOM_ATTACK_HAND, COMSIG_PARENT_ATTACKBY, COMSIG_PARENT_EXAMINE))
 
 /datum/element/scavenging/proc/on_examine(atom/source, mob/user, list/examine_list)
+	if(!source || !user || !examine_list)
+		return
 	var/methods = tool_types.Copy()
 	if(can_use_hands)
 		methods += list("bare handed")
 	if(!length(methods))
 		return
 	var/text = english_list(methods, "", " or ")
-	examine_list += "<span class='notice'>Looks like [source.ru_who()] can be scavenged [length(tool_types) ? "with" : ""][length(methods == 1) ? "" : "either "][length(tool_types) ? "a " : ""][text]</span>"
+	var/who_text = hascall(source, "ru_who") ? source.ru_who() : "it"
+	examine_list += "<span class='notice'>Looks like [who_text] can be scavenged [length(tool_types) ? "with" : ""][length(methods == 1) ? "" : "either "][length(tool_types) ? "a " : ""][text]</span>"
 
 /datum/element/scavenging/proc/scavenge_barehanded(atom/source, mob/user)
 	scavenge(source, user, 1)

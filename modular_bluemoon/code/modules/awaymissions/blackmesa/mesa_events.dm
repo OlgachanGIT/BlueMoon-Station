@@ -1,3 +1,8 @@
+// =============================================================================
+// FORWARD DECLARATIONS
+// =============================================================================
+/datum/ai_director/zombie_mission
+
 /obj/effect/landmark/awaymission/blackmesa
 	name = "Black Mesa Landmark"
 	icon = 'icons/effects/landmarks_static.dmi'
@@ -22,6 +27,7 @@
 	weight = 0
 	max_occurrences = 0
 	category = EVENT_CATEGORY_INVASION
+	var/min_difficulty_level = 0 // Minimum difficulty level required for this event
 
 /datum/round_event/blackmesa
 	var/list/excluded_areas = list(
@@ -36,7 +42,8 @@
 /datum/round_event/blackmesa/setup()
 	. = ..()
 	// Check if ihategordon is even loaded
-	if(!get_areas(/area/awaymission/ihategordon, TRUE).len)
+	var/list/mission_areas = get_areas(/area/awaymission/ihategordon, TRUE)
+	if(!mission_areas.len)
 		return EVENT_CANCELLED
 
 /datum/round_event/blackmesa/proc/get_mesa_areas()
@@ -118,6 +125,7 @@
 	weight = 5
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 1
 
 /datum/round_event/blackmesa/power_outage/start()
 	var/list/areas = get_mesa_areas()
@@ -155,6 +163,7 @@
 	weight = 6
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 2
 
 /datum/round_event_control/blackmesa/portal_storm/medium
 	name = "Black Mesa: Portal Storm (Medium)"
@@ -162,6 +171,7 @@
 	weight = 6
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 4
 
 /datum/round_event_control/blackmesa/portal_storm/dangerous
 	name = "Black Mesa: Portal Storm (Dangerous)"
@@ -169,6 +179,7 @@
 	weight = 6
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 7
 
 /datum/round_event/blackmesa/portal_storm
 	var/spawn_count = 3
@@ -243,6 +254,7 @@
 	weight = 4
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 1
 
 /datum/round_event/blackmesa/supply_drop
 	excluded_areas = list(
@@ -312,6 +324,7 @@
 	weight = 3
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 0
 
 /datum/round_event/blackmesa/sandstorm/start()
 	var/turf/T = get_random_mesa_turf()
@@ -327,6 +340,7 @@
 	weight = 2
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 0
 
 /datum/round_event/blackmesa/rain
 
@@ -347,6 +361,7 @@
 	weight = 7
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 3
 
 /datum/round_event_control/blackmesa/blackops_incursion/medium
 	name = "Black Mesa: Black Ops Incursion (Medium)"
@@ -354,6 +369,7 @@
 	weight = 7
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 5
 
 /datum/round_event_control/blackmesa/blackops_incursion/dangerous
 	name = "Black Mesa: Black Ops Incursion (Dangerous)"
@@ -361,6 +377,7 @@
 	weight = 7
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 8
 
 /datum/round_event/blackmesa/blackops_incursion
 	var/spawn_count = 3
@@ -424,6 +441,7 @@
 	weight = 8
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 1
 
 /datum/round_event_control/blackmesa/hecu_reinforcements/medium
 	name = "Black Mesa: HECU Reinforcements (Medium)"
@@ -431,6 +449,7 @@
 	weight = 8
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 4
 
 /datum/round_event_control/blackmesa/hecu_reinforcements/dangerous
 	name = "Black Mesa: HECU Reinforcements (Dangerous)"
@@ -438,6 +457,7 @@
 	weight = 8
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 7
 
 /datum/round_event/blackmesa/hecu_reinforcements
 	var/spawn_count = 3
@@ -507,6 +527,7 @@
 	weight = 5
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 6
 
 /datum/round_event/blackmesa/hecu_ghost_squad
 	var/static/occurred = FALSE
@@ -575,6 +596,7 @@
 	weight = 5
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 4
 
 /datum/round_event_control/blackmesa/bombardment/medium
 	name = "Black Mesa: Orbital Bombardment (Medium)"
@@ -582,6 +604,7 @@
 	weight = 5
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 6
 
 /datum/round_event_control/blackmesa/bombardment/dangerous
 	name = "Black Mesa: Orbital Bombardment (Dangerous)"
@@ -589,6 +612,7 @@
 	weight = 5
 	max_occurrences = 1
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 8
 
 /datum/round_event/blackmesa/bombardment
 	var/missile_count = 5
@@ -615,7 +639,8 @@
 		/area/awaymission/ihategordon/dorm_rooms,
 		/area/awaymission/ihategordon/hecu_camp_hall,
 		/area/awaymission/ihategordon/hecu_camp_medbay,
-		/area/awaymission/ihategordon/sci_medbay
+		/area/awaymission/ihategordon/sci_medbay,
+		/area/awaymission/ihategordon/outsideofmesa/hecu_camp
 	)
 
 /datum/round_event/blackmesa/bombardment/light
@@ -676,6 +701,7 @@
 	weight = 3
 	max_occurrences = 3
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 1
 
 /datum/round_event/blackmesa/medical_drop/start()
 	SSblackmesa_events.mesa_announce("Внимание! Отправлены медицинские капсулы для передовых групп HECU. Ожидайте прибытия припасов.", "Medical Support", 'modular_bluemoon/sound/ambience/mesa/BMAS3.ogg')
@@ -715,6 +741,7 @@
 	weight = 4
 	max_occurrences = 2
 	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 2
 
 /datum/round_event/blackmesa/lockdown
 	var/list/locked_doors = list()
@@ -729,11 +756,15 @@
 		return
 
 	for(var/area/A in areas)
-		for(var/obj/machinery/door/D in A.contents)
-			if(!D.locked)
-				D.locked = TRUE
-				D.update_icon()
-				locked_doors += D
+		var/list/turfs = get_area_turfs(A)
+		if(!turfs.len)
+			continue
+		for(var/turf/T in turfs)
+			for(var/obj/machinery/door/D in T.contents)
+				if(!D.locked)
+					D.locked = TRUE
+					D.update_icon()
+					locked_doors += D
 
 	addtimer(CALLBACK(src, PROC_REF(end_lockdown)), lockdown_duration)
 
@@ -745,4 +776,40 @@
 
 	locked_doors.Cut()
 	SSblackmesa_events.mesa_announce("Система аварийной блокировки отключена. Все двери разблокированы.", "Lockdown Ended", 'modular_bluemoon/sound/ambience/mesa/BMAS1.ogg')
+
+// Event 11: Zombie Horde
+/datum/round_event_control/blackmesa/zombie_horde
+	name = "Black Mesa: Zombie Horde"
+	typepath = /datum/round_event/blackmesa/zombie_horde
+	description = "Triggers a zombie horde wave through the AI Director."
+	weight = 8
+	max_occurrences = 3
+	category = EVENT_CATEGORY_INVASION
+	min_difficulty_level = 0
+
+/datum/round_event/blackmesa/zombie_horde
+	start_when = 1
+	end_when = 2
+
+/datum/round_event/blackmesa/zombie_horde/start()
+	if(!src)
+		return
+	if(!GLOB.zombie_director)
+		return
+
+	var/datum/ai_director/zombie_mission/D = GLOB.zombie_director
+	if(!D)
+		return
+
+	var/list/alive_players = D.get_alive_players_in_mission()
+	if(!alive_players || !alive_players.len)
+		return
+
+	var/threat_level = D.calculate_threat_level(alive_players.len)
+	if(threat_level <= 0)
+		return
+
+	D.spawn_zombie_wave(threat_level, alive_players)
+	D.last_wave_time = world.time
+	D.current_wave_number++
 
