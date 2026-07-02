@@ -20,6 +20,7 @@
 		/area/awaymission/ihategordon/hecu_abandoned_camp,
 		/area/awaymission/ihategordon/rocks,
 		/area/awaymission/ihategordon/outsideofmesa,
+		/area/awaymission/ihategordon/outsideofmesa/hecu_camp,
 		/area/awaymission/ihategordon/secret_rooms,
 		/area/awaymission/ihategordon/underground_tunnels,
 		/area/awaymission/ihategordon/sectorhnorthoffices,
@@ -70,17 +71,19 @@
 	if(time_since_last < wave_timer)
 		return
 
-	wave_timer = rand(600, max_wave_interval)
-
 	var/list/alive_players = get_alive_players_in_mission()
 	if(!alive_players || !alive_players.len)
-		log_world("[src] No alive players in mission, skipping wave")
+		log_world("[src] No alive players in mission, resetting wave timer")
+		last_wave_time = world.time
 		return
 
 	var/threat_level = calculate_threat_level(alive_players.len)
 	if(!threat_level || threat_level <= 0)
 		log_world("[src] Invalid threat level: [threat_level]")
+		last_wave_time = world.time
 		return
+
+	wave_timer = rand(600, max_wave_interval)
 
 	log_world("[src] Attempting to spawn wave with threat=[threat_level]")
 	spawn_zombie_wave(threat_level, alive_players)
@@ -176,6 +179,7 @@
 	var/list/spawned_zombies = list()
 
 	log_world("[src] Starting zombie wave: threat=[threat_level], players=[players.len]")
+	announce_wave(zombies_to_spawn)
 
 	// Gradual spawning: spawn in batches of 3-5 zombies
 	var/batch_size = rand(3, 5)
@@ -220,7 +224,6 @@
 			start_horde_music()
 
 	log_world("[src] Wave complete: spawned=[spawned_zombies.len]")
-	announce_wave(spawned_zombies.len)
 
 /datum/ai_director/zombie_mission/proc/find_valid_spawn_turf(list/players)
 	if(!src)

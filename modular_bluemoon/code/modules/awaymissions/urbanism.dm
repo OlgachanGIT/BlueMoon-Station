@@ -537,14 +537,14 @@
 	name = "generator"
 	desc = "A strange generator. Activate it with an empty hand."
 	icon = 'modular_bluemoon/icons/obj/urbanism/urbanism.dmi'
-	icon_state = "generator_off"
+	icon_state = "generatorold"
 	anchored = TRUE
 	density = TRUE
 	resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
 	max_integrity = 9999999
 
 	// Activation settings
-	var/activation_time = 5 SECONDS
+	var/activation_time = 60 SECONDS
 	var/active_duration = 60 SECONDS
 	var/damage_threshold = 50 // Damage needed to interrupt activation
 
@@ -552,6 +552,7 @@
 	var/activating = FALSE
 	var/active = FALSE
 	var/activation_start_time = 0
+	var/next_mob_spawn_time = 0
 	var/damage_taken = 0
 
 	// Mob wave settings
@@ -582,7 +583,7 @@
 
 	// Spawn mobs during activation
 	if(spawn_mobs && mob_types && mob_types.len)
-		if(world.time % mob_spawn_interval == 0)
+		if(world.time >= next_mob_spawn_time)
 			spawn_mob_wave()
 
 /obj/structure/urbanism_generator/attack_hand(mob/user)
@@ -609,12 +610,12 @@
 		return
 
 	activating = TRUE
+	damage_taken = 0
 	to_chat(user, span_notice("Вы начинаете активировать генератор..."))
 
-	// Play activation sound placeholder
-	playsound(src, 'sound/machines/chime.ogg', 50, TRUE)
+	playsound(src, 'modular_bluemoon/sound/creatures/mesa/generator/generator_start.ogg', 50, TRUE)
 
-	if(do_after(user, activation_time, target = src))
+	if(do_after(user, activation_time, target = src, timed_action_flags = IGNORE_USER_LOC_CHANGE | IGNORE_HELD_ITEM | IGNORE_INCAPACITATED))
 		if(QDELETED(src) || QDELETED(user))
 			activating = FALSE
 			return
@@ -632,28 +633,28 @@
 	active = TRUE
 	activation_start_time = world.time
 	damage_taken = 0
+	next_mob_spawn_time = world.time + mob_spawn_interval
 
-	icon_state = "generator_on"
 	visible_message(span_boldnotice("Генератор активирован!"))
 
+	// Open blastdoor immediately if this generator is linked to one
+	if(blastdoor_id)
+		open_blastdoor()
+
 	// Play active sound
-	playsound(src, 'sound/machines/terminal_on.ogg', 50, TRUE)
+	playsound(src, 'modular_bluemoon/sound/creatures/mesa/generator/generator_sputter.ogg', 50, TRUE)
 
 /obj/structure/urbanism_generator/proc/finish_activation()
 	if(!src)
 		return
 
 	active = FALSE
-	icon_state = "generator_off"
+	icon_state = "generatorold"
 	visible_message(span_boldnotice("Генератор завершил работу!"))
 
 	// Give reward
 	if(reward_type)
 		spawn_reward()
-
-	// Open blastdoor
-	if(blastdoor_id)
-		open_blastdoor()
 
 /obj/structure/urbanism_generator/proc/spawn_reward()
 	if(!src || !reward_type)
@@ -670,14 +671,47 @@
 	if(!src || !blastdoor_id)
 		return
 
-	// Find and open blastdoor with matching ID
-	for(var/obj/machinery/door/poddoor/BD in GLOB.machines)
-		if(!BD)
-			continue
-		if(BD.id == blastdoor_id)
-			BD.open()
+	// Find and open blastdoor with matching ID.
+	// Many door subclasses declare `id` (poddoor, brig/window doors, windowdoor),
+	// so iterate atoms and cast to the known subclasses before accessing `id`.
+	for(var/obj/machinery/door/poddoor/D in GLOB.machines)
+		if(D && D.id == blastdoor_id)
+			D.open()
 			visible_message(span_notice("Дверь [blastdoor_id] открылась!"))
 			return
+	for(var/obj/machinery/door/window/brigdoor/W in GLOB.machines)
+		if(W && W.id == blastdoor_id)
+			W.open()
+			visible_message(span_notice("Дверь [blastdoor_id] открылась!"))
+			return
+	// Note: do not iterate the generic /obj/machinery/door/window class because
+	// it does not declare `id` — brigdoor subclass above covers window doors with IDs.
+
+/obj/structure/urbanism_generator/proc/get_spawn_count_for_difficulty()
+	if(!src)
+		return 1
+
+	var/max_count = max(1, max_mobs_per_wave)
+	var/difficulty = 0
+	var/datum/ai_director/zombie_mission/director = GLOB.zombie_director
+	if(director)
+		difficulty = director.difficulty_level
+
+	switch(difficulty)
+		if(0)
+			return rand(1, min(2, max_count))
+		if(1)
+			return rand(1, min(3, max_count))
+		if(2)
+			return rand(2, min(4, max_count))
+		if(3)
+			return rand(2, min(5, max_count))
+		if(4)
+			return rand(3, min(6, max_count))
+		if(5)
+			return rand(3, min(7, max_count))
+		else
+			return rand(4, max_count)
 
 /obj/structure/urbanism_generator/proc/spawn_mob_wave()
 	if(!src)
@@ -687,27 +721,38 @@
 	if(!T)
 		return
 
-	var/mobs_to_spawn = rand(1, max_mobs_per_wave)
+	if(!mob_types || !mob_types.len)
+		return
 
-	for(var/i = 1 to mobs_to_spawn)
+	var/mobs_to_spawn = get_spawn_count_for_difficulty()
+	if(mobs_to_spawn < 1)
+		mobs_to_spawn = 1
+
+	for(var/i = 1; i <= mobs_to_spawn; i++)
 		var/mob_type = pick(mob_types)
 		if(!mob_type)
 			continue
 
 		var/turf/spawn_turf = get_step(T, pick(GLOB.cardinals))
-		if(!spawn_turf || spawn_turf.density || spawn_turf.is_blocked_turf())
+		if(!spawn_turf)
+			continue
+		if(spawn_turf.density || spawn_turf.is_blocked_turf())
 			continue
 
 		var/mob/living/M = new mob_type(spawn_turf)
-		if(M)
-			new /obj/effect/temp_visual/dir_setting/ninja/phase(spawn_turf)
-			playsound(spawn_turf, 'sound/magic/Teleport_app.ogg', 50, TRUE)
+		if(!M)
+			continue
+
+		new /obj/effect/temp_visual/dir_setting/ninja/phase(spawn_turf)
+		playsound(spawn_turf, 'sound/magic/Teleport_app.ogg', 50, TRUE)
+
+	next_mob_spawn_time = world.time + mob_spawn_interval
 
 /obj/structure/urbanism_generator/take_damage(damage_amount, damage_type = BRUTE, damage_flag = 0, sound_effect = 1, attack_dir)
 	if(!src)
 		return
 
-	if(!active)
+	if(!active && !activating)
 		return ..()
 
 	damage_taken += damage_amount
@@ -723,11 +768,11 @@
 
 	active = FALSE
 	activating = FALSE
-	icon_state = "generator_off"
+	icon_state = "generatorold"
 	damage_taken = 0
 
 	visible_message(span_danger("Генератор был повреждён и остановлен!"))
-	playsound(src, 'sound/machines/buzz-sigh.ogg', 50, TRUE)
+	playsound(src, 'modular_bluemoon/sound/creatures/mesa/generator/generator_sputter.ogg', 50, TRUE)
 
 // =============================================================================
 // GENERATOR WITH REWARD
@@ -772,9 +817,32 @@
 	name = "secondary door generator"
 	blastdoor_id = "urbanism_door_2"
 
+/obj/structure/urbanism_generator/continuous
+	name = "hive generator"
+	desc = "A generator that continuously spawns infected while active."
+	reward_type = null
+	spawn_mobs = TRUE
+	mob_types = list(
+		/mob/living/simple_animal/hostile/infected,
+		/mob/living/simple_animal/hostile/infected/bruiser
+	)
+	mob_spawn_interval = 10 SECONDS
+	max_mobs_per_wave = 2
+	active_duration = 120 SECONDS
+
 /turf/closed/wall/r_wall/blackmesa
 	name = "indestructible reinforced wall"
 	desc = "An extremely reinforced wall that cannot be dismantled by any means."
+	icon = 'icons/turf/walls/reinforced_wall.dmi'
+	icon_state = "r_wall"
+	smooth = SMOOTH_TRUE
+	canSmoothWith = list(
+		/turf/closed/wall,
+		/turf/closed/wall/r_wall,
+		/turf/closed/wall/r_wall/blackmesa,
+		/turf/closed/wall/r_wall/rust,
+		/turf/closed/wall/rust
+	)
 	var/resistance_flags = INDESTRUCTIBLE | LAVA_PROOF | FIRE_PROOF | UNACIDABLE | ACID_PROOF | FREEZE_PROOF
 
 /turf/closed/wall/r_wall/blackmesa/try_decon(obj/item/W, mob/user, turf/T)

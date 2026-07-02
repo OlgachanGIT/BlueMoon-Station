@@ -8,7 +8,7 @@
 	name = "Difficulty Trigger Zone"
 	icon = 'icons/effects/landmarks_static.dmi'
 	icon_state = "x4"
-	invisibility = 0 // Visible for debugging, can be made invisible later
+	invisibility = 100
 	anchored = TRUE
 	density = FALSE
 	var/trigger_id = 1 // 1-8 for progressive difficulty
@@ -16,12 +16,16 @@
 
 /obj/effect/landmark/awaymission/blackmesa/difficulty_trigger/Initialize(mapload)
 	. = ..()
+	if(!src)
+		return
 	if(trigger_id < 1 || trigger_id > 8)
 		trigger_id = 1
 	log_world("Black Mesa Trigger Zone #[trigger_id] initialized at [src]")
 
 /obj/effect/landmark/awaymission/blackmesa/difficulty_trigger/Crossed(atom/movable/AM)
 	. = ..()
+	if(!src)
+		return
 	if(triggered)
 		return
 	if(!AM)
@@ -30,6 +34,8 @@
 	if(!isliving(AM))
 		return
 	var/mob/living/L = AM
+	if(!L)
+		return
 	if(!L.client)
 		return
 	if(L.stat == DEAD)
@@ -41,6 +47,8 @@
 	increase_difficulty(trigger_id)
 
 /obj/effect/landmark/awaymission/blackmesa/difficulty_trigger/proc/increase_difficulty(trigger_level)
+	if(!src)
+		return
 	if(!trigger_level)
 		return
 	if(!GLOB.zombie_director)
@@ -49,6 +57,9 @@
 
 	var/datum/ai_director/zombie_mission/D = GLOB.zombie_director
 	if(!D)
+		return
+	if(!SSblackmesa_events)
+		log_world("ERROR: SSblackmesa_events is null when triggering difficulty")
 		return
 
 	// Increase difficulty level in director
