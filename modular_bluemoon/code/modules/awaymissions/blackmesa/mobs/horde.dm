@@ -27,6 +27,8 @@
 	minbodytemp = 0
 	maxbodytemp = 1500
 	robust_searching = 1
+	search_objects = 1
+	wanted_objects = list(/obj/structure/urbanism_generator)
 	environment_smash = ENVIRONMENT_SMASH_STRUCTURES
 	gold_core_spawnable = NO_SPAWN
 	density = TRUE
@@ -39,6 +41,8 @@
 /mob/living/simple_animal/hostile/infected/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/swarming)
+	// Initialize wanted_objects typecache at runtime to avoid constant-expression compile errors
+	wanted_objects = typecacheof(wanted_objects, TRUE)
 
 /mob/living/simple_animal/hostile/infected/death(gibbed)
 	. = ..(gibbed)
