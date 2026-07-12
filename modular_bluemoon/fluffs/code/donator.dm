@@ -2066,6 +2066,7 @@
 	slot = ITEM_SLOT_BACKPACK
 	path = /obj/item/storage/backpack/case/command/freak
 	ckeywhitelist = list("freakowo")
+	handle_post_equip = TRUE
 
 /datum/gear/donator/bm/fire_blossom
 	name = "Fire blossom"
@@ -2490,3 +2491,15 @@
 	slot = ITEM_SLOT_NECK
 	path = /obj/item/clothing/neck/cloak/oversize
 	ckeywhitelist = list("moun4l")
+
+/datum/gear/donator/bm/slim_body_and_shorts
+	name = "Comfortable short bodysuit with athletic shorts"
+	slot = ITEM_SLOT_ICLOTHING
+	path = /obj/item/clothing/under/donator/bm/h_slim_body_and_shorts
+	ckeywhitelist = list("hateredsoul")
+
+/datum/gear/donator/bm/torn_veil
+	name = "Shimmering torn veil"
+	slot = ITEM_SLOT_OCLOTHING
+	path = /obj/item/clothing/suit/donator/bm/torn_veil
+	ckeywhitelist = list("hateredsoul")
