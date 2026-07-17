@@ -1333,6 +1333,13 @@
   * * addition - is any additional text, which will be appended to the rest of the log line
   */
 /proc/log_combat(atom/user, atom/target, what_done, atom/object=null, addition=null)
+	// Атрибуция активности антагов для директора: атака по чужому игровому персонажу двигает
+	// score атакующего. bump_antag_activity сам отсеивает не-антагов - здесь только дешёвые гейты.
+	if(user != target && isliving(user) && ismob(target))
+		var/mob/living/attacking_mob = user
+		var/mob/victim_mob = target
+		if(attacking_mob.mind && victim_mob.mind && victim_mob.mind != attacking_mob.mind)
+			SSdirector.bump_antag_activity(attacking_mob.mind, DIRECTOR_ACTIVITY_ATTACK)
 	var/ssource = key_name(user)
 	var/starget = key_name(target)
 
@@ -1590,8 +1597,7 @@
 	var/screentips_enabled = user.client.prefs.screentip_pref
 	if(screentips_enabled == SCREENTIP_PREFERENCE_DISABLED || (flags_1 & NO_SCREENTIPS_1))
 		active_hud.screentip_text.maptext = ""
-		active_hud.last_screentip_atom = null
-		active_hud.last_screentip_held = null
+		active_hud.set_screentip_cache(null, null)
 		return
 
 	// Dedup repeat hovers — same atom with same held item produces an identical
@@ -1600,8 +1606,7 @@
 	var/obj/item/held_item = user.get_active_held_item()
 	if(active_hud.last_screentip_atom == src && active_hud.last_screentip_held == held_item)
 		return
-	active_hud.last_screentip_atom = src
-	active_hud.last_screentip_held = held_item
+	active_hud.set_screentip_cache(src, held_item)
 
 	active_hud.screentip_text.maptext_y = 10 // 10px lines us up with the action buttons top left corner
 	var/lmb_rmb_line = ""
