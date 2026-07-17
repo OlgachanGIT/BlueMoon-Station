@@ -62,7 +62,7 @@
 	M.sync()
 
 /datum/config_entry/flag/sprint_enabled
-	default = TRUE
+	default = FALSE
 
 /datum/config_entry/flag/sprint_enabled/ValidateAndSet(str_val)
 	. = ..()

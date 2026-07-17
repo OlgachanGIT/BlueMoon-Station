@@ -1,10 +1,14 @@
+// ============================================================================
+// TIER 1 - Basic Weapons (Lowest Power)
+// ============================================================================
+
 /obj/item/gun/ballistic/automatic/pistol/hl9mm
 	name = "9mm pistol"
 	desc = " пистолет Beretta 92FS или же 9mm pistol является довольно распространённым пистолетом у охранников комплекса чёрной мезы... Выглядит невероятно старомодно "
 	icon = 'modular_bluemoon/icons/obj/guns/projectile.dmi'
 	icon_state = "hl9mmpistol"
 	w_class = WEIGHT_CLASS_SMALL
-	mag_type = /obj/item/ammo_box/magazine/pistolm9mm
+	mag_type = /obj/item/ammo_box/magazine/pistolm9mm/mesa
 	can_suppress = FALSE
 	burst_size = 1
 	spread = 7
@@ -26,6 +30,69 @@
 /obj/item/gun/ballistic/automatic/pistol/hl9mm/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
 	..()
 	playsound(user, fire_sound, 80, 0, 0)
+
+/obj/item/gun/ballistic/automatic/pistol/hl9mm/insert_mag(obj/item/ammo_box/magazine/AM, mob/user)
+	if(!istype(AM, /obj/item/ammo_box/magazine/pistolm9mm) && !istype(AM, /obj/item/ammo_box/magazine/pistolm9mm/mesa))
+		return
+	if(!magazine || tactical_reload)
+		var/obj/item/ammo_box/magazine/oldmag = magazine
+		if(user.transferItemToLoc(AM, src))
+			magazine = AM
+			if(oldmag)
+				to_chat(user, span_notice("You perform a tactical reload on \the [src], replacing the [magazine_wording]."))
+				user.put_in_hands(oldmag)
+				oldmag.update_icon()
+			else
+				to_chat(user, span_notice("You load a new [magazine_wording] into \the [src]."))
+			if(magazine.ammo_count())
+				playsound(src, load_sound, 70, 1)
+				if(!chambered)
+					chamber_round()
+			else
+				playsound(src, load_empty_sound, 70, 1)
+			update_icon()
+			return TRUE
+	return FALSE
+
+// Custom magazine for hl9mm with special projectile
+/obj/item/ammo_box/magazine/pistolm9mm/mesa
+	name = "9mm magazine (special)"
+	icon_state = "9x19p"
+	ammo_type = /obj/item/ammo_casing/c9mm/mesa
+	max_ammo = 16
+	multiple_sprites = 2
+
+/obj/item/ammo_box/magazine/pistolm9mm/mesa/update_icon()
+	..()
+	icon_state = "9x19p-[ammo_count() ? "16" : "0"]"
+
+// Custom casing for hl9mm
+/obj/item/ammo_casing/c9mm/mesa
+	name = "9mm bullet casing (Black Mesa)"
+	desc = "A 9mm bullet casing."
+	caliber = "9mm"
+	projectile_type = /obj/item/projectile/bullet/c9mm/mesa
+
+// Custom projectile for hl9mm with bonus damage to simple animals
+/obj/item/projectile/bullet/c9mm/mesa
+	name = "9mm bullet"
+	damage = 22
+	armour_penetration = 20
+	embedding = list(embed_chance=15, fall_chance=3, jostle_chance=4, ignore_throwspeed_threshold=TRUE, pain_stam_pct=0.4, pain_mult=5, jostle_pain_mult=6, rip_time=10)
+
+/obj/item/projectile/bullet/c9mm/mesa/on_hit(atom/target, blocked = FALSE)
+	. = ..()
+	if(!target)
+		return
+	if(istype(target, /mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = target
+		if(!SA)
+			return
+		SA.apply_damage(10, BRUTE)
+
+// ============================================================================
+// TIER 4 - Elite Weapons (Highest Power)
+// ============================================================================
 
 /obj/item/gun/ballistic/automatic/sniper_rifle/m4oa1
 	name = "m40a1 sniper rifle"
@@ -77,6 +144,7 @@
 	else
 		icon_state = "[initial(icon_state)]"
 
+// TIER 2
 /obj/item/gun/ballistic/automatic/mp5
 	name = "MP5 machinegun"
 	desc = "Heckler Koch Mp5 является хоть и устаревшим, но невероятно сильным оружием в виду своей скорострельности. Какой идиот вообще подумал, что будет отличной идеей отобрать его у морпеха HECU?"
@@ -93,7 +161,7 @@
 	spread = 9
 	burst_size = 3
 	burst_shot_delay = 2
-	fire_delay = 1.5 ///Это пиздец!
+	fire_delay = 1 ///Это пиздец!
 	can_bayonet = FALSE
 	automatic_burst_overlay = FALSE
 
@@ -112,7 +180,8 @@
 	desc = "Magazines taking 10mm ammunition; it fits in the MP5."
 	icon = 'modular_bluemoon/icons/obj/ammo.dmi'
 	icon_state = "mp5"
-	ammo_type = /obj/item/ammo_casing/c10mm
+	ammo_type = /obj/item/ammo_casing/mm57
+	caliber = "5.7mm"
 	max_ammo = 30
 
 /obj/item/ammo_box/magazine/mp5/update_icon()
@@ -122,6 +191,7 @@
 	else
 		icon_state = "[initial(icon_state)]"
 
+// TIER 1
 /obj/item/gun/ballistic/shotgun/m870
 	name = "m870 shotgun"
 	desc = "Remington 870 - это классический помповый дробовик, который был представлен компанией Remington Arms в 1950 году и до сих пор остается одним из самых популярных и продаваемых ружей в США."
@@ -133,7 +203,7 @@
 	w_class = WEIGHT_CLASS_BULKY
 	recoil = 4
 	attack_speed = 10
-	force = 40
+	force = 10
 	fire_delay = 4
 	mag_type = /obj/item/ammo_box/magazine/internal/shot/m870
 	weapon_weight = WEAPON_HEAVY
@@ -148,6 +218,7 @@
 	caliber = "shotgun"
 	max_ammo = 4
 
+// TIER 2
 /obj/item/gun/ballistic/shotgun/spas
 	name = "SPAS 12 shotgun"
 	desc = "Этот невероятно старый и брутальный дробовик заставляет вас надеть балаклаву с горнолыжными очками."
@@ -164,9 +235,12 @@
 	mag_type = /obj/item/ammo_box/magazine/internal/shot/spas
 	pumpsound = 'modular_bluemoon/sound/weapons/mesa/shotgun_rack.ogg'
 	weapon_weight = WEAPON_HEAVY
+	var/stamina_drain_per_shot = 5
 
 /obj/item/gun/ballistic/shotgun/spas/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
 	..()
+	if(user)
+		user.adjustStaminaLoss(stamina_drain_per_shot)
 	src.pump(user)
 	playsound(user, fire_sound, 80, 0, 0)
 
@@ -231,6 +305,7 @@
 	fire_sound = 'modular_bluemoon/sound/weapons/mesa/underbarrel.ogg'
 	pin = /obj/item/firing_pin
 
+// TIER 3
 /obj/item/gun/ballistic/automatic/m16a4/mesa
 	name = "\improper old M16 rifle"
 	desc = "Невероятно старая версия М16 с сломанным подствольным гранатомётом и... Большей отдачей что-ли? Держа её в руках, вы чувствуете странные ощущения... Да и отряды HECU с таким замечены не были"
@@ -302,6 +377,7 @@
 	else
 		icon_state = "[initial(icon_state)][magazine ? "" : "-e"]"
 
+// TIER 1
 /obj/item/gun/ballistic/automatic/mp7
 	name = "\improper mp7"
 	desc = "Heckler & Koch MP7 A1 PDW — пистолет-пулемёт, разработанный в начале 2000-х годов немецкой фирмой Heckler & Koch. Отлично подойдёт, если вместо лечения союзников медик вашего отряда HECU хочет устроить бойню"
@@ -357,11 +433,22 @@
 /obj/item/projectile/bullet/mm46
 	name = "4.6mm bullet"
 	damage = 10
-	armour_penetration = 3
+	armour_penetration = 1
 	wound_bonus = -3
 	bare_wound_bonus = 1
+
+/obj/item/projectile/bullet/mm46/on_hit(atom/target, blocked = FALSE)
+	. = ..()
+	if(!target)
+		return
+	if(istype(target, /mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = target
+		if(!SA)
+			return
+		SA.apply_damage(10, BRUTE)
 // конец пулек
 
+// TIER 3
 /obj/item/gun/ballistic/automatic/scar
 	name = "\improper HC scar"
 	desc = "Модифицированная версия FN Scar, предназначенная для ведения стрельбы на средние и дальние дистанции. В отличие от M4oa1, имеет автоматический режим стрельбы и менее убойный калибр + крутой песчаный камуфляж (Но вы же помните то, что орудуете только в научном комплексе?)"
@@ -419,6 +506,7 @@
 	wound_bonus = -6
 	bare_wound_bonus = 5
 
+// TIER 2
 /obj/item/gun/ballistic/automatic/p90
 	name = "\improper P90"
 	desc = "FN P90 является оружием индивидуальной самообороны бельгийской компании Fabrique Nationale Herstal."
@@ -471,9 +559,9 @@
 
 /obj/item/projectile/bullet/mm57
 	name = "5.7mm bullet"
-	damage = 10
-	armour_penetration = 4
-	wound_bonus = -4
+	damage = 20
+	armour_penetration = 15
+	wound_bonus = 2
 	bare_wound_bonus = 2
 
 
@@ -865,6 +953,7 @@
 		alarmed = 1
 	return
 
+// TIER 4
 /obj/item/gun/ballistic/revolver/hlrsh12
 	name = "RSH-12 revolver"
 	desc = "Противник даже слова сказать не успеет. Это прототип РШ12 который можно зарядить картечью. С этого дерьма даже стрелять опасно!"
@@ -916,6 +1005,7 @@
 	speedloader = TRUE
 	multiple_sprites = 1
 
+// TIER 3
 /obj/item/gun/ballistic/automatic/pistol/deagle/hl
 	name = "Desert Eagle handgun"
 	desc = "Карманная артиллерия прямо у вас в руках. пустынный орёл способен пробивать бронежилеты большинства стандартных образцов, что делает его идеальным выбором для лидеров отрядов HECU"
@@ -937,6 +1027,7 @@
 /obj/item/gun/ballistic/automatic/pistol/deagle/hl/update_icon_state()
 	icon_state = "[initial(icon_state)][chambered ? "" : "_mag"]"
 
+// TIER 3
 /obj/item/gun/ballistic/revolver/mateba/hl357
 	name = "\improper .357 revolver"
 	desc = "Достаточно неплохого калибра револьвер, специально выбранный для быстрого устранения... Крупной дичи"
@@ -950,6 +1041,7 @@
 	ammo_type = /obj/item/ammo_casing/a357
 	max_ammo = 6
 
+// TIER 4
 /obj/item/gun/ballistic/automatic/m249
 	name = "M249 SAW"
 	desc = "FN M249 Squad Automatic Weapon - лёгкий пулемёт, предназначенный для обеспечения огневой поддержки отделения. Обычно используется с 100-патронной лентой. Имеет сошки для улучшения точности при стрельбе лёжа."

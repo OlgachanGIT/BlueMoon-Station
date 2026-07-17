@@ -132,7 +132,7 @@
 	if(!areas.len)
 		return
 
-	SSblackmesa_events.mesa_announce("Внимание! Зафиксирован критический сбой в энергосети Сектора H. Ожидаемое время восстановления: 60 секунд.", "Power Grid Failure", 'modular_bluemoon/sound/ambience/mesa/BMAS2.ogg')
+	SSblackmesa_events.mesa_announce("Внимание! Зафиксирован критический сбой в энергосети Сектора H. Ожидаемое время восстановления: 60 секунд.", "Power Grid Failure", 'modular_bluemoon/sound/ambience/mesa/lightoff.ogg')
 
 	for(var/area/A in areas)
 		A.power_light = FALSE

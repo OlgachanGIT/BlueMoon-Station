@@ -126,6 +126,11 @@
 		neural_interface = null
 	STOP_PROCESSING(SSobj, src)
 
+	// Удаляем щит при снятии костюма
+	var/datum/component/shielded/shield = GetComponent(/datum/component/shielded)
+	if(shield)
+		qdel(shield)
+
 /obj/item/clothing/suit/space/hev_suit/attackby(obj/item/I, mob/user, params)
 	if(istype(I, /obj/item/stock_parts/cell))
 		if(cell)

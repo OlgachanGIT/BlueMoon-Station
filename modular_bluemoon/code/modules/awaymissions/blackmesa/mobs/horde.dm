@@ -3,6 +3,24 @@
 // AI Director controlled zombie waves for ihategordon mission
 // =============================================================================
 
+// Move speed modifier for infected slow effect
+/datum/movespeed_modifier/infected_slow
+	id = MOVESPEED_ID_INFECTED_SLOW
+	multiplicative_slowdown = 8.0
+	blacklisted_movetypes = FLOATING
+
+// Move speed modifier for bruiser slow effect (stronger)
+/datum/movespeed_modifier/bruiser_slow
+	id = MOVESPEED_ID_BRUISER_SLOW
+	multiplicative_slowdown = 10.0
+	blacklisted_movetypes = FLOATING
+
+// Move speed modifier for infected damage slow (when hit)
+/datum/movespeed_modifier/infected_damage_slow
+	id = MOVESPEED_ID_INFECTED_DAMAGE_SLOW
+	multiplicative_slowdown = 3.0
+	blacklisted_movetypes = FLOATING
+
 // Parent infected mob type
 /mob/living/simple_animal/hostile/infected
 	name = "infected"
@@ -13,10 +31,10 @@
 	icon_dead = "zombie_dead"
 	mob_biotypes = list(MOB_ORGANIC, MOB_HUMANOID)
 	faction = list(FACTION_XEN)
-	turns_per_move = 1
+	turns_per_move = 0 // Instant reaction time
 	maxHealth = 100
 	health = 100
-	speed = 2
+	speed = 0 // Instant movement
 	melee_damage_lower = 10
 	melee_damage_upper = 15
 	attack_verb_continuous = "slashes"
@@ -33,16 +51,48 @@
 	gold_core_spawnable = NO_SPAWN
 	density = TRUE
 	mouse_opacity = MOUSE_OPACITY_OPAQUE
+	vision_range = 25 // Increased pursuit distance
+	aggro_vision_range = 30 // Increased aggro range when attacked
 	var/is_runner = FALSE
-	// Allow zombies to climb tables and stack on same tile
-	pass_flags = PASSTABLE
+	// Allow zombies to climb tables and pass through fences
+	pass_flags = PASSTABLE | PASSFENCE
 	pass_flags_self = NONE
+	sight = 20 // High sight range to detect players from far away
+	move_on_shuttle = TRUE // Allow movement during shuttle transit (helps with pathfinding)
+	stop_automated_movement = 0 // Don't stop automated movement
 
 /mob/living/simple_animal/hostile/infected/Initialize(mapload)
 	. = ..()
 	AddComponent(/datum/component/swarming)
 	// Initialize wanted_objects typecache at runtime to avoid constant-expression compile errors
 	wanted_objects = typecacheof(wanted_objects, TRUE)
+
+/mob/living/simple_animal/hostile/infected/adjustHealth(amount, updating_health = TRUE, forced = FALSE)
+	. = ..()
+	// Apply slowdown when taking damage
+	if(amount < 0 && !stat)
+		// Only slow if taking damage (negative amount)
+		add_movespeed_modifier(/datum/movespeed_modifier/infected_damage_slow, TRUE)
+		addtimer(CALLBACK(src, TYPE_PROC_REF(/mob, remove_movespeed_modifier), /datum/movespeed_modifier/infected_damage_slow), 1 SECONDS)
+
+/mob/living/simple_animal/hostile/infected/Found(atom/A)
+	// Prioritize activating generators above all other targets
+	if(istype(A, /obj/structure/urbanism_generator))
+		var/obj/structure/urbanism_generator/G = A
+		if(G && G.activating)
+			return A
+	return ..()
+
+/mob/living/simple_animal/hostile/infected/CanAttack(atom/the_target)
+	if(!the_target)
+		return FALSE
+	if(istype(the_target, /obj/structure/urbanism_generator))
+		var/obj/structure/urbanism_generator/G = the_target
+		if(!G)
+			return FALSE
+		if(!G.activating)
+			return FALSE
+	return ..()
 
 /mob/living/simple_animal/hostile/infected/death(gibbed)
 	. = ..(gibbed)
@@ -54,24 +104,20 @@
 	if(speak && speak.len && prob(30))
 		playsound(src, pick(speak), 70, TRUE)
 
-/mob/living/simple_animal/hostile/infected/Bump(atom/A)
+/mob/living/simple_animal/hostile/infected/AttackingTarget(atom/target)
 	. = ..()
-	// Fence climbing mechanic
-	if(istype(A, /obj/structure/fence))
-		var/obj/structure/fence/F = A
-		if(!F || !F.density)
+	if(!target)
+		return
+	// Apply slow effect to living targets (players)
+	if(isliving(target))
+		var/mob/living/L = target
+		if(!L)
 			return
-		// Check if we can climb over
-		if(prob(60) && !stat)
-			visible_message("<span class='danger'>[src] starts climbing over [F]!</span>")
-			// Climbing delay similar to table climbing
-			if(do_after(src, 15, target = F))
-				if(QDELETED(src) || QDELETED(F))
-					return
-				visible_message("<span class='danger'>[src] climbs over [F]!</span>")
-				var/turf/target_turf = get_step(F, src.dir)
-				if(target_turf && !target_turf.density)
-					forceMove(target_turf)
+		if(L.client && L.stat != DEAD)
+			// Apply temporary slow (5 seconds)
+			L.add_movespeed_modifier(/datum/movespeed_modifier/infected_slow, TRUE)
+			addtimer(CALLBACK(L, TYPE_PROC_REF(/mob, remove_movespeed_modifier), /datum/movespeed_modifier/infected_slow), 5 SECONDS)
+			to_chat(L, span_warning("Вас замедлил заражённый!"))
 
 // =============================================================================
 // TIER 1: RUNNER ZOMBIE (DEPRECATED - No longer spawned)
@@ -103,16 +149,32 @@
 	icon_state = "former_gonome"
 	icon_living = "former_gonome"
 	icon_dead = "former_dead"
-	maxHealth = 300
-	health = 300
-	speed = 3
+	maxHealth = 100
+	health = 100
+	speed = 2 // Slightly faster
+	turns_per_move = 0 // Faster reaction
 	melee_damage_lower = 15
 	melee_damage_upper = 25
-	sight = 9
+	sight = 20 // High sight range to detect players from far away
 	robust_searching = 1
 	environment_smash = ENVIRONMENT_SMASH_WALLS
 	harm_intent_damage = 20
 	obj_damage = 40
+
+/mob/living/simple_animal/hostile/infected/bruiser/AttackingTarget(atom/target)
+	. = ..()
+	if(!target)
+		return
+	// Apply strong slow effect to living targets (players)
+	if(isliving(target))
+		var/mob/living/L = target
+		if(!L)
+			return
+		if(L.client && L.stat != DEAD)
+			// Apply temporary strong slow (6 seconds)
+			L.add_movespeed_modifier(/datum/movespeed_modifier/bruiser_slow, TRUE)
+			addtimer(CALLBACK(L, TYPE_PROC_REF(/mob, remove_movespeed_modifier), /datum/movespeed_modifier/bruiser_slow), 6 SECONDS)
+			to_chat(L, span_warning("Вас сильно замедлил бруiser!"))
 
 /mob/living/simple_animal/hostile/infected/bruiser/Aggro()
 	. = ..()
@@ -122,3 +184,53 @@
 /mob/living/simple_animal/hostile/infected/bruiser/alt
 	icon_state = "former_gonome_alt"
 	icon_living = "former_gonome_alt"
+
+// =============================================================================
+// ZOMBIE SPAWN LANDMARK
+// Invisible landmark that randomly spawns infected or bruiser zombies
+// =============================================================================
+/obj/effect/landmark/zombie_spawn
+	name = "zombie spawn"
+	icon_state = "x"
+	invisibility = INVISIBILITY_ABSTRACT // Completely invisible
+	anchored = TRUE
+	layer = MID_LANDMARK_LAYER
+
+	var/spawn_chance = 30 // 30% chance to spawn on round start
+	var/spawn_mob_types = list(
+		/mob/living/simple_animal/hostile/infected = 70,
+		/mob/living/simple_animal/hostile/infected/bruiser = 30
+	)
+
+/obj/effect/landmark/zombie_spawn/Initialize(mapload)
+	. = ..()
+	if(mapload && prob(spawn_chance))
+		spawn_zombie()
+	return INITIALIZE_HINT_QDEL
+
+/obj/effect/landmark/zombie_spawn/proc/spawn_zombie()
+	var/turf/spawn_turf = get_turf(src)
+	if(!spawn_turf)
+		return
+
+	// Check if spawn location is valid (not blocked)
+	if(spawn_turf.density)
+		return
+
+	for(var/atom/movable/A in spawn_turf)
+		if(A.density)
+			return
+
+	// Choose mob type based on weights
+	var/mob_type = pickweight(spawn_mob_types)
+	if(!mob_type)
+		return
+
+	var/mob/living/simple_animal/hostile/infected/Z = new mob_type(spawn_turf)
+	if(Z)
+		// Apply HP multiplier from zombie director if available
+		if(GLOB.zombie_director)
+			var/datum/ai_director/zombie_mission/D = GLOB.zombie_director
+			if(D && D.zombie_hp_multiplier > 1.0)
+				Z.maxHealth = round(Z.maxHealth * D.zombie_hp_multiplier)
+				Z.health = Z.maxHealth

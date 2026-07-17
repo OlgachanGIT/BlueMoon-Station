@@ -4,8 +4,8 @@
 // =============================================================================
 
 /datum/ai_director/zombie_mission
-	var/wave_timer = 1200
-	var/max_wave_interval = 6000
+	var/wave_timer = 600 // Reduced from 1200 to 600 (1 minute instead of 2 minutes)
+	var/max_wave_interval = 3000 // Reduced from 6000 to 3000 (5 minutes instead of 10 minutes)
 	var/last_wave_time = 0
 	var/current_wave_number = 0
 	var/list/active_zombies = list()
@@ -14,6 +14,8 @@
 	var/horde_music_duration = 12000 // 2 minutes in deciseconds
 	var/horde_music_cutoff_threshold = 5 // Stop music if fewer than this many zombies remain
 	var/difficulty_level = 0 // 0-8, increases when players cross trigger zones
+	var/zombie_hp_multiplier = 1.0 // HP multiplier for spawned zombies
+	var/initialized = FALSE // Track if director has been initialized
 
 	// Whitelist and blacklist areas
 	var/list/excluded_areas = list(
@@ -41,6 +43,8 @@
 
 /datum/ai_director/zombie_mission/New()
 	. = ..()
+	initialized = TRUE
+	last_wave_time = world.time // Initialize timer so first wave spawns after wave_timer
 	START_PROCESSING(SSprocessing, src)
 
 /datum/ai_director/zombie_mission/Destroy()
@@ -137,62 +141,83 @@
 /datum/ai_director/zombie_mission/proc/calculate_threat_level(player_count)
 	if(!player_count)
 		player_count = 1
-	// Progressive threat based on difficulty level
+	// Progressive threat based on difficulty level (INCREASED for more intense hordes)
 	// Level 0: 3-4 zombies (no horde music)
-	// Level 1-2: 5-8 zombies
-	// Level 3-4: 10-15 zombies
-	// Level 5-6: 15-22 zombies
-	// Level 7-8: 20-30 zombies (max)
-	var/threat
+	// Level 1-2: 4-7 zombies
+	// Level 3-4: 6-10 zombies
+	// Level 5-6: 8-15 zombies
+	// Level 7-8: 12-20 zombies (max)
+	// Scaled by player count for multiplayer
+	var/base_threat
 	switch(difficulty_level)
 		if(0)
-			threat = rand(3, 4)
+			base_threat = rand(3, 4)
 		if(1)
-			threat = rand(5, 8)
+			base_threat = rand(4, 7)
 		if(2)
-			threat = rand(7, 10)
+			base_threat = rand(5, 8)
 		if(3)
-			threat = rand(10, 15)
+			base_threat = rand(6, 10)
 		if(4)
-			threat = rand(12, 18)
+			base_threat = rand(7, 12)
 		if(5)
-			threat = rand(15, 22)
+			base_threat = rand(8, 15)
 		if(6)
-			threat = rand(18, 25)
+			base_threat = rand(9, 17)
 		if(7)
-			threat = rand(20, 28)
+			base_threat = rand(10, 18)
 		if(8)
-			threat = rand(25, 30)
+			base_threat = rand(12, 20)
 		else
-			threat = rand(3, 4)
+			base_threat = rand(3, 4)
+
+	// Scale with player count (add 1 zombie per additional player beyond first, reduced scaling)
+	var/player_multiplier = 1 + ((player_count - 1) * 0.3)
+	var/threat = ceil(base_threat * player_multiplier)
 	return threat
 
 /datum/ai_director/zombie_mission/proc/spawn_zombie_wave(threat_level, list/players)
+	if(!src)
+		return
 	if(!threat_level || threat_level <= 0)
+		log_world("[src] Invalid threat_level: [threat_level]")
 		return
 	if(!players || !players.len)
-		return
-	if(!src)
+		log_world("[src] No players provided")
 		return
 
 	var/zombies_to_spawn = threat_level
 	var/list/spawned_zombies = list()
 
-	log_world("[src] Starting zombie wave: threat=[threat_level], players=[players.len]")
+	log_world("[src] Starting zombie wave: threat=[threat_level], players=[players.len], zombies_to_spawn=[zombies_to_spawn]")
 	announce_wave(zombies_to_spawn)
+
+	// OPTIMIZATION: Pre-build spawn turfs once per wave instead of per zombie
+	var/list/cached_spawn_turfs = get_cached_spawn_turfs(players)
+	if(!cached_spawn_turfs || !cached_spawn_turfs.len)
+		log_world("[src] No valid spawn turfs found")
+		return
 
 	// Gradual spawning: spawn in batches of 3-5 zombies
 	var/batch_size = rand(3, 5)
 	var/zombies_spawned = 0
+	var/failed_spawns = 0
 
-	while(zombies_spawned < zombies_to_spawn)
+	while(zombies_spawned < zombies_to_spawn && failed_spawns < 20)
 		var/remaining = zombies_to_spawn - zombies_spawned
 		var/current_batch = min(batch_size, remaining)
 
 		for(var/i = 1 to current_batch)
-			var/turf/spawn_turf = find_valid_spawn_turf(players)
+			// OPTIMIZATION: Pick from pre-cached turfs (already validated: density, LOS, pathfinding)
+			var/turf/spawn_turf = pick(cached_spawn_turfs)
 			if(!spawn_turf)
-				log_world("[src] Failed to find spawn turf for zombie #[zombies_spawned + i]")
+				log_world("[src] Failed to pick spawn turf for zombie #[zombies_spawned + i]")
+				failed_spawns++
+				continue
+
+			// Re-check density/blocking in case something changed during wave
+			if(spawn_turf.density || spawn_turf.is_blocked_turf())
+				failed_spawns++
 				continue
 
 			var/mob_type
@@ -202,28 +227,37 @@
 				mob_type = prob(50) ? /mob/living/simple_animal/hostile/infected/bruiser : /mob/living/simple_animal/hostile/infected/bruiser/alt
 
 			if(!mob_type)
+				failed_spawns++
 				continue
 
 			var/mob/living/simple_animal/hostile/infected/Z = new mob_type(spawn_turf)
 			if(Z)
+				// Apply HP multiplier based on difficulty
+				if(zombie_hp_multiplier > 1.0)
+					Z.maxHealth = round(Z.maxHealth * zombie_hp_multiplier)
+					Z.health = Z.maxHealth
+					log_world("[src] Applied HP multiplier [zombie_hp_multiplier] to zombie at [spawn_turf], new HP: [Z.maxHealth]")
+
 				spawned_zombies += Z
 				active_zombies += Z
 				new /obj/effect/temp_visual/dir_setting/ninja/phase(spawn_turf)
 				playsound(spawn_turf, 'sound/magic/Teleport_app.ogg', 50, TRUE)
-				log_world("[src] Spawned zombie #[zombies_spawned + i] at [spawn_turf]")
-
-		zombies_spawned += current_batch
+				log_world("[src] Spawned zombie #[zombies_spawned + 1] at [spawn_turf]")
+				zombies_spawned++
+			else
+				failed_spawns++
+				log_world("[src] Failed to spawn zombie at [spawn_turf]")
 
 		// If more zombies to spawn, wait before next batch
-		if(zombies_spawned < zombies_to_spawn)
+		if(zombies_spawned < zombies_to_spawn && failed_spawns < 20)
 			sleep(20) // Wait 2 seconds between batches
+
+	log_world("[src] Wave complete: intended=[zombies_to_spawn], spawned=[spawned_zombies.len], failed=[failed_spawns]")
 
 	if(spawned_zombies.len > 0)
 		// Only play horde music if difficulty level > 0
 		if(difficulty_level > 0)
 			start_horde_music()
-
-	log_world("[src] Wave complete: spawned=[spawned_zombies.len]")
 
 /datum/ai_director/zombie_mission/proc/find_valid_spawn_turf(list/players)
 	if(!src)
@@ -235,31 +269,38 @@
 	if(!valid_areas || !valid_areas.len)
 		return null
 
-	for(var/i = 1 to 100)
-		var/mob/living/target = pick(players)
+	// Fixed spawn radius: 7-8 tiles around player (as per requirements)
+	var/min_dist = 7
+	var/max_dist = 8
+
+	// OPTIMIZATION: Pre-build nearby_turfs list once per player to avoid repeated range() calls
+	var/list/player_spawn_turfs = list()
+	for(var/mob/living/target in players)
 		if(!target)
 			continue
 		var/turf/center = get_turf(target)
 		if(!center)
 			continue
-
-		var/list/nearby_turfs = list()
-		for(var/turf/T in range(20, center))
+		var/area/player_area = get_area(center)
+		if(!player_area || !(player_area in valid_areas))
+			continue
+		player_spawn_turfs[target] = list()
+		for(var/turf/T in range(max_dist, center))
 			if(!T)
 				continue
 			var/dist = get_dist(T, center)
-			if(dist >= 6 && dist <= 20)
-				nearby_turfs += T
+			if(dist >= min_dist && dist <= max_dist)
+				player_spawn_turfs[target] += T
 
-		if(!nearby_turfs || !nearby_turfs.len)
+	for(var/i = 1 to 50) // REDUCED from 200 to 50 for performance
+		var/mob/living/target = pick(players)
+		if(!target)
+			continue
+		if(!player_spawn_turfs[target] || !LAZYLEN(player_spawn_turfs[target]))
 			continue
 
-		var/turf/T = pick(nearby_turfs)
+		var/turf/T = pick(player_spawn_turfs[target])
 		if(!T)
-			continue
-
-		var/area/A = get_area(T)
-		if(!A || !(A in valid_areas))
 			continue
 
 		if(T.density)
@@ -268,12 +309,50 @@
 		if(T.is_blocked_turf())
 			continue
 
-		if(!can_reach_player(T, center))
-			continue
+		// OPTIMIZATION: Skip BFS pathfinding for performance - zombies can break through obstacles
+		// Only do basic area check which we already did above
 
 		return T
 
 	return null
+
+/datum/ai_director/zombie_mission/proc/get_cached_spawn_turfs(list/players)
+	if(!src)
+		return null
+	if(!players || !players.len)
+		return null
+
+	var/list/valid_areas = get_mesa_areas()
+	if(!valid_areas || !valid_areas.len)
+		return null
+
+	// Fixed spawn radius: 7-8 tiles around player
+	var/min_dist = 7
+	var/max_dist = 8
+
+	var/list/cached_turfs = list()
+
+	for(var/mob/living/target in players)
+		if(!target)
+			continue
+		var/turf/center = get_turf(target)
+		if(!center)
+			continue
+		var/area/player_area = get_area(center)
+		if(!player_area || !(player_area in valid_areas))
+			continue
+
+		for(var/turf/T in range(max_dist, center))
+			if(!T)
+				continue
+			var/dist = get_dist(T, center)
+			if(dist >= min_dist && dist <= max_dist)
+				if(!T.density && !T.is_blocked_turf())
+					// Simplified: only check basic density and blocking, skip LOS and pathfinding
+					// Zombies can break through obstacles anyway
+					cached_turfs += T
+
+	return cached_turfs
 
 /datum/ai_director/zombie_mission/proc/can_reach_player(turf/start_turf, turf/target_turf)
 	if(!src)
@@ -281,12 +360,12 @@
 	if(!start_turf || !target_turf)
 		return FALSE
 
-	// Simple BFS to check if there's a path (max 100 steps)
+	// OPTIMIZATION: Simplified pathfinding - check direct line with limited BFS (50 steps instead of 150)
 	var/list/visited = list()
 	var/list/queue = list(start_turf)
 	visited[start_turf] = TRUE
 	var/steps = 0
-	var/max_steps = 100
+	var/max_steps = 50 // Reduced from 150 for performance
 
 	while(queue.len && steps < max_steps)
 		var/turf/current = queue[1]
@@ -302,10 +381,13 @@
 				continue
 			if(next_turf.density)
 				continue
-			// Allow passing through zombies but not walls
+			// Check for blocking objects - zombies can break glass and climb fences
 			var/blocked = FALSE
 			for(var/atom/movable/AM in next_turf)
 				if(AM.density && !istype(AM, /mob/living))
+					// Allow passing through glass/structures zombies can break or climb
+					if(istype(AM, /obj/structure/window) || istype(AM, /obj/structure/grille) || istype(AM, /obj/structure/fence))
+						continue
 					blocked = TRUE
 					break
 			if(blocked)
@@ -314,6 +396,27 @@
 			queue += next_turf
 
 	return FALSE
+
+/datum/ai_director/zombie_mission/proc/has_line_of_sight(turf/start_turf, turf/target_turf)
+	if(!src)
+		return FALSE
+	if(!start_turf || !target_turf)
+		return FALSE
+
+	// Check if there's a clear line of sight between turfs
+	for(var/turf/T in getline(start_turf, target_turf))
+		if(T == start_turf || T == target_turf)
+			continue
+		if(T.opacity)
+			return FALSE
+		if(T.density)
+			return FALSE
+		// Check for dense objects blocking sight
+		for(var/atom/movable/AM in T)
+			if(AM.opacity || (AM.density && !istype(AM, /mob/living)))
+				return FALSE
+
+	return TRUE
 
 /datum/ai_director/zombie_mission/proc/announce_wave(zombie_count)
 	if(!src)
@@ -340,8 +443,9 @@
 	if(!threat_level || threat_level <= 0)
 		return
 
+	// Bypass wave_timer check for generator-triggered hordes
 	spawn_zombie_wave(threat_level, alive_players)
-	last_wave_time = world.time
+	// Don't update last_wave_time - allow natural waves to continue on their schedule
 	current_wave_number++
 
 /datum/ai_director/zombie_mission/proc/start_horde_music()

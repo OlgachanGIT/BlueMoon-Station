@@ -77,35 +77,50 @@ SUBSYSTEM_DEF(blackmesa_events)
 
 /datum/controller/subsystem/blackmesa_events/proc/cycle_day_night()
 	day_phase = (day_phase + 1) % 4
-	var/new_color = "#f88d66"
+	var/new_color = "#6d4525"
 	var/announce_text = ""
 	var/announce_title = ""
+	var/light_power = 0.8
 
 	switch(day_phase)
-		if(0) // Evening
-			new_color = "#f88d66"
+		if(0) // Evening - gloomy dark red
+			new_color = "#2a0a00"
+			light_power = 0.6
 			announce_text = "Внимание! Наступает вечер. Рекомендуется включить дополнительное освещение. ВНИМАНИЕ! состояние сектора ухудшается. Всем немедленно проследовать к ближайшим выходам из сектора."
 			announce_title = "Evening Approach"
-		if(1) // Night
-			new_color = "#071130"
+		if(1) // Night - very dark, oppressive
+			new_color = "#150500"
+			light_power = 0.4
 			announce_text = "Внимание! Наступает ночь. Всем сотрудникам заступивших на ночную смену приступить к работе. ВНИМАНИЕ! Состояние сектора всё ещё критично. Требуется немедленная эвакуация"
 			announce_title = "Nightfall"
-		if(2) // Morning
-			new_color = "#1c1c30"
+		if(2) // Morning - still dark and gloomy
+			new_color = "#1f0800"
+			light_power = 0.5
 			announce_text = "Внимание! Наступает утро. Начало дневной смены через 30 минут. ВНИМАНИЕ! Состояние сектора остаётся критичным. Всем сотрудникам рекомендуется следовать указаниям военных подразделений HECU"
 			announce_title = "Morning"
-		if(3) // Day
-			new_color = "#fff8b8"
+		if(3) // Day - dim and oppressive
+			new_color = "#2d0f00"
+			light_power = 0.7
 			announce_text = "Внимание! Наступил день. Большая часть систем выведена из строя. Рекомендуется проведение немедленной эвакуации с сектора "
 			announce_title = "Daytime"
 
-	update_mesa_lights(new_color)
+	update_mesa_lights(new_color, light_power)
 	mesa_announce(announce_text, announce_title, 'modular_bluemoon/sound/ambience/mesa/timeevent.ogg')
 
-/datum/controller/subsystem/blackmesa_events/proc/update_mesa_lights(color)
+/datum/controller/subsystem/blackmesa_events/proc/update_mesa_lights(color, light_power)
+	// Update floodlights
 	for(var/obj/machinery/power/floodlight/urbanismlight/mesaoutside/L in GLOB.machines)
+		if(!L)
+			continue
 		L.light_color = color
-		L.set_light(L.light_range, L.light_power, color)
+		L.set_light(L.light_range, light_power, color)
+
+	// Update area lighting for all ihategordon areas
+	for(var/area/awaymission/ihategordon/A in get_areas(/area/awaymission/ihategordon, TRUE))
+		if(!A)
+			continue
+		// Set gloomy ambient lighting
+		A.dynamic_lighting = DYNAMIC_LIGHTING_IFSTARLIGHT
 
 /datum/controller/subsystem/blackmesa_events/proc/mesa_announce(text, title = "", sound = null)
 	if(!text)
@@ -116,14 +131,18 @@ SUBSYSTEM_DEF(blackmesa_events)
 	announcement += "<br>[span_alert("[html_encode(text)]")]<br>"
 
 	var/s = sound ? sound(sound) : null
+	var/players_notified = 0
 	for(var/mob/M in GLOB.player_list)
 		if(isnewplayer(M))
 			continue
 		var/area/A = get_area(M)
 		if(istype(A, /area/awaymission/ihategordon) || istype(A, /area/command/gateway))
 			to_chat(M, announcement)
+			players_notified++
 			if(s && M.client && (M.client.prefs.toggles & SOUND_ANNOUNCEMENTS))
 				SEND_SOUND(M, s)
+
+	log_world("mesa_announce: '[title]' - notified [players_notified] players in Black Mesa area")
 
 /datum/controller/subsystem/blackmesa_events/proc/initialize_zombie_director()
 	if(!GLOB.zombie_director)
