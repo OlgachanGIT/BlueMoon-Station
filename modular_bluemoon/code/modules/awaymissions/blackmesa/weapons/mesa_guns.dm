@@ -1,10 +1,14 @@
+// ============================================================================
+// TIER 1 - Basic Weapons (Lowest Power)
+// ============================================================================
+
 /obj/item/gun/ballistic/automatic/pistol/hl9mm
 	name = "9mm pistol"
 	desc = " пистолет Beretta 92FS или же 9mm pistol является довольно распространённым пистолетом у охранников комплекса чёрной мезы... Выглядит невероятно старомодно "
 	icon = 'modular_bluemoon/icons/obj/guns/projectile.dmi'
 	icon_state = "hl9mmpistol"
 	w_class = WEIGHT_CLASS_SMALL
-	mag_type = /obj/item/ammo_box/magazine/pistolm9mm
+	mag_type = /obj/item/ammo_box/magazine/pistolm9mm/mesa
 	can_suppress = FALSE
 	burst_size = 1
 	spread = 7
@@ -26,6 +30,69 @@
 /obj/item/gun/ballistic/automatic/pistol/hl9mm/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
 	..()
 	playsound(user, fire_sound, 80, 0, 0)
+
+/obj/item/gun/ballistic/automatic/pistol/hl9mm/insert_mag(obj/item/ammo_box/magazine/AM, mob/user)
+	if(!istype(AM, /obj/item/ammo_box/magazine/pistolm9mm) && !istype(AM, /obj/item/ammo_box/magazine/pistolm9mm/mesa))
+		return
+	if(!magazine || tactical_reload)
+		var/obj/item/ammo_box/magazine/oldmag = magazine
+		if(user.transferItemToLoc(AM, src))
+			magazine = AM
+			if(oldmag)
+				to_chat(user, span_notice("You perform a tactical reload on \the [src], replacing the [magazine_wording]."))
+				user.put_in_hands(oldmag)
+				oldmag.update_icon()
+			else
+				to_chat(user, span_notice("You load a new [magazine_wording] into \the [src]."))
+			if(magazine.ammo_count())
+				playsound(src, load_sound, 70, 1)
+				if(!chambered)
+					chamber_round()
+			else
+				playsound(src, load_empty_sound, 70, 1)
+			update_icon()
+			return TRUE
+	return FALSE
+
+// Custom magazine for hl9mm with special projectile
+/obj/item/ammo_box/magazine/pistolm9mm/mesa
+	name = "9mm magazine (special)"
+	icon_state = "9x19p"
+	ammo_type = /obj/item/ammo_casing/c9mm/mesa
+	max_ammo = 16
+	multiple_sprites = 2
+
+/obj/item/ammo_box/magazine/pistolm9mm/mesa/update_icon()
+	..()
+	icon_state = "9x19p-[ammo_count() ? "16" : "0"]"
+
+// Custom casing for hl9mm
+/obj/item/ammo_casing/c9mm/mesa
+	name = "9mm bullet casing (Black Mesa)"
+	desc = "A 9mm bullet casing."
+	caliber = "9mm"
+	projectile_type = /obj/item/projectile/bullet/c9mm/mesa
+
+// Custom projectile for hl9mm with bonus damage to simple animals
+/obj/item/projectile/bullet/c9mm/mesa
+	name = "9mm bullet"
+	damage = 22
+	armour_penetration = 20
+	embedding = list(embed_chance=15, fall_chance=3, jostle_chance=4, ignore_throwspeed_threshold=TRUE, pain_stam_pct=0.4, pain_mult=5, jostle_pain_mult=6, rip_time=10)
+
+/obj/item/projectile/bullet/c9mm/mesa/on_hit(atom/target, blocked = FALSE)
+	. = ..()
+	if(!target)
+		return
+	if(istype(target, /mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = target
+		if(!SA)
+			return
+		SA.apply_damage(10, BRUTE)
+
+// ============================================================================
+// TIER 4 - Elite Weapons (Highest Power)
+// ============================================================================
 
 /obj/item/gun/ballistic/automatic/sniper_rifle/m4oa1
 	name = "m40a1 sniper rifle"
@@ -77,6 +144,7 @@
 	else
 		icon_state = "[initial(icon_state)]"
 
+// TIER 2
 /obj/item/gun/ballistic/automatic/mp5
 	name = "MP5 machinegun"
 	desc = "Heckler Koch Mp5 является хоть и устаревшим, но невероятно сильным оружием в виду своей скорострельности. Какой идиот вообще подумал, что будет отличной идеей отобрать его у морпеха HECU?"
@@ -93,7 +161,7 @@
 	spread = 9
 	burst_size = 3
 	burst_shot_delay = 2
-	fire_delay = 1.5 ///Это пиздец!
+	fire_delay = 1 ///Это пиздец!
 	can_bayonet = FALSE
 	automatic_burst_overlay = FALSE
 
@@ -112,7 +180,8 @@
 	desc = "Magazines taking 10mm ammunition; it fits in the MP5."
 	icon = 'modular_bluemoon/icons/obj/ammo.dmi'
 	icon_state = "mp5"
-	ammo_type = /obj/item/ammo_casing/c10mm
+	ammo_type = /obj/item/ammo_casing/mm57
+	caliber = "5.7mm"
 	max_ammo = 30
 
 /obj/item/ammo_box/magazine/mp5/update_icon()
@@ -122,6 +191,7 @@
 	else
 		icon_state = "[initial(icon_state)]"
 
+// TIER 1
 /obj/item/gun/ballistic/shotgun/m870
 	name = "m870 shotgun"
 	desc = "Remington 870 - это классический помповый дробовик, который был представлен компанией Remington Arms в 1950 году и до сих пор остается одним из самых популярных и продаваемых ружей в США."
@@ -133,7 +203,7 @@
 	w_class = WEIGHT_CLASS_BULKY
 	recoil = 4
 	attack_speed = 10
-	force = 40
+	force = 10
 	fire_delay = 4
 	mag_type = /obj/item/ammo_box/magazine/internal/shot/m870
 	weapon_weight = WEAPON_HEAVY
@@ -148,6 +218,7 @@
 	caliber = "shotgun"
 	max_ammo = 4
 
+// TIER 2
 /obj/item/gun/ballistic/shotgun/spas
 	name = "SPAS 12 shotgun"
 	desc = "Этот невероятно старый и брутальный дробовик заставляет вас надеть балаклаву с горнолыжными очками."
@@ -164,9 +235,12 @@
 	mag_type = /obj/item/ammo_box/magazine/internal/shot/spas
 	pumpsound = 'modular_bluemoon/sound/weapons/mesa/shotgun_rack.ogg'
 	weapon_weight = WEAPON_HEAVY
+	var/stamina_drain_per_shot = 5
 
 /obj/item/gun/ballistic/shotgun/spas/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
 	..()
+	if(user)
+		user.adjustStaminaLoss(stamina_drain_per_shot)
 	src.pump(user)
 	playsound(user, fire_sound, 80, 0, 0)
 
@@ -231,26 +305,79 @@
 	fire_sound = 'modular_bluemoon/sound/weapons/mesa/underbarrel.ogg'
 	pin = /obj/item/firing_pin
 
+// TIER 3
 /obj/item/gun/ballistic/automatic/m16a4/mesa
 	name = "\improper old M16 rifle"
 	desc = "Невероятно старая версия М16 с сломанным подствольным гранатомётом и... Большей отдачей что-ли? Держа её в руках, вы чувствуете странные ощущения... Да и отряды HECU с таким замечены не были"
 	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
 	icon_state = "m16hl"
 	burst_size = 1
-	fire_delay = 2
+	fire_delay = 1 //ATATATATATATATATA!!!
 	spread = 11
 	fire_sound = 'modular_bluemoon/sound/weapons/mesa/m16.ogg'
+	mag_type = /obj/item/ammo_box/magazine/m16/mesa
+	obj_flags = UNIQUE_RENAME
+	unique_reskin = list(
+		"Default" = list("icon_state" = "m16hl"),
+		"Alternative" = list("icon_state" = "m16hl_alt")
+	)
 
-/obj/item/gun/ballistic/automatic/m16a4/mesa/update_icon_state()
-	if(magazine)
-		icon_state = "m16hl"
-	else
-		icon_state = "m16hl-e"
+/obj/item/gun/ballistic/automatic/m16a4/mesa/Initialize(mapload)
+	gun_light = new /obj/item/flashlight/seclite(src)
+	return ..()
 
 /obj/item/gun/ballistic/automatic/m16a4/mesa/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
-	..()
-	playsound(user, fire_sound, 80, 0, 0)
+	if(!user)
+		return
+	. = ..(user, pointblank, pbtarget, message, stam_cost)
 
+//  пульки
+
+/obj/item/ammo_box/magazine/m16/mesa
+	icon = 'modular_bluemoon/phenyamomota/icon/obj/guns/ammo.dmi'
+	icon_state = "m16e"
+	ammo_type = /obj/item/ammo_casing/a556
+	caliber = "a556hl"
+	max_ammo = 50
+
+/obj/item/ammo_box/magazine/m16/mesa/update_icon()
+	. = ..()
+	if(ammo_count())
+		icon_state = "[initial(icon_state)]"
+	else
+		icon_state = "[initial(icon_state)]-0"
+
+/obj/item/ammo_casing/a556hl
+	name = "5.56mm bullet casing"
+	desc = "A 5.56mm bullet casing."
+	caliber = "a556"
+	projectile_type = /obj/item/projectile/bullet/a556
+
+
+/obj/item/projectile/bullet/a556hl
+	damage = 15
+	armour_penetration = 10
+	wound_bonus = 0.5
+
+/obj/item/projectile/bullet/a556hl/on_hit(atom/target, blocked = FALSE)
+	. = ..()
+	if(!target)
+		return
+	if(istype(target, /mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = target
+		if(!SA)
+			return
+		SA.apply_damage(15, BRUTE)
+
+//пули. Хз зачем решил их обозначить так.
+
+/obj/item/gun/ballistic/automatic/m16a4/mesa/update_icon_state()
+	if(current_skin)
+		icon_state = "[unique_reskin[current_skin]["icon_state"]][magazine ? "" : "-e"]"
+	else
+		icon_state = "[initial(icon_state)][magazine ? "" : "-e"]"
+
+// TIER 1
 /obj/item/gun/ballistic/automatic/mp7
 	name = "\improper mp7"
 	desc = "Heckler & Koch MP7 A1 PDW — пистолет-пулемёт, разработанный в начале 2000-х годов немецкой фирмой Heckler & Koch. Отлично подойдёт, если вместо лечения союзников медик вашего отряда HECU хочет устроить бойню"
@@ -275,6 +402,9 @@
 /obj/item/gun/ballistic/automatic/mp7/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
 	..()
 	playsound(user, fire_sound, 80, 0, 0)
+
+
+// тоже пули
 
 /obj/item/ammo_box/magazine/mp7
 	name = "MP7 magazine"
@@ -303,20 +433,33 @@
 /obj/item/projectile/bullet/mm46
 	name = "4.6mm bullet"
 	damage = 10
-	armour_penetration = 3
+	armour_penetration = 1
 	wound_bonus = -3
 	bare_wound_bonus = 1
 
+/obj/item/projectile/bullet/mm46/on_hit(atom/target, blocked = FALSE)
+	. = ..()
+	if(!target)
+		return
+	if(istype(target, /mob/living/simple_animal))
+		var/mob/living/simple_animal/SA = target
+		if(!SA)
+			return
+		SA.apply_damage(10, BRUTE)
+// конец пулек
+
+// TIER 3
 /obj/item/gun/ballistic/automatic/scar
 	name = "\improper HC scar"
 	desc = "Модифицированная версия FN Scar, предназначенная для ведения стрельбы на средние и дальние дистанции. В отличие от M4oa1, имеет автоматический режим стрельбы и менее убойный калибр + крутой песчаный камуфляж (Но вы же помните то, что орудуете только в научном комплексе?)"
-	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	icon = 'modular_bluemoon/icons/obj/guns/Machineguns.dmi'
 	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_lefthand.dmi'
 	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_righthand.dmi'
-	icon_state = "scar"
+	icon_state = "scarh"
 	item_state = "scar"
-	fire_delay = 5
+	fire_delay = 2
 	spread = 10
+	burst_size = 3
 	fire_sound = 'modular_bluemoon/sound/weapons/mesa/scar.ogg'
 	weapon_weight = WEAPON_HEAVY
 	w_class = WEIGHT_CLASS_BULKY
@@ -325,9 +468,9 @@
 /obj/item/gun/ballistic/automatic/scar/update_icon_state()
 	icon_state = "[initial(icon_state)][chambered ? "" : ""]"
 	if(magazine)
-		icon_state = "scar"
+		icon_state = "scarh"
 	else
-		icon_state = "scar_mag"
+		icon_state = "scarh_e"
 
 /obj/item/gun/ballistic/automatic/scar/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
 	..()
@@ -364,6 +507,7 @@
 	wound_bonus = -6
 	bare_wound_bonus = 5
 
+// TIER 2
 /obj/item/gun/ballistic/automatic/p90
 	name = "\improper P90"
 	desc = "FN P90 является оружием индивидуальной самообороны бельгийской компании Fabrique Nationale Herstal."
@@ -416,9 +560,9 @@
 
 /obj/item/projectile/bullet/mm57
 	name = "5.7mm bullet"
-	damage = 10
-	armour_penetration = 4
-	wound_bonus = -4
+	damage = 20
+	armour_penetration = 15
+	wound_bonus = 2
 	bare_wound_bonus = 2
 
 
@@ -810,6 +954,7 @@
 		alarmed = 1
 	return
 
+// TIER 4
 /obj/item/gun/ballistic/revolver/hlrsh12
 	name = "RSH-12 revolver"
 	desc = "Противник даже слова сказать не успеет. Это прототип РШ12 который можно зарядить картечью. С этого дерьма даже стрелять опасно!"
@@ -861,6 +1006,7 @@
 	speedloader = TRUE
 	multiple_sprites = 1
 
+// TIER 3
 /obj/item/gun/ballistic/automatic/pistol/deagle/hl
 	name = "Desert Eagle handgun"
 	desc = "Карманная артиллерия прямо у вас в руках. пустынный орёл способен пробивать бронежилеты большинства стандартных образцов, что делает его идеальным выбором для лидеров отрядов HECU"
@@ -882,6 +1028,7 @@
 /obj/item/gun/ballistic/automatic/pistol/deagle/hl/update_icon_state()
 	icon_state = "[initial(icon_state)][chambered ? "" : "_mag"]"
 
+// TIER 3
 /obj/item/gun/ballistic/revolver/mateba/hl357
 	name = "\improper .357 revolver"
 	desc = "Достаточно неплохого калибра револьвер, специально выбранный для быстрого устранения... Крупной дичи"
@@ -895,9 +1042,10 @@
 	ammo_type = /obj/item/ammo_casing/a357
 	max_ammo = 6
 
+// TIER 4
 /obj/item/gun/ballistic/automatic/m249
 	name = "M249 SAW"
-	desc = "FN M249 Squad Automatic Weapon - лёгкий пулемёт, предназначенный для обеспечения огневой поддержки отделения. Обычно используется с 100-патронной лентой."
+	desc = "FN M249 Squad Automatic Weapon - лёгкий пулемёт, предназначенный для обеспечения огневой поддержки отделения. Обычно используется с 100-патронной лентой. Имеет сошки для улучшения точности при стрельбе лёжа."
 	icon = 'modular_bluemoon/icons/obj/guns/Machineguns.dmi'
 	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/left48x32.dmi'
 	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/right48x32.dmi'
@@ -910,19 +1058,44 @@
 	recoil = 1
 	spread = 6
 	burst_size = 3
-	burst_shot_delay = 1
+	burst_shot_delay = 3
 	fire_delay = 1.5
 	can_suppress = FALSE
 	can_bayonet = FALSE
 	slot_flags = ITEM_SLOT_BACK
 	automatic_burst_overlay = FALSE
+	actions_types = list(/datum/action/item_action/deploy_bipod)
 	var/cover_open = FALSE
 	slowdown = 1.0
+	item_flags = SLOWS_WHILE_IN_HAND
+
+	var/bipod_deployed = FALSE
+	var/heat_accumulated = 0
+	var/max_heat = 20
+	var/overheated = FALSE
+	var/overheat_cooldown_end = 0
+	var/last_fire_time = 0
+	var/initial_spread = 6
+	var/bipod_spread = 1
+	var/no_bipod_spread = 15
+	var/stamina_drain_per_shot = 5
+	var/heat_cooldown_rate = 1.5
+	var/heat_gain_per_shot = 1
+	var/last_bipod_turf = null
+
 
 /obj/item/gun/ballistic/automatic/m249/examine(mob/user)
 	. = ..()
 	if(cover_open && magazine)
 		. += "<span class='notice'>It seems like you could use an <b>empty hand</b> to remove the magazine.</span>"
+	if(bipod_deployed)
+		. += "<span class='notice'>Сошки разложены. Разброс минимален, стамина не тратится.</span>"
+	else
+		. += "<span class='notice'>Сошки сложены. Высокий разброс, тратится стамина при стрельбе.</span>"
+	if(overheated)
+		. += "<span class='warning'>Пулемёт перегрет! Ожидайте остывания.</span>"
+	else if(heat_accumulated > 0)
+		. += "<span class='warning'>Нагрев: [round(heat_accumulated, 0.1)]/[max_heat]</span>"
 
 /obj/item/gun/ballistic/automatic/m249/attack_self(mob/user)
 	cover_open = !cover_open
@@ -932,6 +1105,71 @@
 	else
 		playsound(user, 'sound/weapons/sawclose.ogg', 60, 1)
 	update_icon()
+
+/obj/item/gun/ballistic/automatic/m249/ui_action_click(mob/user, actiontype)
+	if(istype(actiontype, /datum/action/item_action/deploy_bipod))
+		toggle_bipod(user)
+	else
+		..()
+
+/obj/item/gun/ballistic/automatic/m249/can_shoot()
+	if(overheated)
+		var/mob/living/user = loc
+		if(user && ismob(user))
+			to_chat(user, "<span class='warning'>[src] перегрет! Подождите пока остынет.</span>")
+		return FALSE
+	return get_ammo()
+
+/obj/item/gun/ballistic/automatic/m249/proc/toggle_bipod(mob/living/user)
+	if(!user)
+		return
+	if(bipod_deployed)
+		collapse_bipod(user)
+	else
+		deploy_bipod(user)
+
+/obj/item/gun/ballistic/automatic/m249/proc/deploy_bipod(mob/living/user)
+	if(!user)
+		return
+	if(user.mobility_flags & MOBILITY_STAND)
+		to_chat(user, "<span class='warning'>Вы должны лежать, чтобы разложить сошки!</span>")
+		return
+	bipod_deployed = TRUE
+	spread = bipod_spread
+	last_bipod_turf = get_turf(user)
+	to_chat(user, "<span class='notice'>Вы разложили сошки [src]. Разброс уменьшен.</span>")
+	playsound(user, 'sound/weapons/sawopen.ogg', 50, 1)
+	update_icon()
+
+/obj/item/gun/ballistic/automatic/m249/proc/collapse_bipod(mob/living/user)
+	if(!user)
+		return
+	bipod_deployed = FALSE
+	spread = no_bipod_spread
+	last_bipod_turf = null
+	if(user)
+		to_chat(user, "<span class='notice'>Вы сложили сошки [src].</span>")
+	playsound(user, 'sound/weapons/sawclose.ogg', 50, 1)
+	update_icon()
+
+/obj/item/gun/ballistic/automatic/m249/proc/check_bipod_stability()
+	if(!bipod_deployed)
+		return
+	var/mob/living/user = loc
+	if(!user || !ismob(user))
+		collapse_bipod()
+		return
+	if(user.mobility_flags & MOBILITY_STAND)
+		collapse_bipod(user)
+		if(user)
+			to_chat(user, "<span class='warning'>Вы встали и сошки сложились!</span>")
+		return
+	var/current_turf = get_turf(user)
+	if(current_turf != last_bipod_turf)
+		collapse_bipod(user)
+		if(user)
+			to_chat(user, "<span class='warning'>Вы переместились и сошки сложились!</span>")
+		return
 
 /obj/item/gun/ballistic/automatic/m249/update_icon_state()
 	var/ammo_state = ""
@@ -944,9 +1182,13 @@
 /obj/item/gun/ballistic/automatic/m249/afterattack(atom/target as mob|obj|turf, mob/living/user as mob|obj, flag, params)
 	if(cover_open)
 		to_chat(user, "<span class='warning'>[src]'s cover is open! Close it before firing!</span>")
-	else
-		. = ..()
-		update_icon()
+		return
+	if(overheated)
+		to_chat(user, "<span class='warning'>[src] перегрет! Подождите пока остынет.</span>")
+		return
+	check_bipod_stability()
+	. = ..()
+	update_icon()
 
 /obj/item/gun/ballistic/automatic/m249/on_attack_hand(mob/user, act_intent = user.a_intent, unarmed_attack_flags)
 	if(loc != user)
@@ -970,6 +1212,96 @@
 	..()
 	update_icon()
 
+/obj/item/gun/ballistic/automatic/m249/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
+	if(!user)
+		return
+	if(overheated)
+		to_chat(user, "<span class='warning'>[src] перегрет! Подождите пока остынет.</span>")
+		return
+	process_heat_cooldown()
+	if(heat_accumulated >= max_heat)
+		overheated = TRUE
+		overheat_cooldown_end = world.time + 50
+		user.balloon_alert(user, "Пулемёт сильно нагрелся и заклинил!")
+		playsound(src, 'sound/effects/smoke.ogg', 50, 1)
+		return
+	heat_accumulated += heat_gain_per_shot
+	last_fire_time = world.time
+	if(heat_accumulated >= 10 && heat_accumulated < 11)
+		user.balloon_alert(user, "Дуло пулемёта начинает дымиться!")
+	if(heat_accumulated >= 20 && heat_accumulated < 21)
+		user.balloon_alert(user, "Пулемёт сильно нагревается!")
+	if(!bipod_deployed)
+		user.adjustStaminaLoss(stamina_drain_per_shot)
+	. = ..(user, pointblank, pbtarget, message, stam_cost)
+
+/obj/item/gun/ballistic/automatic/m249/proc/process_heat_cooldown()
+	if(heat_accumulated <= 0)
+		return
+	if(overheated && world.time >= overheat_cooldown_end)
+		overheated = FALSE
+		heat_accumulated = 0
+		if(loc && ismob(loc))
+			var/mob/living/user = loc
+			user.balloon_alert(user, "Пулемёт остыл!")
+		return
+	var/time_since_last_fire = world.time - last_fire_time
+	if(time_since_last_fire >= 20)
+		var/cooling_amount = heat_cooldown_rate * (time_since_last_fire / 10)
+		heat_accumulated = max(0, heat_accumulated - cooling_amount)
+		if(heat_accumulated <= 0 && !overheated)
+			heat_accumulated = 0
+
+/obj/item/gun/ballistic/automatic/m249/Initialize(mapload)
+	. = ..()
+	spread = no_bipod_spread
+	START_PROCESSING(SSobj, src)
+
+/obj/item/gun/ballistic/automatic/m249/Destroy()
+	STOP_PROCESSING(SSobj, src)
+	return ..()
+
+/obj/item/gun/ballistic/automatic/m249/process()
+	process_heat_cooldown()
+	check_bipod_stability()
+
+/obj/item/gun/ballistic/automatic/m249/pickup(mob/user)
+	. = ..()
+	if(bipod_deployed)
+		collapse_bipod(user)
+	if(istype(user, /mob/living))
+		RegisterSignal(user, COMSIG_MOVABLE_MOVED, PROC_REF(on_mob_move))
+		RegisterSignal(user, COMSIG_LIVING_RESTING, PROC_REF(on_mob_rest))
+
+/obj/item/gun/ballistic/automatic/m249/dropped(mob/user)
+	. = ..()
+	if(bipod_deployed)
+		collapse_bipod(user)
+	if(istype(user, /mob/living))
+		UnregisterSignal(user, COMSIG_MOVABLE_MOVED)
+		UnregisterSignal(user, COMSIG_LIVING_RESTING)
+
+/obj/item/gun/ballistic/automatic/m249/proc/on_mob_move(atom/old_loc, dir)
+	SIGNAL_HANDLER
+	if(!bipod_deployed)
+		return
+	var/mob/living/user = loc
+	if(!user)
+		return
+	collapse_bipod(user)
+	to_chat(user, "<span class='warning'>Вы переместились и сошки сложились!</span>")
+
+/obj/item/gun/ballistic/automatic/m249/proc/on_mob_rest(mob/living/source, new_resting)
+	SIGNAL_HANDLER
+	if(!bipod_deployed)
+		return
+	var/mob/living/user = loc
+	if(!user || !ismob(user))
+		return
+	if(!new_resting)
+		collapse_bipod(user)
+		to_chat(user, "<span class='warning'>Вы встали и сошки сложились!</span>")
+
 /obj/item/ammo_box/magazine/m249
 	name = "M249 ammo belt (5.56mm)"
 	desc = "100-патронная лента для M249 SAW. Содержит стандартные 5.56x45mm НАТО патроны."
@@ -986,38 +1318,14 @@
 	else
 		icon_state = "[initial(icon_state)]"
 
-//одежда
-
-/obj/item/clothing/suit/armor/saggitarius
-	name = "order stealth suit"
-	desc = "Modified version of average amrmor suit. uses special sensors to make owner invisible"
-	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
-	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/skihellclothes.dmi'
-	icon_state = "saggitariussuit"
-	item_state = "saggitariussuit"
-	body_parts_covered = CHEST|GROIN|ARMS|LEGS
-	cold_protection = CHEST|GROIN|ARMS|LEGS
-
-/obj/item/clothing/head/helmet/saggitarius
-	name = "NVG Helmet"
-	desc = "Standard saggitarius helmet. Protects the head from impacts. Equipped with a night vision."
-	icon_state = "saggitariushelmett"
-	item_state = "saggitariushelmet"
-	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
-	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/skihellclothes.dmi'
-	darkness_view = 8
-	flash_protect = -1
-	lighting_alpha = LIGHTING_PLANE_ALPHA_MOSTLY_INVISIBLE
-
-
-/obj/item/storage/backpack/relicuum
-	name = "relicuum backpack"
-	desc = "Strange backpack with antenna on it"
-	icon = 'modular_bluemoon/icons/obj/clothing/skihellclothes.dmi'
-	mob_overlay_icon = 'modular_bluemoon/icons/mob/clothing/skihellclothes.dmi'
-	icon_state = "relicuumbag"
-	item_state = "relicuumbag"
-
+/datum/action/item_action/deploy_bipod
+	name = "Разложить/Сложить сошки"
+	desc = "Разложить сошки для улучшения точности (только лёжа)"
+	icon_icon = 'icons/mob/actions/actions_items.dmi'
+	button_icon_state = "activate"
+	background_icon_state = "storage_gather_switch"
+	required_mobility_flags = NONE
+	check_flags = AB_CHECK_RESTRAINED|AB_CHECK_STUN|AB_CHECK_CONSCIOUS
 
 /obj/item/clothing/neck/tie/hecudogtag
 	name = "HECU Dogtag"

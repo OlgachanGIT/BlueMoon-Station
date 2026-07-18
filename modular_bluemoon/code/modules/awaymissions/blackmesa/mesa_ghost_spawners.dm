@@ -293,8 +293,8 @@
 		/obj/item/storage/firstaid/emergency,
 		/obj/item/kitchen/knife/combat,
 		/obj/item/book/granter/martial/cqc,
-		/obj/item/ammo_box/magazine/m16,
-		/obj/item/ammo_box/magazine/m16,
+		/obj/item/ammo_box/magazine/m16/mesa,
+		/obj/item/ammo_box/magazine/m16/mesa,
 	)
 
 
@@ -343,9 +343,9 @@
 		/obj/item/storage/box/survival/radio,
 		/obj/item/storage/ifak,
 		/obj/item/kitchen/knife/combat,
-		/obj/item/ammo_box/magazine/m16,
-		/obj/item/ammo_box/magazine/m16,
-		/obj/item/ammo_box/magazine/m16,
+		/obj/item/ammo_box/magazine/m16/mesa,
+		/obj/item/ammo_box/magazine/m16/mesa,
+		/obj/item/ammo_box/magazine/m16/mesa,
 	)
 
 //трупы
@@ -434,9 +434,9 @@
 	r_hand = /obj/item/book/granter/martial/cqc
 
 /obj/item/storage/belt/military/assault/hecu/black/blackops/PopulateContents()
-	new /obj/item/ammo_box/magazine/m16(src)
-	new /obj/item/ammo_box/magazine/m16(src)
-	new /obj/item/ammo_box/magazine/m16(src)
+	new /obj/item/ammo_box/magazine/m16/mesa(src)
+	new /obj/item/ammo_box/magazine/m16/mesa(src)
+	new /obj/item/ammo_box/magazine/m16/mesa(src)
 	new /obj/item/reagent_containers/hypospray/combat/omnizine(src)
 	new /obj/item/storage/box/survival/radio(src,30,pick("red","yellow","orange"))
 	new /obj/item/kitchen/knife/combat(src)
