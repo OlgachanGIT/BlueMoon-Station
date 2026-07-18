@@ -4,8 +4,8 @@
 // =============================================================================
 
 /datum/ai_director/zombie_mission
-	var/wave_timer = 600 // Reduced from 1200 to 600 (1 minute instead of 2 minutes)
-	var/max_wave_interval = 3000 // Reduced from 6000 to 3000 (5 minutes instead of 10 minutes)
+	var/wave_timer = 300 // Reduced from 600 to 300 (30 seconds instead of 1 minute)
+	var/max_wave_interval = 1500 // Reduced from 3000 to 1500 (2.5 minutes instead of 5 minutes)
 	var/last_wave_time = 0
 	var/current_wave_number = 0
 	var/list/active_zombies = list()
@@ -16,6 +16,9 @@
 	var/difficulty_level = 0 // 0-8, increases when players cross trigger zones
 	var/zombie_hp_multiplier = 1.0 // HP multiplier for spawned zombies
 	var/initialized = FALSE // Track if director has been initialized
+	var/wave_timer_paused = FALSE // Track if wave timer is paused (safe zone)
+	var/paused_time_accumulated = 0 // Track accumulated paused time
+	var/horde_music_channel = 991 // Unique channel for horde music
 
 	// Whitelist and blacklist areas
 	var/list/excluded_areas = list(
@@ -62,6 +65,23 @@
 	if(!mission_areas || !mission_areas.len)
 		return
 
+	var/list/alive_players = get_alive_players_in_mission()
+	if(!alive_players || !alive_players.len)
+		// No players in mission - pause the wave timer
+		if(!wave_timer_paused)
+			wave_timer_paused = TRUE
+			paused_time_accumulated = 0
+		paused_time_accumulated += 1 // Track how long we've been paused
+		if(horde_music_playing)
+			manage_horde_music()
+		return
+	else
+		// Players returned - unpause and adjust timer
+		if(wave_timer_paused)
+			wave_timer_paused = FALSE
+			last_wave_time += paused_time_accumulated // Adjust last_wave_time to account for paused time
+			paused_time_accumulated = 0
+
 	if(world.time - last_wave_time >= wave_timer)
 		attempt_spawn_wave()
 
@@ -77,8 +97,9 @@
 
 	var/list/alive_players = get_alive_players_in_mission()
 	if(!alive_players || !alive_players.len)
-		log_world("[src] No alive players in mission, resetting wave timer")
-		last_wave_time = world.time
+		log_world("[src] No alive players in mission, pausing wave timer")
+		wave_timer_paused = TRUE
+		paused_time_accumulated = 0
 		return
 
 	var/threat_level = calculate_threat_level(alive_players.len)
@@ -87,7 +108,7 @@
 		last_wave_time = world.time
 		return
 
-	wave_timer = rand(600, max_wave_interval)
+	wave_timer = rand(300, max_wave_interval)
 
 	log_world("[src] Attempting to spawn wave with threat=[threat_level]")
 	spawn_zombie_wave(threat_level, alive_players)
@@ -101,7 +122,6 @@
 	var/list/players = list()
 	var/list/valid_areas = get_mesa_areas()
 	if(!valid_areas || !valid_areas.len)
-		log_world("[src] No valid mesa areas found")
 		return players
 
 	for(var/mob/living/L in GLOB.player_list)
@@ -112,9 +132,7 @@
 			continue
 		if(A in valid_areas)
 			players += L
-			log_world("[src] Found player [L] in area [A]")
 
-	log_world("[src] Total alive players in mission: [players.len]")
 	return players
 
 /datum/ai_director/zombie_mission/proc/get_mesa_areas()
@@ -348,6 +366,10 @@
 			var/dist = get_dist(T, center)
 			if(dist >= min_dist && dist <= max_dist)
 				if(!T.density && !T.is_blocked_turf())
+					// Check if spawn turf is in a valid area (not in forbidden zones like mesarocks)
+					var/area/spawn_area = get_area(T)
+					if(!spawn_area || !(spawn_area in valid_areas))
+						continue
 					// Simplified: only check basic density and blocking, skip LOS and pathfinding
 					// Zombies can break through obstacles anyway
 					cached_turfs += T
@@ -473,7 +495,7 @@
 			continue
 		if(A in valid_areas)
 			if(M.client && M.client.prefs && (M.client.prefs.toggles & SOUND_AMBIENCE))
-				SEND_SOUND(M, sound('modular_bluemoon/sound/ambience/mesa/horde_music.ogg', repeat = TRUE, volume = 50))
+				SEND_SOUND(M, sound('modular_bluemoon/sound/ambience/mesa/horde_music.ogg', repeat = FALSE, volume = 50, channel = horde_music_channel))
 
 /datum/ai_director/zombie_mission/proc/stop_horde_music()
 	if(!src)
@@ -483,11 +505,18 @@
 
 	horde_music_playing = FALSE
 
+	var/list/valid_areas = get_mesa_areas()
+	if(!valid_areas || !valid_areas.len)
+		return
+
 	for(var/mob/M in GLOB.player_list)
 		if(!M || isnewplayer(M))
 			continue
-		if(M.client)
-			SEND_SOUND(M, sound(null, volume = 0))
+		var/area/A = get_area(M)
+		if(!A)
+			continue
+		if(A in valid_areas)
+			M.stop_sound_channel(horde_music_channel)
 
 /datum/ai_director/zombie_mission/proc/manage_horde_music()
 	if(!src)

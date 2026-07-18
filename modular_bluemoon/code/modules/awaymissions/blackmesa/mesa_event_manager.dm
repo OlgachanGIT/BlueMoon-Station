@@ -88,10 +88,10 @@ SUBSYSTEM_DEF(blackmesa_events)
 			light_power = 0.6
 			announce_text = "Внимание! Наступает вечер. Рекомендуется включить дополнительное освещение. ВНИМАНИЕ! состояние сектора ухудшается. Всем немедленно проследовать к ближайшим выходам из сектора."
 			announce_title = "Evening Approach"
-		if(1) // Night - very dark, oppressive
-			new_color = "#150500"
-			light_power = 0.4
-			announce_text = "Внимание! Наступает ночь. Всем сотрудникам заступивших на ночную смену приступить к работе. ВНИМАНИЕ! Состояние сектора всё ещё критично. Требуется немедленная эвакуация"
+		if(1) // Night - gloomy like evening but still oppressive
+			new_color = "#2a0a00"
+			light_power = 0.6
+			announce_text = "Внимание! Наступает ночь. Всем сотрудникам заступивших на ночную смену приступить к работе. ВНИМАНИЕ! Состояние сектора всё ещё критично. Требуется Немедленная эвакуация"
 			announce_title = "Nightfall"
 		if(2) // Morning - still dark and gloomy
 			new_color = "#1f0800"

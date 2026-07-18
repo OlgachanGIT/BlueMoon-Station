@@ -105,6 +105,16 @@
 		playsound(src, pick(speak), 70, TRUE)
 
 /mob/living/simple_animal/hostile/infected/AttackingTarget(atom/target)
+	// Crutch method: if attacking a fence, teleport to the fence tile
+	if(istype(target, /obj/structure/fence))
+		var/obj/structure/fence/F = target
+		if(!F || !F.density)
+			return
+		if(!stat)
+			var/turf/fence_turf = get_turf(F)
+			if(fence_turf)
+				forceMove(fence_turf)
+				return
 	. = ..()
 	if(!target)
 		return
@@ -162,6 +172,16 @@
 	obj_damage = 40
 
 /mob/living/simple_animal/hostile/infected/bruiser/AttackingTarget(atom/target)
+	// Crutch method: if attacking a fence, teleport to the fence tile
+	if(istype(target, /obj/structure/fence))
+		var/obj/structure/fence/F = target
+		if(!F || !F.density)
+			return
+		if(!stat)
+			var/turf/fence_turf = get_turf(F)
+			if(fence_turf)
+				forceMove(fence_turf)
+				return
 	. = ..()
 	if(!target)
 		return

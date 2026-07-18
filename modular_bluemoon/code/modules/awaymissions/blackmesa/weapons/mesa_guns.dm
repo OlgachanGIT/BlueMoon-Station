@@ -452,13 +452,14 @@
 /obj/item/gun/ballistic/automatic/scar
 	name = "\improper HC scar"
 	desc = "Модифицированная версия FN Scar, предназначенная для ведения стрельбы на средние и дальние дистанции. В отличие от M4oa1, имеет автоматический режим стрельбы и менее убойный калибр + крутой песчаный камуфляж (Но вы же помните то, что орудуете только в научном комплексе?)"
-	icon = 'modular_bluemoon/icons/obj/guns/projectile48x32.dmi'
+	icon = 'modular_bluemoon/icons/obj/guns/Machineguns.dmi'
 	lefthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_lefthand.dmi'
 	righthand_file = 'modular_bluemoon/icons/mob/inhands/weapons/guns_righthand.dmi'
-	icon_state = "scar"
+	icon_state = "scarh"
 	item_state = "scar"
-	fire_delay = 5
+	fire_delay = 2
 	spread = 10
+	burst_size = 3
 	fire_sound = 'modular_bluemoon/sound/weapons/mesa/scar.ogg'
 	weapon_weight = WEAPON_HEAVY
 	w_class = WEIGHT_CLASS_BULKY
@@ -467,9 +468,9 @@
 /obj/item/gun/ballistic/automatic/scar/update_icon_state()
 	icon_state = "[initial(icon_state)][chambered ? "" : ""]"
 	if(magazine)
-		icon_state = "scar"
+		icon_state = "scarh"
 	else
-		icon_state = "scar_mag"
+		icon_state = "scarh_e"
 
 /obj/item/gun/ballistic/automatic/scar/shoot_live_shot(mob/living/user, pointblank = FALSE, mob/pbtarget, message = 1, stam_cost = 0)
 	..()

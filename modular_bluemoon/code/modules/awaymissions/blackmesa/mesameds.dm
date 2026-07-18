@@ -46,7 +46,7 @@
 	desc = "A tactical medical pack designed for use in the field. It contains a unique healing solution developed by Black Mesa scientists, which accelerates the healing process of burns, wounds, and toxins."
 	icon = 'modular_bluemoon/icons/obj/mesameds.dmi'
 	icon_state = "basicmed"
-	item_state = "firstaid-o2"
+	item_state = "basicmed"
 	lefthand_file = 'icons/mob/inhands/equipment/medical_lefthand.dmi'
 	righthand_file = 'icons/mob/inhands/equipment/medical_righthand.dmi'
 	amount = 1
