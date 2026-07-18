@@ -69,8 +69,7 @@
 	//Nanites without hosts are non-interactive through normal means
 	if(isliving(parent))
 		host_mob = parent
-
-		if(!(host_mob.mob_biotypes & (MOB_ORGANIC|MOB_UNDEAD)) && !HAS_TRAIT(host_mob, TRAIT_COMPATIBLE_WITH_NANOMACHINES)) //Shouldn't happen, but this avoids HUD runtimes in case a silicon gets them somehow.
+		if(HAS_TRAIT(host_mob, TRAIT_NANITES_IMMUNITY) || (!(host_mob.mob_biotypes & (MOB_ORGANIC|MOB_UNDEAD)) && !HAS_TRAIT(host_mob, TRAIT_COMPATIBLE_WITH_NANITES))) //Shouldn't happen, but this avoids HUD runtimes in case a silicon gets them somehow.
 			return COMPONENT_INCOMPATIBLE
 
 		start_time = world.time
@@ -379,6 +378,7 @@
 	for(var/X in programs)
 		var/datum/nanite_program/NP = X
 		NP.on_emp(severity)
+	set_need_sync(TRUE)
 
 /datum/component/nanites/proc/on_shock(datum/source, shock_damage, siemens_coeff = 1, flags = NONE)
 	if(shock_damage < 1)
@@ -390,12 +390,14 @@
 		for(var/X in programs)
 			var/datum/nanite_program/NP = X
 			NP.on_shock(shock_damage)
+		set_need_sync(TRUE)
 
 /datum/component/nanites/proc/on_minor_shock(datum/source)
 	adjust_nanites(null, -(rand(minor_shock_deletion_lower, minor_shock_deletion_upper)))			//Lose 5-15 flat nanite volume
 	for(var/X in programs)
 		var/datum/nanite_program/NP = X
 		NP.on_minor_shock()
+	set_need_sync(TRUE)
 
 /datum/component/nanites/proc/check_stealth(datum/source)
 	return stealth
@@ -442,7 +444,10 @@
 	max_nanites = max(1, amount)
 
 /datum/component/nanites/proc/set_cloud(datum/source, amount)
+	SIGNAL_HANDLER
+
 	cloud_id = clamp(amount, 0, 100)
+	set_need_sync(TRUE)
 
 /datum/component/nanites/proc/get_cloud(datum/source)
 	SIGNAL_HANDLER
@@ -450,6 +455,8 @@
 	return cloud_id
 
 /datum/component/nanites/proc/set_cloud_sync(datum/source, method)
+	SIGNAL_HANDLER
+
 	switch(method)
 		if(NANITE_CLOUD_TOGGLE)
 			cloud_active = !cloud_active
@@ -457,6 +464,7 @@
 			cloud_active = FALSE
 		if(NANITE_CLOUD_ENABLE)
 			cloud_active = TRUE
+	set_need_sync(TRUE)
 
 /datum/component/nanites/proc/set_safety(datum/source, amount)
 	safety_threshold = clamp(amount, 0, max_nanites)
